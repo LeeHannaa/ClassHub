@@ -1,5 +1,6 @@
 package com.example.classhub.domain.lectureroom;
 
+import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LectureRoom {
+public class LectureRoom extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lectureRoomId;
