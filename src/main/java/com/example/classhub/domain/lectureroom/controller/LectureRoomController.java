@@ -38,4 +38,8 @@ public class LectureRoomController {
         return ResponseEntity.ok(lectureRoomUpdateResponse);
     }
 
+    @DeleteMapping("/{lectureRoomId}")
+    public void delete(@PathVariable Long lectureRoomId){
+        lectureRoomService.delete(lectureRoomId);
+    }
 }

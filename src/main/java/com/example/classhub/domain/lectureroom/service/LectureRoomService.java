@@ -61,4 +61,8 @@ public class LectureRoomService {
         lectureRoomRepository.save(lectureRoom);
         return LectureRoomDto.from(lectureRoom);
     }
+
+    public void delete(Long lectureRoomId) {
+        lectureRoomRepository.deleteById(lectureRoomId);
+    }
 }
