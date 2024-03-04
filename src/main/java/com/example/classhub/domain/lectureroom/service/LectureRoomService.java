@@ -52,4 +52,13 @@ public class LectureRoomService {
                 .collect(Collectors.toList());
         return new LectureRoomListResponse(lectureRoomResponses);
     }
+
+    public LectureRoomDto update(Long lectureRoomId, LectureRoomDto lectureRoomDto) {
+        LectureRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
+
+        lectureRoom.update(lectureRoomDto);
+        lectureRoomRepository.save(lectureRoom);
+        return LectureRoomDto.from(lectureRoom);
+    }
 }

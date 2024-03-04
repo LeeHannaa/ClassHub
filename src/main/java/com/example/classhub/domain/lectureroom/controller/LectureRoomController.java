@@ -1,8 +1,10 @@
 package com.example.classhub.domain.lectureroom.controller;
 
 import com.example.classhub.domain.lectureroom.controller.request.LectureRoomCreateRequest;
+import com.example.classhub.domain.lectureroom.controller.request.LectureRoomUpdateRequest;
 import com.example.classhub.domain.lectureroom.controller.response.LectureRoomCreateResponse;
 import com.example.classhub.domain.lectureroom.controller.response.LectureRoomListResponse;
+import com.example.classhub.domain.lectureroom.controller.response.LectureRoomUpdateResponse;
 import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
 import com.example.classhub.domain.lectureroom.service.LectureRoomService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,13 @@ public class LectureRoomController {
     public ResponseEntity<LectureRoomListResponse> findLectureRoomList(){
         LectureRoomListResponse lectureRoomListResponse = lectureRoomService.getLectureRoomList();
         return ResponseEntity.ok(lectureRoomListResponse);
+    }
+
+    @PatchMapping("/{lectureRoomId}")
+    public ResponseEntity<LectureRoomUpdateResponse> update(@PathVariable Long lectureRoomId, @RequestBody LectureRoomUpdateRequest request){
+        LectureRoomDto lectureRoomDto = lectureRoomService.update(lectureRoomId, LectureRoomDto.from(request));
+        LectureRoomUpdateResponse lectureRoomUpdateResponse = new LectureRoomUpdateResponse(lectureRoomDto);
+        return ResponseEntity.ok(lectureRoomUpdateResponse);
     }
 
 }

@@ -33,4 +33,9 @@ public class LectureRoom extends BaseEntity {
                 .onOff(lectureRoomDto.isOnOff())
                 .build();
     }
+
+    public void update(LectureRoomDto lectureRoomDto) {
+        this.name = lectureRoomDto.getName();
+        this.onOff = lectureRoomDto.isOnOff();
+    }
 }

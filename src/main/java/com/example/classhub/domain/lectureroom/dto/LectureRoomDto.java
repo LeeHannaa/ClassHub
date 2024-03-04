@@ -2,6 +2,7 @@ package com.example.classhub.domain.lectureroom.dto;
 
 import com.example.classhub.domain.lectureroom.LectureRoom;
 import com.example.classhub.domain.lectureroom.controller.request.LectureRoomCreateRequest;
+import com.example.classhub.domain.lectureroom.controller.request.LectureRoomUpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,12 @@ public class LectureRoomDto {
     private boolean onOff;
 
     public static LectureRoomDto from(LectureRoomCreateRequest request) {
+        return LectureRoomDto.builder()
+                .name(request.getName())
+                .onOff(request.isOnOff())
+                .build();
+    }
+    public static LectureRoomDto from(LectureRoomUpdateRequest request) {
         return LectureRoomDto.builder()
                 .name(request.getName())
                 .onOff(request.isOnOff())

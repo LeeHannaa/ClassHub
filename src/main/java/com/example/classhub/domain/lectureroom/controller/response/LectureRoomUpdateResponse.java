@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Data
-public class LectureRoomCreateResponse {
+public class LectureRoomUpdateResponse {
     private String name;
     private String taInviteCode;
     private String stInviteCode;
     private boolean onOff;
 
-    public LectureRoomCreateResponse(LectureRoomDto lectureRoomDto) {
+    public LectureRoomUpdateResponse(LectureRoomDto lectureRoomDto) {
         this.name = lectureRoomDto.getName();
         this.taInviteCode = lectureRoomDto.getTaInviteCode();
         this.stInviteCode = lectureRoomDto.getStInviteCode();
