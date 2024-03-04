@@ -1,13 +1,17 @@
 package com.example.classhub.domain.lectureroom.service;
 
 import com.example.classhub.domain.lectureroom.LectureRoom;
+import com.example.classhub.domain.lectureroom.controller.response.LectureRoomListResponse;
+import com.example.classhub.domain.lectureroom.controller.response.LectureRoomResponse;
 import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
 import com.example.classhub.domain.lectureroom.repository.LectureRoomRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +43,13 @@ public class LectureRoomService {
             sb.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return sb.toString();
+    }
+
+    public LectureRoomListResponse getLectureRoomList() {
+        List<LectureRoom> lectureRooms = lectureRoomRepository.findAll();
+        List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
+                .map(LectureRoomResponse::new)
+                .collect(Collectors.toList());
+        return new LectureRoomListResponse(lectureRoomResponses);
     }
 }

@@ -2,6 +2,7 @@ package com.example.classhub.domain.lectureroom.controller;
 
 import com.example.classhub.domain.lectureroom.controller.request.LectureRoomCreateRequest;
 import com.example.classhub.domain.lectureroom.controller.response.LectureRoomCreateResponse;
+import com.example.classhub.domain.lectureroom.controller.response.LectureRoomListResponse;
 import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
 import com.example.classhub.domain.lectureroom.service.LectureRoomService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,12 @@ public class LectureRoomController {
         LectureRoomDto lectureRoomDto = lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
         LectureRoomCreateResponse lectureRoomCreateResponse = new LectureRoomCreateResponse(lectureRoomDto);
         return ResponseEntity.ok(lectureRoomCreateResponse);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<LectureRoomListResponse> findLectureRoomList(){
+        LectureRoomListResponse lectureRoomListResponse = lectureRoomService.getLectureRoomList();
+        return ResponseEntity.ok(lectureRoomListResponse);
     }
 
 }
