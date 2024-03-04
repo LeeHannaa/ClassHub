@@ -33,6 +33,28 @@ public class LectureRoomService {
         return LectureRoomDto.from(lectureRoom);
     }
 
+    @Transactional
+    public LectureRoomListResponse getLectureRoomList() {
+        List<LectureRoom> lectureRooms = lectureRoomRepository.findAll();
+        List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
+                .map(LectureRoomResponse::new)
+                .collect(Collectors.toList());
+        return new LectureRoomListResponse(lectureRoomResponses);
+    }
+    @Transactional
+    public LectureRoomDto update(Long lectureRoomId, LectureRoomDto lectureRoomDto) {
+        LectureRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
+
+        lectureRoom.update(lectureRoomDto);
+        lectureRoomRepository.save(lectureRoom);
+        return LectureRoomDto.from(lectureRoom);
+    }
+    @Transactional
+    public void delete(Long lectureRoomId) {
+        lectureRoomRepository.deleteById(lectureRoomId);
+    }
+
     private String generateInviteCode() {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder sb = new StringBuilder();
@@ -43,26 +65,5 @@ public class LectureRoomService {
             sb.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return sb.toString();
-    }
-
-    public LectureRoomListResponse getLectureRoomList() {
-        List<LectureRoom> lectureRooms = lectureRoomRepository.findAll();
-        List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
-                .map(LectureRoomResponse::new)
-                .collect(Collectors.toList());
-        return new LectureRoomListResponse(lectureRoomResponses);
-    }
-
-    public LectureRoomDto update(Long lectureRoomId, LectureRoomDto lectureRoomDto) {
-        LectureRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
-
-        lectureRoom.update(lectureRoomDto);
-        lectureRoomRepository.save(lectureRoom);
-        return LectureRoomDto.from(lectureRoom);
-    }
-
-    public void delete(Long lectureRoomId) {
-        lectureRoomRepository.deleteById(lectureRoomId);
     }
 }
