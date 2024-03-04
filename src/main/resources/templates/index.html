@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<h1>INDEX PAGE</h1>
+<div>
+    <h2>생성된 강의실 리스트</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>강의실 아이디</th>
+                <th>강의실 이름</th>
+                <th>강의실 활성화</th>
+                <th>학생 입장 코드</th>
+                <th>조교 입장 코드</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lectureroom : ${lectureRooms}">
+            <td th:text="${lectureroom.lectureRoomId}"></td>
+            <td th:text="${lectureroom.name}"></td>
+            <td th:text="${lectureroom.onOff}"></td>
+            <td th:text="${lectureroom.stInviteCode}"></td>
+            <td th:text="${lectureroom.taInviteCode}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<button><a th:href="@{/lecture-room/lectureRoomForm}">강의실 생성</a></button>
+</body>
+</html>

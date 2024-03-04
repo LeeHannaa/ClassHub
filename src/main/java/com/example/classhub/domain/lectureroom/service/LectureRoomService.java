@@ -33,7 +33,7 @@ public class LectureRoomService {
         return LectureRoomDto.from(lectureRoom);
     }
 
-    @Transactional
+//    @Transactional
     public LectureRoomListResponse getLectureRoomList() {
         List<LectureRoom> lectureRooms = lectureRoomRepository.findAll();
         List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
