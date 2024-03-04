@@ -27,7 +27,7 @@
             <td th:text="${lectureroom.onOff}"></td>
             <td th:text="${lectureroom.stInviteCode}"></td>
             <td th:text="${lectureroom.taInviteCode}"></td>
-            <td><a th:href="@{/lecture-room/update/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">Update</a></td>
+            <td><a th:href="@{/lecture-room/updateForm/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">Update</a></td>
             <td><a th:href="@{/lecture-room/delete/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">Delete</a></td>
         </tr>
         </tbody>

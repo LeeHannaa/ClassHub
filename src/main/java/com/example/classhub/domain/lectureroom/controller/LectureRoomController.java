@@ -37,11 +37,16 @@ public class LectureRoomController {
     }
 
 
-    @GetMapping("/lecture-room/update/{lectureRoomId}")
-    public ResponseEntity<LectureRoomUpdateResponse> update(@PathVariable Long lectureRoomId, @RequestBody LectureRoomUpdateRequest request){
-        LectureRoomDto lectureRoomDto = lectureRoomService.update(lectureRoomId, LectureRoomDto.from(request));
-        LectureRoomUpdateResponse lectureRoomUpdateResponse = new LectureRoomUpdateResponse(lectureRoomDto);
-        return ResponseEntity.ok(lectureRoomUpdateResponse);
+    @GetMapping("/lecture-room/updateForm/{lectureRoomId}")
+    public String updateForm(@PathVariable Long lectureRoomId, Model model) {
+        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        model.addAttribute("lectureRoom", lectureRoomDto);
+        return "lectureRoomUpdate";
+    }
+    @PostMapping("/lecture-room/update/{lectureRoomId}")
+    public String update(@PathVariable Long lectureRoomId, @ModelAttribute("lectureRoom") LectureRoomUpdateRequest request){
+        lectureRoomService.update(lectureRoomId, LectureRoomDto.from(request));
+        return "redirect:/lecture-room";
     }
 
     @GetMapping("/lecture-room/delete/{lectureRoomId}")
