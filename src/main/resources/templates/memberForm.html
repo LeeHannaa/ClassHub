@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>회원 가입</title>
+    </head>
+    <body>
+        <h2>회원 가입</h2>
+        <form action="#" th:action="@{/member/saveMember}" th:object="${member}" method="post">
+            <label for="member_name">이름:</label><br>
+            <input type="text" id="member_name" th:field="*{member_name}" required><br>
+            <label for="email">이메일:</label><br>
+            <input type="email" id="email" th:field="*{email}" required><br>
+            <label for="unique_id">학번:</label><br>
+            <input type="text" id="unique_id" th:field="*{uniqueId}" required><br>
+            <input type="submit" value="회원 가입">
+        </form>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+    </body>
+</html>

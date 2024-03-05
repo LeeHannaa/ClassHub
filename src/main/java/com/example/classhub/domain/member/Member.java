@@ -22,20 +22,20 @@ public class Member extends BaseEntity {
     private Long memberId;
     private String member_name;
     private String email;
-    private String unique_id;
+    private String uniqueId;
 
     public static Member from(MemberDto memberDto) {
         return Member.builder()
                 .member_name(memberDto.getMember_name())
                 .email(memberDto.getEmail())
-                .unique_id(memberDto.getUnique_id())
+                .uniqueId(memberDto.getUniqueId())
                 .build();
     }
 
     public void update(MemberDto memberDto) {
         this.member_name = memberDto.getMember_name();
         this.email = memberDto.getEmail();
-        this.unique_id = memberDto.getUnique_id();
+        this.uniqueId = memberDto.getUniqueId();
     }
 
 }

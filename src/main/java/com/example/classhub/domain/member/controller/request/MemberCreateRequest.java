@@ -11,5 +11,5 @@ public class MemberCreateRequest {
     private Long memberId;
     private String member_name;
     private String email;
-    private String unique_id;
+    private String uniqueId;
 }
