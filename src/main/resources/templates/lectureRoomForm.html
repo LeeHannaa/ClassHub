@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>강의실 생성 폼</title>
+</head>
+<body>
+<h1>강의실 생성 폼</h1>
+<form action="#" th:action="@{/lecture-room/saveLecture}" th:object="${lectureRoom}" method="post">
+    <label for="name">강의실 이름:</label>
+    <input type="text" id="name" th:field="*{name}">
+    <br>
+    <label for="onOff">강의실 상태:</label>
+    <input type="checkbox" id="onOff" th:field="*{onOff}">
+    <br>
+    <button type="submit">저장</button>
+</form>
+<a th:href="@{/}">강의실 목록으로 돌아가기</a>
+</body>
+</html>

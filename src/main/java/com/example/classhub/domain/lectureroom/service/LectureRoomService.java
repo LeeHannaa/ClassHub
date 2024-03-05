@@ -33,13 +33,19 @@ public class LectureRoomService {
         return LectureRoomDto.from(lectureRoom);
     }
 
-    @Transactional
+//    @Transactional
     public LectureRoomListResponse getLectureRoomList() {
         List<LectureRoom> lectureRooms = lectureRoomRepository.findAll();
         List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
                 .map(LectureRoomResponse::new)
                 .collect(Collectors.toList());
         return new LectureRoomListResponse(lectureRoomResponses);
+    }
+    @Transactional
+    public LectureRoomDto findByRoomId(Long lectureRoomId) {
+        LectureRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
+        return LectureRoomDto.from(lectureRoom);
     }
     @Transactional
     public LectureRoomDto update(Long lectureRoomId, LectureRoomDto lectureRoomDto) {
