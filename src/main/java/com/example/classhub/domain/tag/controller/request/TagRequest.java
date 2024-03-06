@@ -1,4 +1,4 @@
-package com.example.classhub.domain.tag.controller;
+package com.example.classhub.domain.tag.controller.request;
 
 import lombok.Data;
 import lombok.Getter;

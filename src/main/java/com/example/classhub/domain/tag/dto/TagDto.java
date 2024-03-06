@@ -1,7 +1,7 @@
 package com.example.classhub.domain.tag.dto;
 
 import com.example.classhub.domain.tag.Tag;
-import com.example.classhub.domain.tag.controller.TagRequest;
+import com.example.classhub.domain.tag.controller.request.TagRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

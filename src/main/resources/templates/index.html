@@ -11,11 +11,11 @@
     <table>
         <thead>
             <tr>
-                <th>강의실 아이디</th>
-                <th>강의실 이름</th>
-                <th>강의실 활성화</th>
-                <th>학생 입장 코드</th>
-                <th>조교 입장 코드</th>
+                <th>강의실아이디</th>
+                <th>강의실이름</th>
+                <th>강의실활성화</th>
+                <th>학생입장코드</th>
+                <th>조교입장코드</th>
                 <th>수정</th>
                 <th>삭제</th>
             </tr>
@@ -32,6 +32,25 @@
         </tr>
         </tbody>
     </table>
+    <table>
+        <thead>
+        <tr>
+            <th>태그아이디</th>
+            <th>태그이름</th>
+<!--            <th>수정</th>-->
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tag : ${tags}">
+            <td th:text="${tag.tagId}"></td>
+            <td th:text="${tag.name}"></td>
+            <!--            <td><a th:href="@{/lecture-room/updateForm/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">Update</a></td>-->
+            <td><a th:href="@{/tag/delete/{tagId}(tagId=${tag.tagId})}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+
 </div>
 
 
