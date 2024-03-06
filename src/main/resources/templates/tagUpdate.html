@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div class="container">
+    <h1>태그 수정 페이지</h1>
+    <hr>
+
+    <form action="#" th:action="@{/tag/update/{tagId}(tagId=${tagId})}" th:object="${tag}" method="post">
+        <label for="name">태그 이름:</label>
+        <input type="text" id="name" th:field="*{name}">
+        <br>
+        <button type="submit"> 수정</button>
+    </form>
+
+
+    <hr>
+
+    <a th:href="@{/}">강의실 목록으로 돌아가기</a>
+</div>
+</body>
+
+</html>

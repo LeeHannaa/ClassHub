@@ -32,5 +32,20 @@ public class TagService {
         return new TagListResponse(tagResponses);
     }
 
+    public TagDto findByTagId(Long tagId){
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(()-> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
+        return TagDto.from(tag);
+    }
+
+    public TagDto update(Long tagId, TagDto tagDto){
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
+
+        tag.update(tagDto);
+        tagRepository.save(tag);
+        return tagDto.from(tag);
+    }
+
     public void tagDelete(Long tagId){tagRepository.deleteById(tagId);}
 }

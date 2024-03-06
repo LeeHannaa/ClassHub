@@ -37,7 +37,7 @@
         <tr>
             <th>태그아이디</th>
             <th>태그이름</th>
-<!--            <th>수정</th>-->
+            <th>수정</th>
             <th>삭제</th>
         </tr>
         </thead>
@@ -45,7 +45,7 @@
         <tr th:each="tag : ${tags}">
             <td th:text="${tag.tagId}"></td>
             <td th:text="${tag.name}"></td>
-            <!--            <td><a th:href="@{/lecture-room/updateForm/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">Update</a></td>-->
+            <td><a th:href="@{/tag/updateForm/{tagId}(tagId=${tag.tagId})}">Update</a></td>
             <td><a th:href="@{/tag/delete/{tagId}(tagId=${tag.tagId})}">Delete</a></td>
         </tr>
         </tbody>
