@@ -40,4 +40,27 @@ public class MemberService {
                 .toList();
         return new MemberListResponse(memberResponses);
     }
+
+    @Transactional
+    public MemberDto findByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        return MemberDto.from(member);
+    }
+    @Transactional
+    public void delete(Long memberId) {
+        memberRepository.deleteById(memberId);
+    }
+
+    @Transactional
+    public MemberDto update(Long memberId, MemberDto memberDto) {
+      Member member = memberRepository.findById(memberId)
+              .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+
+      member.update(memberDto);
+      memberRepository.save(member);
+      return MemberDto.from(member);
+    }
+
+
 }
