@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<body>
+<div class="container">
+  <h1>강의실 수정 페이지</h1>
+  <hr>
+
+  <a th:href="@{/member/memberList}">회원 목록으로 돌아가기</a>
+
+  <hr>
+
+  <form action="#" th:action="@{/member/update/{memberId}(memberId=${memberId})}" th:object="${member}" method="post">
+    <label for="name">회원 이름:</label>
+    <input type="text" id="name" th:field="*{member_name}">
+    <br>
+    <label for="uniqueId">회원 학번:</label>
+    <input type="text" id="uniqueId" th:field="*{uniqueId}">
+    <br>
+    <label for="email">회원 이메일:</label>
+    <input type="email" id="email" th:field="*{email}">
+    <br>
+    <button type="submit"> 수정</button>
+  </form>
+
+</div>
+</body>
+
+</html>

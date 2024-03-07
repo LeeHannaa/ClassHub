@@ -21,6 +21,8 @@
                 <td th:text="${member.member_name}"></td>
                 <td th:text="${member.email}"></td>
                 <td th:text="${member.uniqueId}"></td>
+              <td><a th:href="@{/member/updateForm/{memberId}(memberId=${member.memberId})}">Update</a></td>
+              <td><a th:href="@{/member/delete/{memberId}(memberId=${member.memberId})}">Delete</a></td>
             </tr>
             </tbody>
         </table>
