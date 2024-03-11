@@ -3,18 +3,24 @@ package com.example.classhub.domain.lectureroom.controller;
 import com.example.classhub.domain.lectureroom.controller.request.LectureRoomCreateRequest;
 import com.example.classhub.domain.lectureroom.controller.request.LectureRoomUpdateRequest;
 import com.example.classhub.domain.lectureroom.controller.response.LectureRoomListResponse;
+import com.example.classhub.domain.lectureroom.controller.response.LectureRoomResponse;
 import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
 import com.example.classhub.domain.lectureroom.service.LectureRoomService;
+import com.example.classhub.domain.tag.controller.response.TagListResponse;
+import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class LectureRoomController {
     private final LectureRoomService lectureRoomService;
+    private final TagService tagService;
 
     @GetMapping("/lecture-room/lectureRoomForm")
     public String createLectureRoomFrom(Model model){
@@ -28,9 +34,25 @@ public class LectureRoomController {
     }
 
     @GetMapping("/lecture-room")
-    public String findLectureRoomList(Model model){
-        LectureRoomListResponse lectureRoomListResponse = lectureRoomService.getLectureRoomList();
+    public String findLectureRoomList(Model model, @RequestParam(name = "searchKeyword", required = false, defaultValue = "")String searchKeyword){
+        LectureRoomListResponse lectureRoomListResponse = null;
+        TagListResponse tagListResponse = tagService.getTagList();
+        System.out.println("keyword    :    " + searchKeyword);
+
+        if (searchKeyword.isEmpty()){
+            lectureRoomListResponse = lectureRoomService.getLectureRoomList();
+        }
+        else{
+            System.out.println("들어옴");
+            lectureRoomListResponse = lectureRoomService.findByKeyword(searchKeyword);
+        }
+        List<LectureRoomResponse> lectureRooms = lectureRoomListResponse.getLectureRooms();
+        for (LectureRoomResponse room : lectureRooms) {
+            System.out.println("강의실 이름: " + room.getName());
+        }
         model.addAttribute("lectureRooms", lectureRoomListResponse.getLectureRooms());
+        model.addAttribute("tags", tagListResponse.getTags());
+
         return "index";
     }
 
