@@ -252,6 +252,7 @@
                         <th>강의실활성화</th>
                         <th>학생입장코드</th>
                         <th>조교입장코드</th>
+                        <th>강의실 입장</th>
                         <th>수정</th>
                         <th>삭제</th>
                     </tr>
@@ -263,8 +264,9 @@
                         <td th:text="${lectureroom.onOff}"></td>
                         <td th:text="${lectureroom.stInviteCode}"></td>
                         <td th:text="${lectureroom.taInviteCode}"></td>
-                        <td><a th:href="@{/lecture-room/updateForm/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">Update</a></td>
-                        <td><a th:href="@{/lecture-room/delete/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">Delete</a></td>
+                        <td><a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">입장</a></td>
+                        <td><a th:href="@{/lecture-room/updateForm/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">수정</a></td>
+                        <td><a th:href="@{/lecture-room/delete/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">삭제</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -295,7 +297,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
+                    <span>ClassHub Walab B1A2 강준혁 이한나 장유진</span>
                 </div>
             </div>
         </footer>
@@ -318,15 +320,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">로그아웃하시겠습니까?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="index.html">Logout</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                <a class="btn btn-primary" href="index.html">로그아웃</a>
             </div>
         </div>
     </div>

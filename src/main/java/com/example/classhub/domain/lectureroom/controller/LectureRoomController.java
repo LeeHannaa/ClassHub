@@ -37,25 +37,24 @@ public class LectureRoomController {
     public String findLectureRoomList(Model model, @RequestParam(name = "searchKeyword", required = false, defaultValue = "")String searchKeyword){
         LectureRoomListResponse lectureRoomListResponse = null;
         TagListResponse tagListResponse = tagService.getTagList();
-        System.out.println("keyword    :    " + searchKeyword);
 
         if (searchKeyword.isEmpty()){
             lectureRoomListResponse = lectureRoomService.getLectureRoomList();
         }
         else{
-            System.out.println("들어옴");
             lectureRoomListResponse = lectureRoomService.findByKeyword(searchKeyword);
-        }
-        List<LectureRoomResponse> lectureRooms = lectureRoomListResponse.getLectureRooms();
-        for (LectureRoomResponse room : lectureRooms) {
-            System.out.println("강의실 이름: " + room.getName());
         }
         model.addAttribute("lectureRooms", lectureRoomListResponse.getLectureRooms());
         model.addAttribute("tags", tagListResponse.getTags());
 
         return "index";
     }
-
+    @GetMapping("/lecture-room/detail/{lectureRoomId}")
+    public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model) {
+        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        model.addAttribute("lectureRoom", lectureRoomDto);
+        return "lectureRoomDetail";
+    }
 
     @GetMapping("/lecture-room/updateForm/{lectureRoomId}")
     public String updateForm(@PathVariable Long lectureRoomId, Model model) {
@@ -72,6 +71,8 @@ public class LectureRoomController {
     @GetMapping("/lecture-room/delete/{lectureRoomId}")
     public String delete(@PathVariable(value = "lectureRoomId") Long lectureRoomId){
         lectureRoomService.delete(lectureRoomId);
+        //Todo: tag 매핑 후 삭제 기능 수정
+        tagService.tagDelete(lectureRoomId);
         return "redirect:/lecture-room";
     }
 }
