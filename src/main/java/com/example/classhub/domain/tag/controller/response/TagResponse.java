@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 public class TagResponse {
     private Long tagId;
     private String name;
+    private Long lectureRoomId;
 
     public TagResponse(Tag tag){
         this.tagId = tag.getTagId();
         this.name = tag.getName();
+        this.lectureRoomId = tag.getLectureRoom().getLectureRoomId();
     }
 }

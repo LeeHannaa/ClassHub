@@ -277,12 +277,14 @@
                     <tr>
                         <th>태그아이디</th>
                         <th>태그이름</th>
+                        <th>강의실아이디</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="tag : ${tags}">
                         <td th:text="${tag.tagId}"></td>
                         <td th:text="${tag.name}"></td>
+                        <td th:text="${tag.lectureRoomId}"></td>
                     </tr>
                     </tbody>
                 </table>

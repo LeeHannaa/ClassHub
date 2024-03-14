@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class LectureRoomService {
         TagRequest tagRequest = new TagRequest();
         tagRequest.setName("공지");
         TagDto tagDto = TagDto.from(tagRequest);
-        Tag tag = Tag.from(tagDto);
+        Tag tag = Tag.from(tagDto, lectureRoom);
         tagRepository.save(tag);
 
         return LectureRoomDto.from(lectureRoom);
@@ -77,7 +78,13 @@ public class LectureRoomService {
     }
     @Transactional
     public void delete(Long lectureRoomId) {
-        lectureRoomRepository.deleteById(lectureRoomId);
+        Optional<LectureRoom> optionalLectureRoom = lectureRoomRepository.findById(lectureRoomId);
+        optionalLectureRoom.ifPresent(lectureRoom -> {
+            List<Tag> tags = tagRepository.findByLectureRoom(lectureRoom);
+            tagRepository.deleteAll(tags);
+
+            lectureRoomRepository.deleteById(lectureRoomId);
+        });
     }
 
     private String generateInviteCode() {
