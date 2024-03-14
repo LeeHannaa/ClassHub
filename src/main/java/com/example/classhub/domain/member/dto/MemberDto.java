@@ -18,6 +18,8 @@ public class MemberDto {
     private String member_name;
     private String email;
     private String uniqueId;
+    private String nickname;
+    private int login_count;
 
     public static MemberDto from(MemberCreateRequest request){
         return MemberDto.builder()
@@ -25,12 +27,15 @@ public class MemberDto {
                 .member_name(request.getMember_name())
                 .email(request.getEmail())
                 .uniqueId(request.getUniqueId())
+                .nickname(request.getNickname())
+                .login_count(request.getLogin_count())
                 .build();
     }
 
     public static MemberDto from(MemberUpdateRequest request){
         return MemberDto.builder()
                 .email(request.getEmail())
+                .nickname(request.getNickname())
                 .build();
     }
 

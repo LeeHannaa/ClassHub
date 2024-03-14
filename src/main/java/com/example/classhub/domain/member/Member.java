@@ -23,12 +23,16 @@ public class Member extends BaseEntity {
     private String member_name;
     private String email;
     private String uniqueId;
+    private String nickname;
+    private int login_count;
 
     public static Member from(MemberDto memberDto) {
         return Member.builder()
                 .member_name(memberDto.getMember_name())
                 .email(memberDto.getEmail())
                 .uniqueId(memberDto.getUniqueId())
+                .nickname(memberDto.getNickname())
+                .login_count(memberDto.getLogin_count())
                 .build();
     }
 

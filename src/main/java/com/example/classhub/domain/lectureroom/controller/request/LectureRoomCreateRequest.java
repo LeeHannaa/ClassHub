@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class LectureRoomCreateRequest {
-    private String name;
+    private String l_room_name;
     private boolean OnOff;
+    private String description;
 }
