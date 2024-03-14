@@ -23,6 +23,7 @@ public class LectureRoom extends BaseEntity {
     private String name;
     private String taInviteCode;
     private String stInviteCode;
+    private String creator;
     private boolean onOff;
 
     public static LectureRoom from(LectureRoomDto lectureRoomDto, String taInviteCode, String stInviteCode) {
