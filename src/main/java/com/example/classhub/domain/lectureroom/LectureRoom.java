@@ -2,14 +2,16 @@ package com.example.classhub.domain.lectureroom;
 
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.classhub.domain.memberlroom.MemberLRoom;
+import com.example.classhub.domain.tag.Tag;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +28,11 @@ public class LectureRoom extends BaseEntity {
     private boolean onOff;
     private String description;
 
+  @OneToMany(mappedBy = "lectureRoom")
+  private List<Tag> tags = new ArrayList<>();
+
+  @OneToMany(mappedBy = "lectureRoom")
+  private List<MemberLRoom> memberLRooms = new ArrayList<>();
     public static LectureRoom from(LectureRoomDto lectureRoomDto, String taInviteCode, String stInviteCode) {
         return LectureRoom.builder()
                 .l_room_name(lectureRoomDto.getL_room_name())
