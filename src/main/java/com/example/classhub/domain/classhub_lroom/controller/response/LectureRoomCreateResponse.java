@@ -1,6 +1,6 @@
-package com.example.classhub.domain.lectureroom.controller.response;
+package com.example.classhub.domain.classhub_lroom.controller.response;
 
-import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
+import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,15 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class LectureRoomCreateResponse {
-    private String name;
+    private String roomName;
     private String taInviteCode;
     private String stInviteCode;
+    private String description;
     private boolean onOff;
 
     public LectureRoomCreateResponse(LectureRoomDto lectureRoomDto) {
-        this.name = lectureRoomDto.getName();
+        this.roomName = lectureRoomDto.getRoomName();
         this.taInviteCode = lectureRoomDto.getTaInviteCode();
         this.stInviteCode = lectureRoomDto.getStInviteCode();
+        this.description = lectureRoomDto.getDescription();
         this.onOff = lectureRoomDto.isOnOff();
     }
 }

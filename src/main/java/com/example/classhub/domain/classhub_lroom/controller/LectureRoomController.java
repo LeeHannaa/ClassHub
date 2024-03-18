@@ -1,19 +1,16 @@
-package com.example.classhub.domain.lectureroom.controller;
+package com.example.classhub.domain.classhub_lroom.controller;
 
-import com.example.classhub.domain.lectureroom.controller.request.LectureRoomCreateRequest;
-import com.example.classhub.domain.lectureroom.controller.request.LectureRoomUpdateRequest;
-import com.example.classhub.domain.lectureroom.controller.response.LectureRoomListResponse;
-import com.example.classhub.domain.lectureroom.controller.response.LectureRoomResponse;
-import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
-import com.example.classhub.domain.lectureroom.service.LectureRoomService;
+import com.example.classhub.domain.classhub_lroom.controller.request.LectureRoomCreateRequest;
+import com.example.classhub.domain.classhub_lroom.controller.request.LectureRoomUpdateRequest;
+import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomListResponse;
+import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
+import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

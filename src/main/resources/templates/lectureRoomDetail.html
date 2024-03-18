@@ -11,7 +11,7 @@
 
     <div th:object="${lectureRoom}">
         <label for="name">강의실 이름:</label>
-        <span id="name" th:text="${lectureRoom.name}"></span>
+        <span id="name" th:text="${lectureRoom.roomName}"></span>
         <br>
         <label for="onOff">강의실 활성화 상태:</label>
         <span id="onOff" th:text="${lectureRoom.onOff}"></span>
@@ -21,6 +21,9 @@
         <br>
         <label for="taInviteCode">강의실 조교 입장 코드:</label>
         <span id="taInviteCode" th:text="${lectureRoom.taInviteCode}"></span>
+        <br>
+        <label for="description">강의실 설명:</label>
+        <span id="description" th:text="${lectureRoom.description}"></span>
         <br>
     </div>
 

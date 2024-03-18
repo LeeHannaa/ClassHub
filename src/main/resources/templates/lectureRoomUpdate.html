@@ -10,11 +10,14 @@
     <hr>
 
     <form action="#" th:action="@{/lecture-room/update/{lectureRoomId}(lectureRoomId=${lectureRoomId})}" th:object="${lectureRoom}" method="post">
-    <label for="name">강의실 이름:</label>
-        <input type="text" id="name" th:field="*{name}">
+        <label for="name">강의실 이름:</label>
+        <input type="text" id="name" th:field="*{roomName}">
         <br>
         <label for="onOff">강의실 상태:</label>
         <input type="checkbox" id="onOff" th:field="*{onOff}">
+        <br>
+        <label for="name">강의실 설명:</label>
+        <input type="text" id="description" th:field="*{description}">
         <br>
         <button type="submit"> 수정</button>
     </form>

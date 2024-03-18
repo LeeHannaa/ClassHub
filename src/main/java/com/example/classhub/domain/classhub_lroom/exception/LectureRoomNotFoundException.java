@@ -1,4 +1,4 @@
-package com.example.classhub.domain.lectureroom.exception;
+package com.example.classhub.domain.classhub_lroom.exception;
 
 public class LectureRoomNotFoundException extends RuntimeException{
     public LectureRoomNotFoundException() {

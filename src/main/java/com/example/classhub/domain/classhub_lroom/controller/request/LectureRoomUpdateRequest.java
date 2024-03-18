@@ -1,4 +1,4 @@
-package com.example.classhub.domain.lectureroom.controller.request;
+package com.example.classhub.domain.classhub_lroom.controller.request;
 
 import lombok.Data;
 import lombok.Getter;
@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class LectureRoomUpdateRequest {
-    private String name;
+    private String roomName;
+    private String description;
     private boolean OnOff;
 }
