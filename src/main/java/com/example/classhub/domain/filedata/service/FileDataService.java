@@ -34,5 +34,22 @@ public class FileDataService {
         return new FileDataListResponse(fileDataResponses);
     }
 
+    @Transactional
+    public FileDataDto findByFileDataId(Long fileDataId) {
+        FileData fileData = fileDataRepository.findById(fileDataId).orElseThrow(() -> new IllegalArgumentException("해당 파일이 존재하지 않습니다."));
+        return FileDataDto.from(fileData);
+    }
+    @Transactional
+    public FileDataDto update(Long fileDataId, FileDataDto fileDataDto) {
+        FileData fileData = fileDataRepository.findById(fileDataId).orElseThrow(() -> new IllegalArgumentException("해당 파일이 존재하지 않습니다."));
 
+        fileData.update(fileDataDto);
+        fileDataRepository.save(fileData);
+        return FileDataDto.from(fileData);
+    }
+
+    @Transactional
+    public void delete(Long fileDataId) {
+        fileDataRepository.deleteById(fileDataId);
+    }
 }

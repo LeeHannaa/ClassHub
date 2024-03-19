@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class FileDataController {
     private final FileDataService fileDataService;
 
+    // create
     @GetMapping("/file-data/fileDataForm")
     public String createFileDataForm(Model model) {
         model.addAttribute("fileData", new FileDataCreateRequest());
@@ -29,6 +30,7 @@ public class FileDataController {
         return "redirect:/file-data/fileDataList";
     }
 
+    // read List
     @GetMapping("/file-data/fileDataList")
     public String findFileDataList(Model model){
         FileDataListResponse fileDataListResponse = fileDataService.getFileDataList();
@@ -36,6 +38,24 @@ public class FileDataController {
         return "fileDataList";
     }
 
+    // update
+    @GetMapping("/file-data/updateForm/{fileDataId}")
+    public String updateForm(@ModelAttribute("fileDataId") Long fileDataId, Model model) {
+        FileDataDto fileDataDto = fileDataService.findByFileDataId(fileDataId);
+        model.addAttribute("fileData", fileDataDto);
+        return "fileDataUpdateForm";
+    }
 
+    @PostMapping("/file-data/updateForm/{fileDataId}")
+    public String update(@ModelAttribute("fileDataId") Long fileDataId, @ModelAttribute("fileData") FileDataCreateRequest request) {
+        fileDataService.update(fileDataId, FileDataDto.from(request));
+        return "redirect:/file-data/fileDataList";
+    }
 
+    // delete
+    @GetMapping("/file-data/delete/{fileDataId}")
+    public String delete(@ModelAttribute("fileDataId") Long fileDataId) {
+        fileDataService.delete(fileDataId);
+        return "redirect:/file-data/fileDataList";
+    }
 }

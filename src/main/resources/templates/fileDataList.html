@@ -18,6 +18,8 @@
     <tr th:each="filedata : ${fileDatas}">
         <td th:text="${filedata.fileDataName}"></td>
         <td th:text="${filedata.fileDataType}"></td>
+        <td><a th:href="@{/file-data/updateForm/{fileDataId}(fileDataId=${filedata.id})}">Update</a></td>
+        <td><a th:href="@{/file-data/delete/{fileDataId}(fileDataId=${filedata.id})}">Delete</a></td>
     </tr>
     </tbody>
 </table>

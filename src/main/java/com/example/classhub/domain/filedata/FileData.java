@@ -29,4 +29,9 @@ public class FileData extends BaseEntity {
                 .fileDataType(fileDataDto.getFileDataType())
                 .build();
     }
+
+    public void update(FileDataDto fileDataDto) {
+        this.fileDataName = fileDataDto.getFileDataName();
+        this.fileDataType = fileDataDto.getFileDataType();
+    }
 }
