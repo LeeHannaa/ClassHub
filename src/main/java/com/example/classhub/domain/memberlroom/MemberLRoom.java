@@ -7,9 +7,11 @@ import com.example.classhub.domain.memberlroom.allenum.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class MemberLRoom {
   @Id
@@ -25,9 +27,9 @@ public class MemberLRoom {
   private LectureRoom lectureRoom;
 
   @Enumerated(EnumType.STRING)
-  private Role role;
+  private Role role = Role.STUDENT;
   @Enumerated(EnumType.STRING)
-  private Permission permission;
+  private Permission permission = Permission.UNAPPROVED;
 
   public void setMember(Member member) {
     this.member = member;

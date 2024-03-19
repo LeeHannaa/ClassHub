@@ -29,9 +29,6 @@ public class LectureRoom extends BaseEntity {
     private String description;
 
   @OneToMany(mappedBy = "lectureRoom")
-  private List<Tag> tags = new ArrayList<>();
-
-  @OneToMany(mappedBy = "lectureRoom")
   private List<MemberLRoom> memberLRooms = new ArrayList<>();
     public static LectureRoom from(LectureRoomDto lectureRoomDto, String taInviteCode, String stInviteCode) {
         return LectureRoom.builder()
