@@ -1,7 +1,7 @@
-package com.example.classhub.domain.lectureroom.controller.response;
+package com.example.classhub.domain.classhub_lroom.controller.response;
 
-import com.example.classhub.domain.lectureroom.LectureRoom;
-import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
+import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LectureRoomResponse {
     private Long lectureRoomId;
-    private String name;
+    private String roomName;
     private String taInviteCode;
     private String stInviteCode;
     private boolean onOff;
 
-    public LectureRoomResponse(LectureRoom lectureRoom){
+    public LectureRoomResponse(ClassHub_LRoom lectureRoom){
         this.lectureRoomId = lectureRoom.getLectureRoomId();
-        this.name = lectureRoom.getName();
+        this.roomName = lectureRoom.getRoomName();
         this.taInviteCode = lectureRoom.getTaInviteCode();
         this.stInviteCode = lectureRoom.getStInviteCode();
         this.onOff = lectureRoom.isOnOff();
@@ -25,7 +25,7 @@ public class LectureRoomResponse {
 
     public LectureRoomResponse(LectureRoomDto lectureRoomDto){
         this.lectureRoomId = lectureRoomDto.getLectureRoomId();
-        this.name = lectureRoomDto.getName();
+        this.roomName = lectureRoomDto.getRoomName();
         this.taInviteCode = lectureRoomDto.getTaInviteCode();
         this.stInviteCode = lectureRoomDto.getStInviteCode();
         this.onOff = lectureRoomDto.isOnOff();

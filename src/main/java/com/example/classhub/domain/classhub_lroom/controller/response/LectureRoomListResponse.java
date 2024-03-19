@@ -1,4 +1,4 @@
-package com.example.classhub.domain.lectureroom.controller.response;
+package com.example.classhub.domain.classhub_lroom.controller.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

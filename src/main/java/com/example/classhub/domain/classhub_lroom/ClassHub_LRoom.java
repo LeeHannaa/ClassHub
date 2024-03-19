@@ -1,7 +1,7 @@
-package com.example.classhub.domain.lectureroom;
+package com.example.classhub.domain.classhub_lroom;
 
 import com.example.classhub.domain.BaseEntity;
-import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
+import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.tag.Tag;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,31 +17,34 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LectureRoom extends BaseEntity {
+public class ClassHub_LRoom extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lectureRoomId;
-    private String name;
+    private String roomName;
     private String taInviteCode;
     private String stInviteCode;
     private String creator;
+    private String description;
     private boolean onOff;
 
     @OneToMany(mappedBy = "lectureRoom")
     private List<Tag> tags = new ArrayList<>();
 
 
-    public static LectureRoom from(LectureRoomDto lectureRoomDto, String taInviteCode, String stInviteCode) {
-        return LectureRoom.builder()
-                .name(lectureRoomDto.getName())
+    public static ClassHub_LRoom from(LectureRoomDto lectureRoomDto, String taInviteCode, String stInviteCode) {
+        return ClassHub_LRoom.builder()
+                .roomName(lectureRoomDto.getRoomName())
                 .taInviteCode(taInviteCode)
                 .stInviteCode(stInviteCode)
+                .description(lectureRoomDto.getDescription())
                 .onOff(lectureRoomDto.isOnOff())
                 .build();
     }
 
     public void update(LectureRoomDto lectureRoomDto) {
-        this.name = lectureRoomDto.getName();
+        this.description = lectureRoomDto.getDescription();
+        this.roomName = lectureRoomDto.getRoomName();
         this.onOff = lectureRoomDto.isOnOff();
     }
 }

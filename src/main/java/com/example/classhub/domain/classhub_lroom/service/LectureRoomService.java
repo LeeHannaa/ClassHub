@@ -1,13 +1,11 @@
-package com.example.classhub.domain.lectureroom.service;
+package com.example.classhub.domain.classhub_lroom.service;
 
-import com.example.classhub.domain.lectureroom.LectureRoom;
-import com.example.classhub.domain.lectureroom.controller.response.LectureRoomListResponse;
-import com.example.classhub.domain.lectureroom.controller.response.LectureRoomResponse;
-import com.example.classhub.domain.lectureroom.dto.LectureRoomDto;
-import com.example.classhub.domain.lectureroom.repository.LectureRoomRepository;
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
+import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomListResponse;
+import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomResponse;
+import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
+import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
 import com.example.classhub.domain.tag.Tag;
-import com.example.classhub.domain.tag.controller.request.TagRequest;
-import com.example.classhub.domain.tag.dto.TagDto;
 import com.example.classhub.domain.tag.repository.TagRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,20 +31,15 @@ public class LectureRoomService {
             stInviteCode = generateInviteCode();
         } while (taInviteCode.equals(stInviteCode) || lectureRoomRepository.findByTaInviteCodeAndStInviteCode(taInviteCode, stInviteCode) != null);
 
-        LectureRoom lectureRoom = LectureRoom.from(lectureRoomDto, taInviteCode, stInviteCode);
+        ClassHub_LRoom lectureRoom = ClassHub_LRoom.from(lectureRoomDto, taInviteCode, stInviteCode);
         lectureRoomRepository.save(lectureRoom);
-        TagRequest tagRequest = new TagRequest();
-        tagRequest.setName("공지");
-        TagDto tagDto = TagDto.from(tagRequest);
-        Tag tag = Tag.from(tagDto, lectureRoom);
-        tagRepository.save(tag);
 
         return LectureRoomDto.from(lectureRoom);
     }
 
     @Transactional
     public LectureRoomListResponse getLectureRoomList() {
-        List<LectureRoom> lectureRooms = lectureRoomRepository.findAll();
+        List<ClassHub_LRoom> lectureRooms = lectureRoomRepository.findAll();
         List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
                 .map(LectureRoomResponse::new)
                 .collect(Collectors.toList());
@@ -55,7 +48,7 @@ public class LectureRoomService {
     @Transactional
     public LectureRoomListResponse findByKeyword(String keyword) {
         // 이름, TA 초대 코드 또는 학생 초대 코드 중 하나라도 입력한 키워드와 일치하는 강의실 정보를 조회
-        List<LectureRoom> lectureRooms = lectureRoomRepository.findByTaInviteCodeOrStInviteCodeOrName(keyword, keyword, keyword);
+        List<ClassHub_LRoom> lectureRooms = lectureRoomRepository.findByTaInviteCodeOrStInviteCodeOrRoomName(keyword, keyword, keyword);
         List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
                 .map(LectureRoomResponse::new)
                 .collect(Collectors.toList());
@@ -63,13 +56,13 @@ public class LectureRoomService {
     }
     @Transactional
     public LectureRoomDto findByRoomId(Long lectureRoomId) {
-        LectureRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
+        ClassHub_LRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
         return LectureRoomDto.from(lectureRoom);
     }
     @Transactional
     public LectureRoomDto update(Long lectureRoomId, LectureRoomDto lectureRoomDto) {
-        LectureRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
+        ClassHub_LRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
 
         lectureRoom.update(lectureRoomDto);
@@ -78,7 +71,7 @@ public class LectureRoomService {
     }
     @Transactional
     public void delete(Long lectureRoomId) {
-        Optional<LectureRoom> optionalLectureRoom = lectureRoomRepository.findById(lectureRoomId);
+        Optional<ClassHub_LRoom> optionalLectureRoom = lectureRoomRepository.findById(lectureRoomId);
         optionalLectureRoom.ifPresent(lectureRoom -> {
             List<Tag> tags = tagRepository.findByLectureRoom(lectureRoom);
             tagRepository.deleteAll(tags);
