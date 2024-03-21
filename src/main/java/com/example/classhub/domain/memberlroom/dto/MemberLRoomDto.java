@@ -24,7 +24,7 @@ public class MemberLRoomDto {
 
   public static MemberLRoomDto from(MemberLRoom memberLRoom) {
     return MemberLRoomDto.builder()
-      .memberLRoomId(memberLRoom.getMemberLRoomId())
+      .memberLRoomId(memberLRoom.getId())
       .role(memberLRoom.getRole())
       .permission(memberLRoom.getPermission())
       .build();

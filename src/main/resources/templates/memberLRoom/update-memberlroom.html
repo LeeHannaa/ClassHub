@@ -4,14 +4,22 @@
   <title>Update MemberLRoom</title>
 </head>
 <body>
-<h1>Update MemberLRoom</h1>
+<h1>MemberLRoom 수정하기</h1>
 <form action="#" th:action="@{/memberlroom/update/{id}(id=${memberLRoom.id})}" th:object="${memberLRoom}" method="post">
   <input type="hidden" th:field="*{id}" />
-  <p>Lecture Room Name: <input type="text" th:field="*{lectureRoom}" /></p>
-  <p>Member: <input type="text" th:field="*{member}" /></p>
-  <p>Role: <input type="text" th:field="*{role}" /></p>
-  <p>Permission: <input type="text" th:field="*{permission}" /></p>
-  <p><input type="submit" value="Update" /> <a href="/memberlrooms">Cancel</a></p>
+  <p>강의실 아이디: <input type="number" th:field="*{lectureRoom}" /></p>
+  <p>회원 아이디: <input type="number" th:field="*{member}" /></p>
+  <p>역할:
+    <select th:field="*{role}">
+      <option th:each="role : ${allRoles}" th:value="${role}" th:text="${role}"></option>
+    </select>
+  </p>
+  <p>권한:
+    <select th:field="*{permission}">
+      <option th:each="permission : ${allPermissions}" th:value="${permission}" th:text="${permission}"></option>
+    </select>
+  </p>
+  <p><input type="submit" value="수정" /> <a href="/memberlroom">취소</a></p>
 </form>
 </body>
 </html>

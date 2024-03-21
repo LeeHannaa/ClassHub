@@ -16,7 +16,7 @@ import lombok.Setter;
 public class MemberLRoom {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long memberLRoomId;
+  private Long Id;
 
   @ManyToOne
   @JoinColumn(name = "member_id")
