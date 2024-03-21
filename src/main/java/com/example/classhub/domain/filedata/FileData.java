@@ -2,10 +2,8 @@ package com.example.classhub.domain.filedata;
 
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.filedata.dto.FileDataDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.classhub.domain.post.ClassHub_Post;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +21,15 @@ public class FileData extends BaseEntity {
     private String fileDataName;
     private String fileDataType;
 
-    public static FileData from(FileDataDto fileDataDto) {
+    @ManyToOne
+    @JoinColumn(name = "postId")
+    private ClassHub_Post post;
+
+    public static FileData from(FileDataDto fileDataDto, ClassHub_Post post) {
         return FileData.builder()
                 .fileDataName(fileDataDto.getFileDataName())
                 .fileDataType(fileDataDto.getFileDataType())
+                .post(post)
                 .build();
     }
 

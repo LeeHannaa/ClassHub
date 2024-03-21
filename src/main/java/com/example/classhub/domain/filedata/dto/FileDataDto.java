@@ -39,7 +39,13 @@ public class FileDataDto {
                 .id(fileData.getId())
                 .fileDataName(fileData.getFileDataName())
                 .fileDataType(fileData.getFileDataType())
-//                .postId(fileData.getPostId())
+                .postId(fileData.getPost().getPostId())
+                .build();
+    }
+
+    public static FileDataDto from (Long postId){
+        return FileDataDto.builder()
+                .postId(postId)
                 .build();
     }
 }

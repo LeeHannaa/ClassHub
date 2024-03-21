@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
+
 @Getter
 @NoArgsConstructor
 @Data
