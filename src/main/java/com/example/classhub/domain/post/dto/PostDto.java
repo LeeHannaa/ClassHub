@@ -1,6 +1,6 @@
 package com.example.classhub.domain.post.dto;
 
-import com.example.classhub.domain.post.Post;
+import com.example.classhub.domain.post.ClassHub_Post;
 import com.example.classhub.domain.post.controller.request.PostCreateRequest;
 import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
 import lombok.AllArgsConstructor;
@@ -39,14 +39,14 @@ public class PostDto {
                 .build();
     }
 
-    public static PostDto from(Post post){
+    public static PostDto from(ClassHub_Post post){
         return PostDto.builder()
-                .id(post.getId())
+                .id(post.getPostId())
                 .postTitle(post.getPostTitle())
                 .postContent(post.getPostContent())
                 .postShareRange(post.getPostShareRange())
                 .tagId(post.getTagId())
-                .lRoomId(post.getLectureRoom().getLectureRoomId())
+                .lRoomId(post.getLRoom().getLRoomId())
                 .build();
     }
 }

@@ -1,7 +1,7 @@
 package com.example.classhub.domain.post;
 
 import com.example.classhub.domain.BaseEntity;
-import com.example.classhub.domain.lectureroom.LectureRoom;
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.post.dto.PostDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post extends BaseEntity {
+public class ClassHub_Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
+    private Long postId;
 
     @Column(nullable = false)
     private String postTitle;
@@ -34,18 +34,18 @@ public class Post extends BaseEntity {
 
 //    private Long lRoomId;
 
-    @ManyToOne
-    @JoinColumn(name = "lectureRoomId")
-    private LectureRoom lectureRoom;
+    @ManyToOne(targetEntity = ClassHub_LRoom.class)
+    @JoinColumn(name = "lRoomId" )
+    private ClassHub_LRoom lRoom;
 
 
-    public static Post from(PostDto postDto, LectureRoom lectureRoom) {
-        return Post.builder()
+    public static ClassHub_Post from(PostDto postDto, ClassHub_LRoom lRoom) {
+        return ClassHub_Post.builder()
                 .postTitle(postDto.getPostTitle())
                 .postContent(postDto.getPostContent())
                 .postShareRange(postDto.getPostShareRange())
                 .tagId(postDto.getTagId())
-                .lectureRoom(lectureRoom)
+                .lRoom(lRoom)
                 .build();
     }
 
