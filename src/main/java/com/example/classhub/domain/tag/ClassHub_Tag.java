@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tag extends BaseEntity {
+public class ClassHub_Tag extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tagId;
@@ -30,15 +30,15 @@ public class Tag extends BaseEntity {
 //        this.lectureRoom = lectureRoom;
 //    }
 
-    public static Tag from(TagDto tagDto, ClassHub_LRoom lectureRoom) {
-        return Tag.builder()
+    public static ClassHub_Tag from(TagDto tagDto, ClassHub_LRoom lectureRoom) {
+        return ClassHub_Tag.builder()
                 .name(tagDto.getName())
                 .lectureRoom(lectureRoom)
                 .build();
     }
 
-    public static Tag from(TagDto tagDto) {
-        return Tag.builder()
+    public static ClassHub_Tag from(TagDto tagDto) {
+        return ClassHub_Tag.builder()
                 .name(tagDto.getName())
                 .build();
     }

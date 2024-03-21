@@ -37,7 +37,7 @@ public class LectureRoomDto {
 
     public static LectureRoomDto from(ClassHub_LRoom lectureRoom){
         return LectureRoomDto.builder()
-                .lectureRoomId(lectureRoom.getLectureRoomId())
+                .lectureRoomId(lectureRoom.getLRoomId())
                 .roomName(lectureRoom.getRoomName())
                 .description(lectureRoom.getDescription())
                 .taInviteCode(lectureRoom.getTaInviteCode())

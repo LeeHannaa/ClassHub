@@ -1,7 +1,7 @@
 package com.example.classhub.domain.post.repository;
 
-import com.example.classhub.domain.post.Post;
+import com.example.classhub.domain.post.ClassHub_Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<ClassHub_Post, Long> {
 }

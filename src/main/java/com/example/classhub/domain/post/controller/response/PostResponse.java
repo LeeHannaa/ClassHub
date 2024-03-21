@@ -1,6 +1,6 @@
 package com.example.classhub.domain.post.controller.response;
 
-import com.example.classhub.domain.post.Post;
+import com.example.classhub.domain.post.ClassHub_Post;
 import com.example.classhub.domain.post.dto.PostDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +15,13 @@ public class PostResponse {
     private String tagId;
     private Long lRoomId;
 
-    public PostResponse(Post post){
-        this.id = post.getId();
+    public PostResponse(ClassHub_Post post){
+        this.id = post.getPostId();
         this.postTitle = post.getPostTitle();
         this.postContent = post.getPostContent();
         this.postShareRange = post.getPostShareRange();
         this.tagId = post.getTagId();
-        this.lRoomId = post.getLectureRoom().getLectureRoomId();
+        this.lRoomId = post.getLRoom().getLRoomId();
     }
     public PostResponse(PostDto postDto){
         this.id = postDto.getId();

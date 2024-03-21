@@ -2,7 +2,7 @@ package com.example.classhub.domain.classhub_lroom;
 
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
-import com.example.classhub.domain.tag.Tag;
+import com.example.classhub.domain.tag.ClassHub_Tag;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +20,7 @@ import java.util.List;
 public class ClassHub_LRoom extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lectureRoomId;
+    private Long lRoomId;
     private String roomName;
     private String taInviteCode;
     private String stInviteCode;
@@ -29,7 +29,7 @@ public class ClassHub_LRoom extends BaseEntity {
     private boolean onOff;
 
     @OneToMany(mappedBy = "lectureRoom")
-    private List<Tag> tags = new ArrayList<>();
+    private List<ClassHub_Tag> tags = new ArrayList<>();
 
 
     public static ClassHub_LRoom from(LectureRoomDto lectureRoomDto, String taInviteCode, String stInviteCode) {
