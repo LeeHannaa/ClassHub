@@ -16,7 +16,7 @@ public class LectureRoomResponse {
     private boolean onOff;
 
     public LectureRoomResponse(ClassHub_LRoom lectureRoom){
-        this.lectureRoomId = lectureRoom.getLectureRoomId();
+        this.lectureRoomId = lectureRoom.getLRoomId();
         this.roomName = lectureRoom.getRoomName();
         this.taInviteCode = lectureRoom.getTaInviteCode();
         this.stInviteCode = lectureRoom.getStInviteCode();

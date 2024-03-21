@@ -5,7 +5,7 @@ import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoo
 import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomResponse;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
-import com.example.classhub.domain.tag.Tag;
+import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.repository.TagRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -73,7 +73,7 @@ public class LectureRoomService {
     public void delete(Long lectureRoomId) {
         Optional<ClassHub_LRoom> optionalLectureRoom = lectureRoomRepository.findById(lectureRoomId);
         optionalLectureRoom.ifPresent(lectureRoom -> {
-            List<Tag> tags = tagRepository.findByLectureRoom(lectureRoom);
+            List<ClassHub_Tag> tags = tagRepository.findByLectureRoom(lectureRoom);
             tagRepository.deleteAll(tags);
 
             lectureRoomRepository.deleteById(lectureRoomId);
