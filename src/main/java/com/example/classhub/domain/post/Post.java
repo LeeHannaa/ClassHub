@@ -32,19 +32,20 @@ public class Post extends BaseEntity {
     @Column(nullable = true)
     private String tagId;
 
-    private Long lRoomId;
+//    private Long lRoomId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "lRoomId")
+    @ManyToOne
+    @JoinColumn(name = "lectureRoomId")
     private LectureRoom lectureRoom;
 
-    public static Post from(PostDto postDto) {
+
+    public static Post from(PostDto postDto, LectureRoom lectureRoom) {
         return Post.builder()
                 .postTitle(postDto.getPostTitle())
                 .postContent(postDto.getPostContent())
                 .postShareRange(postDto.getPostShareRange())
                 .tagId(postDto.getTagId())
-                .lRoomId(postDto.getLRoomId())
+                .lectureRoom(lectureRoom)
                 .build();
     }
 

@@ -21,7 +21,7 @@ public class PostResponse {
         this.postContent = post.getPostContent();
         this.postShareRange = post.getPostShareRange();
         this.tagId = post.getTagId();
-        this.lRoomId = post.getLRoomId();
+        this.lRoomId = post.getLectureRoom().getLectureRoomId();
     }
     public PostResponse(PostDto postDto){
         this.id = postDto.getId();

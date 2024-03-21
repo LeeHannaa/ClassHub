@@ -1,5 +1,7 @@
 package com.example.classhub.domain.post.service;
 
+import com.example.classhub.domain.lectureroom.LectureRoom;
+import com.example.classhub.domain.lectureroom.repository.LectureRoomRepository;
 import com.example.classhub.domain.post.Post;
 import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.controller.response.PostResponse;
@@ -14,9 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final LectureRoomRepository lectureRoomRepository;
 
     public void savePost(PostDto postDto) {
-        Post post = Post.from(postDto);
+        LectureRoom lectureRoom = lectureRoomRepository.findById(postDto.getLRoomId()).orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
+        Post post = Post.from(postDto, lectureRoom);
         postRepository.save(post);
 
         PostDto.from(post);

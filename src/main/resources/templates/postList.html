@@ -24,7 +24,7 @@
         <td th:text="${post.postContent}"></td>
         <td th:text="${post.postShareRange}"></td>
         <td th:text="${post.tagId}"></td>
-<!--        <td th:text="${post.lRoomId}"></td>-->
+        <td th:text="${post.getLRoomId()}"></td>
         <td><a th:href="@{/post/updateForm/{postId}(postId=${post.id})}">Update</a></td>
         <td><a th:href="@{/post/delete/{postId}(postId=${post.id})}">Delete</a></td>
     </tr>

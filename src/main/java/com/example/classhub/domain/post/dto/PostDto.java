@@ -46,7 +46,7 @@ public class PostDto {
                 .postContent(post.getPostContent())
                 .postShareRange(post.getPostShareRange())
                 .tagId(post.getTagId())
-                .lRoomId(post.getLRoomId())
+                .lRoomId(post.getLectureRoom().getLectureRoomId())
                 .build();
     }
 }
