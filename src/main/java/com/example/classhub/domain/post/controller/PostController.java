@@ -7,10 +7,8 @@ import com.example.classhub.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,8 +22,8 @@ public class PostController {
         return "postForm";
     }
     @PostMapping("/post/postForm")
-    public String postForm(@ModelAttribute("postForm") PostCreateRequest request){
-        postService.savePost(PostDto.from(request));
+    public String postForm(@ModelAttribute("postForm") PostCreateRequest request, @RequestParam("file") MultipartFile file){
+        postService.savePost(PostDto.from(request), file);
         return "redirect:/post/postList";
     }
 

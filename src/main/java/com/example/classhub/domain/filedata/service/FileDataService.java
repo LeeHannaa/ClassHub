@@ -8,6 +8,8 @@ import com.example.classhub.domain.filedata.repository.FileDataRepository;
 import com.example.classhub.domain.member.Member;
 import com.example.classhub.domain.member.controller.response.MemberListResponse;
 import com.example.classhub.domain.member.controller.response.MemberResponse;
+import com.example.classhub.domain.post.ClassHub_Post;
+import com.example.classhub.domain.post.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FileDataService {
     private final FileDataRepository fileDataRepository;
+    private final PostRepository postRepository;
     @Transactional
     public FileDataDto saveFileData(FileDataDto fileDataDto) {
-        FileData filedata = FileData.from(fileDataDto);
+        ClassHub_Post post = postRepository.findById(fileDataDto.getPostId()).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+        FileData filedata = FileData.from(fileDataDto, post);
         fileDataRepository.save(filedata);
 
         return FileDataDto.from(filedata);
