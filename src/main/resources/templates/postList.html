@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시물 목록</title>
+
+</head>
+<body>
+<h2>게시물 목록</h2>
+<table>
+    <thead>
+    <tr>
+        <th>No.</th>
+        <th>제목</th>
+        <th>내용</th>
+        <th>공유 범위</th>
+        <th>연결된 태그 아이디</th>
+<!--        <th>강의실 아이디</th>-->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.id}"></td>
+        <td th:text="${post.postTitle}"></td>
+        <td th:text="${post.postContent}"></td>
+        <td th:text="${post.postShareRange}"></td>
+        <td th:text="${post.tagId}"></td>
+        <td th:text="${post.getLRoomId()}"></td>
+        <td><a th:href="@{/post/updateForm/{postId}(postId=${post.id})}">Update</a></td>
+        <td><a th:href="@{/post/delete/{postId}(postId=${post.id})}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<button onclick="location.href='/post/postForm'">게시물 등록</button>
+</body>
+</html>

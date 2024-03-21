@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>파일 목록</title>
+
+</head>
+<body>
+<h2>파일 목록</h2>
+<table>
+    <thead>
+    <tr>
+        <th>No.</th>
+        <th>이름</th>
+        <th>타입</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="filedata : ${fileDatas}">
+        <td th:text="${filedata.fileDataName}"></td>
+        <td th:text="${filedata.fileDataType}"></td>
+        <td><a th:href="@{/file-data/updateForm/{fileDataId}(fileDataId=${filedata.id})}">Update</a></td>
+        <td><a th:href="@{/file-data/delete/{fileDataId}(fileDataId=${filedata.id})}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<button onclick="location.href='/file-data/fileDataForm'">파일 등록</button>
+</body>
+</html>
