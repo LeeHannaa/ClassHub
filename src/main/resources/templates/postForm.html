@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시물 생성 폼</title>
+</head>
+<body>
+<h1>게시물 생성 폼</h1>
+<form action="#" th:action="@{/post/postForm}" th:object="${post}" method="post">
+    <label for="postTitle">게시물 제목:</label>
+    <input type="text" id="postTitle" th:field="*{postTitle}">
+
+    <label for="postContent">게시물 내용:</label>
+    <input type="text" id="postContent" th:field="*{postContent}">
+
+    <label for="postShareRange">게시물 공유 범위:</label>
+    <input type="text" id="postShareRange" th:field="*{postShareRange}">
+
+    <label for="tagId">연결된 태그 아이디:</label>
+    <input type="text" id="tagId" th:field="*{tagId}">
+
+<!--    <label for="lRoomId">강의실 아이디:</label>-->
+<!--    <input type="text" id="lRoomId" th:field="*{lRoomId}">-->
+
+    <button type="submit">저장</button>
+</form>
+</body>
+</html>

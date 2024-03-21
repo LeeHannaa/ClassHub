@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div class="container">
+    <h1>회원 정보 수정 페이지</h1>
+    <hr>
+
+    <a th:href="@{/post/postList}">회원 목록으로 돌아가기</a>
+
+    <hr>
+
+    <form action="#" th:action="@{/post/updateForm/{postId}(postId=${postId})}" th:object="${post}" method="post">
+        <label for="postTitle">게시물 제목:</label>
+        <input type="text" id="postTitle" th:field="*{postTitle}">
+
+        <label for="postContent">게시물 내용:</label>
+        <input type="text" id="postContent" th:field="*{postContent}">
+
+        <label for="postShareRange">게시물 공유 범위:</label>
+        <input type="text" id="postShareRange" th:field="*{postShareRange}">
+
+        <label for="tagId">연결된 태그 아이디:</label>
+        <input type="text" id="tagId" th:field="*{tagId}">
+
+        <button type="submit"> 수정</button>
+    </form>
+
+</div>
+</body>
+
+</html>

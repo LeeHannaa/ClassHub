@@ -1,10 +1,9 @@
 package com.example.classhub.domain.post;
 
 import com.example.classhub.domain.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.classhub.domain.lectureroom.LectureRoom;
+import com.example.classhub.domain.post.dto.PostDto;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,41 @@ import lombok.NoArgsConstructor;
 public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
+    @Column(nullable = false)
+    private String postTitle;
 
+    @Column(nullable = false)
+    private String postContent;
+
+    @Column(nullable = false)
+    private String postShareRange;
+
+    @Column(nullable = true)
+    private String tagId;
+
+    private Long lRoomId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "lRoomId")
+    private LectureRoom lectureRoom;
+
+    public static Post from(PostDto postDto) {
+        return Post.builder()
+                .postTitle(postDto.getPostTitle())
+                .postContent(postDto.getPostContent())
+                .postShareRange(postDto.getPostShareRange())
+                .tagId(postDto.getTagId())
+                .lRoomId(postDto.getLRoomId())
+                .build();
+    }
+
+    public void update(PostDto from) {
+        this.postTitle = from.getPostTitle();
+        this.postContent = from.getPostContent();
+        this.postShareRange = from.getPostShareRange();
+        this.tagId = from.getTagId();
+    }
 }
