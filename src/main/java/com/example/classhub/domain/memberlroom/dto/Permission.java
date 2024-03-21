@@ -1,4 +1,4 @@
-package com.example.classhub.domain.memberlroom.allenum;
+package com.example.classhub.domain.memberlroom.dto;
 
 public enum Permission {
   APPROVED, // 승인

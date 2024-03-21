@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>MemberLRooms</title>
+</head>
+<body>
+<h1>MemberLRooms</h1>
+<div>
+  <a href="/memberlroom/new">Create New MemberLRoom</a>
+</div>
+<table>
+  <thead>
+  <tr>
+    <th>Lecture Room</th>
+    <th>Member</th>
+    <th>Role</th>
+    <th>Permission</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="memberLRoom : ${memberLRooms}">
+    <td th:text="${memberLRoom.lectureRoom}">Lecture Room</td>
+    <td th:text="${memberLRoom.member}">Member</td>
+    <td th:text="${memberLRoom.role}">Role</td>
+    <td th:text="${memberLRoom.permission}">Permission</td>
+    <td><a th:href="@{/memberlrooms/edit/{id}(id=${memberLRoom.id})}">Edit</a></td>
+    <td><a th:href="@{/memberlrooms/delete/{id}(id=${memberLRoom.id})}" onclick="return confirm('Are you sure?')">Delete</a></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

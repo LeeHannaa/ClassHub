@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Create MemberLRoom</title>
+</head>
+<body>
+<h1>Create a new MemberLRoom</h1>
+<form action="#" th:action="@{/memberlroom}" th:object="${memberLRoom}" method="post">
+  <p>Lecture Room Name: <input type="text" th:field="*{lectureRoom}" /></p>
+  <p>Member: <input type="text" th:field="*{member}" /></p>
+  <p>Role: <input type="text" th:field="*{role}" /></p>
+  <p>Permission: <input type="text" th:field="*{permission}" /></p>
+  <p><input type="submit" value="Submit" /> <a href="/memberlrooms">Cancel</a></p>
+</form>
+</body>
+</html>

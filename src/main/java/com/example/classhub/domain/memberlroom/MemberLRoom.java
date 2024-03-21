@@ -2,16 +2,16 @@ package com.example.classhub.domain.memberlroom;
 
 import com.example.classhub.domain.lectureroom.LectureRoom;
 import com.example.classhub.domain.member.Member;
-import com.example.classhub.domain.memberlroom.allenum.Permission;
-import com.example.classhub.domain.memberlroom.allenum.Role;
+import com.example.classhub.domain.memberlroom.dto.Permission;
+import com.example.classhub.domain.memberlroom.dto.Role;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class MemberLRoom {
   @Id
