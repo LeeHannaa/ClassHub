@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>MemberLRooms</title>
+</head>
+<body>
+<h1>MemberLRooms</h1>
+<div>
+  <a href="/memberlroom/new">New MemberLRoom 생성하기</a>
+</div>
+<table>
+  <thead>
+  <tr>
+    <th>강의실 아이디</th>
+    <th>회원 아이디</th>
+    <th>역할</th>
+    <th>권한</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="memberLRoom : ${memberLRooms}">
+    <td th:text="${memberLRoom.lectureRoom}">강의실 아이디</td>
+    <td th:text="${memberLRoom.member}">회원 아이디</td>
+    <td th:text="${memberLRoom.role}">역할</td>
+    <td th:text="${memberLRoom.permission}">권한</td>
+    <td><a th:href="@{/memberlroom/edit/{id}(id=${memberLRoom.id})}">수정</a></td>
+    <td><a th:href="@{/memberlroom/delete/{id}(id=${memberLRoom.id})}" onclick="return confirm('Are you sure?')">삭제</a></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

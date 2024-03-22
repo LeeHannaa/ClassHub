@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class LectureRoomUpdateRequest {
     private String roomName;
-    private String description;
     private boolean OnOff;
+    private String description;
 }

@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class MemberUpdateRequest {
     private String email;
+    private String nickname;
 }
