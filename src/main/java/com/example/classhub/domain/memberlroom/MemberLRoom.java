@@ -1,6 +1,6 @@
 package com.example.classhub.domain.memberlroom;
 
-import com.example.classhub.domain.lectureroom.LectureRoom;
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.member.Member;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
@@ -19,12 +19,12 @@ public class MemberLRoom {
   private Long Id;
 
   @ManyToOne
-  @JoinColumn(name = "member_id")
+  @JoinColumn(name = "memberId")
   private Member member;
 
   @ManyToOne
-  @JoinColumn(name = "l_room_id")
-  private LectureRoom lectureRoom;
+  @JoinColumn(name = "lRoomId")
+  private ClassHub_LRoom lectureRoom;
 
   @Enumerated(EnumType.STRING)
   private Role role = Role.STUDENT;
@@ -36,7 +36,7 @@ public class MemberLRoom {
     member.getMemberLRooms().add(this);
   }
 
-  public void setLectureRoom(LectureRoom lectureRoom) {
+  public void setLectureRoom(ClassHub_LRoom lectureRoom) {
     this.lectureRoom = lectureRoom;
     lectureRoom.getMemberLRooms().add(this);
   }

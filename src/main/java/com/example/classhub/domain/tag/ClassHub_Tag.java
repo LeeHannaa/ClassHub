@@ -22,7 +22,7 @@ public class ClassHub_Tag extends BaseEntity {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "lRoomId")
     private ClassHub_LRoom lectureRoom;
 
 //    public void changeLecture(LectureRoom lectureRoom){ // Tag에서 lectureRoom을 변경해줄 때 해당 lectureRoom에서의 값을 변경
