@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div class="container">
+    <h1>데이터 디테일 수정 페이지</h1>
+    <hr>
+
+    <a th:href="@{/data-detail/dataDetailList}">회원 목록으로 돌아가기</a>
+
+    <hr>
+
+    <form action="#" th:action="@{/data-detail/updateForm/{dataDetailId}(dataDetailId=${dataDetailId})}" th:object="${dataDetail}" method="post">
+        <label for="score">점수 데이터:</label>
+        <input type="text" id="score" th:field="*{score}">
+        <br>
+        <label for="comment">커멘트 데이터:</label>
+        <input type="text" id="comment" th:field="*{comment}">
+        <br>
+
+        <button type="submit"> 수정</button>
+    </form>
+
+</div>
+</body>
+
+</html>
