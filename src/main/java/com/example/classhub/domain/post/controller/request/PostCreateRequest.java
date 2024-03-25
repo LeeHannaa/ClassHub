@@ -13,6 +13,6 @@ public class PostCreateRequest {
     private String postTitle;
     private String postContent;
     private String postShareRange;
-    private String tagId;
+//    private String tagId;
     private Long lRoomId;
 }

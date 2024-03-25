@@ -25,7 +25,7 @@ public class PostDto {
                 .postTitle(postCreateRequest.getPostTitle())
                 .postContent(postCreateRequest.getPostContent())
                 .postShareRange(postCreateRequest.getPostShareRange())
-                .tagId(postCreateRequest.getTagId())
+//                .tagId(postCreateRequest.getTagId())
                 .lRoomId(postCreateRequest.getLRoomId())
                 .build();
     }

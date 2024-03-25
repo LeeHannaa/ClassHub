@@ -20,6 +20,7 @@ public class ClassHub_Tag extends BaseEntity {
     private Long tagId;
 
     private String name;
+    private boolean nan;
 
     @ManyToOne
     @JoinColumn(name = "lRoomId")
@@ -33,6 +34,7 @@ public class ClassHub_Tag extends BaseEntity {
     public static ClassHub_Tag from(TagDto tagDto, ClassHub_LRoom lectureRoom) {
         return ClassHub_Tag.builder()
                 .name(tagDto.getName())
+                .nan(tagDto.isNan())
                 .lectureRoom(lectureRoom)
                 .build();
     }
@@ -40,6 +42,7 @@ public class ClassHub_Tag extends BaseEntity {
     public static ClassHub_Tag from(TagDto tagDto) {
         return ClassHub_Tag.builder()
                 .name(tagDto.getName())
+                .nan(tagDto.isNan())
                 .build();
     }
 
