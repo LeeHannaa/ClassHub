@@ -45,6 +45,16 @@ public class ClassHub_LRoom extends BaseEntity {
                 .build();
     }
 
+    public static ClassHub_LRoom from(LectureRoomDto lectureRoomDto) {
+        return ClassHub_LRoom.builder()
+                .roomName(lectureRoomDto.getRoomName())
+                .taInviteCode(lectureRoomDto.getTaInviteCode())
+                .stInviteCode(lectureRoomDto.getStInviteCode())
+                .description(lectureRoomDto.getDescription())
+                .onOff(lectureRoomDto.isOnOff())
+                .build();
+    }
+
     public void update(LectureRoomDto lectureRoomDto) {
         this.description = lectureRoomDto.getDescription();
         this.roomName = lectureRoomDto.getRoomName();

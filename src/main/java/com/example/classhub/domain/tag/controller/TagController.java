@@ -25,8 +25,8 @@ public class TagController {
         return "tagForm";
     }
     @PostMapping("/tag/saveTag")
-    public String createLectureRoom(@ModelAttribute("lectureRoom") TagRequest request){
-        tagService.createTag(TagDto.from(request));
+    public String createTag(TagRequest request){
+        tagService.createTag(TagDto.from(request), request.getLRoomId());
         return "redirect:/tag";
     }
 

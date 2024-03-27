@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class TagRequest {
     private String name;
+    private Long lRoomId;
+    private boolean nan;
 }

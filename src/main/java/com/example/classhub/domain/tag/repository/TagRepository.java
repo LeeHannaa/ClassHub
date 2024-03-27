@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface TagRepository extends JpaRepository<ClassHub_Tag, Long> {
     List<ClassHub_Tag> findByLectureRoom(ClassHub_LRoom lectureRoom);
+
+    ClassHub_Tag findByName(String name);
 }

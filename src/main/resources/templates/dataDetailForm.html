@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시물 생성 폼</title>
+</head>
+<body>
+<h1>게시물 생성 폼</h1>
+<form action="#" th:action="@{/data-detail/dataDetailForm}" th:object="${dataDetail}" method="post">
+    <label for="studentNum">학번:</label>
+    <input type="text" id="studentNum" th:field="*{studentNum}">
+    <br>
+    <label for="score">점수 데이터:</label>
+    <input type="text" id="score" th:field="*{score}">
+    <br>
+    <label for="comment">커멘트 데이터:</label>
+    <input type="text" id="comment" th:field="*{comment}">
+    <br>
+    <label for="tagId">연결된 태그 아이디:</label>
+    <input type="text" id="tagId" th:field="*{tagId}">
+
+    <button type="submit">저장</button>
+</form>
+</body>
+</html>

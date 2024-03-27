@@ -44,7 +44,17 @@ public class ClassHub_Post extends BaseEntity {
                 .postTitle(postDto.getPostTitle())
                 .postContent(postDto.getPostContent())
                 .postShareRange(postDto.getPostShareRange())
-                .tagId(postDto.getTagId())
+                .tagId("1")
+                .lRoom(lRoom)
+                .build();
+    }
+
+    public static ClassHub_Post from(PostDto postDto, ClassHub_LRoom lRoom, String tagId) {
+        return ClassHub_Post.builder()
+                .postTitle(postDto.getPostTitle())
+                .postContent(postDto.getPostContent())
+                .postShareRange(postDto.getPostShareRange())
+                .tagId(tagId)
                 .lRoom(lRoom)
                 .build();
     }

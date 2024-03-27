@@ -1,5 +1,6 @@
 package com.example.classhub.domain.tag.dto;
 
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.controller.request.TagRequest;
 import lombok.AllArgsConstructor;
@@ -14,10 +15,14 @@ import lombok.NoArgsConstructor;
 public class TagDto {
     private Long tagId;
     private String name;
+    private Long lRoomId;
+    private boolean nan;
 
     public static TagDto from(TagRequest request){
         return TagDto.builder()
                 .name(request.getName())
+                .lRoomId(request.getLRoomId())
+                .nan(request.isNan())
                 .build();
     }
 
@@ -25,6 +30,8 @@ public class TagDto {
         return TagDto.builder()
                 .tagId(tag.getTagId())
                 .name(tag.getName())
+                .lRoomId(tag.getLectureRoom().getLRoomId())
+                .nan(tag.isNan())
                 .build();
     }
 }
