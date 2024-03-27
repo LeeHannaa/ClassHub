@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class MemberLRoom {
+public class ClassHub_MemberLRoom {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -31,12 +31,12 @@ public class MemberLRoom {
 
   public void setClassHubMember(ClassHub_Member classHubMember) {
     this.classHubMember = classHubMember;
-    classHubMember.getMemberLRooms().add(this);
+    classHubMember.getClassHubMemberLRooms().add(this);
   }
 
   public void setLectureRoom(ClassHub_LRoom lectureRoom) {
     this.lectureRoom = lectureRoom;
-    lectureRoom.getMemberLRooms().add(this);
+    lectureRoom.getClassHubMemberLRooms().add(this);
   }
 
 

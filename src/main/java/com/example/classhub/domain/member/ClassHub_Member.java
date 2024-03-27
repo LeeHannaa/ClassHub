@@ -2,7 +2,7 @@ package com.example.classhub.domain.member;
 
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.member.dto.MemberDto;
-import com.example.classhub.domain.memberlroom.MemberLRoom;
+import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +28,7 @@ public class ClassHub_Member extends BaseEntity {
     private int login_count;
 
     @OneToMany(mappedBy = "classHubMember")
-    private List<MemberLRoom> memberLRooms = new ArrayList<>();
+    private List<ClassHub_MemberLRoom> classHubMemberLRooms = new ArrayList<>();
     public static ClassHub_Member from(MemberDto memberDto) {
         return ClassHub_Member.builder()
                 .member_name(memberDto.getMember_name())
