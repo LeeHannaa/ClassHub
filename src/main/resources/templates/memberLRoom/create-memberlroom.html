@@ -7,7 +7,7 @@
 <h1>new MemberLRoom 생성하기</h1>
 <form action="#" th:action="@{/memberlroom}" th:object="${memberLRoom}" method="post">
   <p>강의실 아이디: <input type="number" th:field="*{lectureRoom}" /></p>
-  <p>회원 아이디: <input type="number" th:field="*{member}" /></p>
+  <p>회원 아이디: <input type="number" th:field="*{classHubMember}" /></p>
   <p>역할:
     <select th:field="*{role}">
       <option th:each="role : ${allRoles}" th:value="${role}" th:text="${role}"></option>

@@ -1,6 +1,6 @@
 package com.example.classhub.domain.memberlroom.controller;
 
-import com.example.classhub.domain.memberlroom.MemberLRoom;
+import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
@@ -22,15 +22,15 @@ public class MemberLRoomController {
   // Create
   @GetMapping("/new")
   public String showCreateForm(Model model) {
-    model.addAttribute("memberLRoom", new MemberLRoom());
+    model.addAttribute("memberLRoom", new ClassHub_MemberLRoom());
     model.addAttribute("allRoles", Role.values());
     model.addAttribute("allPermissions", Permission.values());
     return "memberLRoom/create-memberlroom";
   }
 
   @PostMapping
-  public String createMemberLRoom(@ModelAttribute MemberLRoom memberLRoom) {
-    memberLRoomService.createMemberLRoom(memberLRoom);
+  public String createMemberLRoom(@ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom) {
+    memberLRoomService.createMemberLRoom(classHubMemberLRoom);
     return "redirect:/memberlroom";
   }
 
@@ -44,26 +44,26 @@ public class MemberLRoomController {
   // Read One
   @GetMapping("/{id}")
   public String showMemberLRoomById(@PathVariable Long id, Model model) {
-    MemberLRoom memberLRoom = memberLRoomService.findMemberLRoomById(id)
+    ClassHub_MemberLRoom classHubMemberLRoom = memberLRoomService.findMemberLRoomById(id)
       .orElseThrow(() -> new IllegalArgumentException("Invalid memberLRoom Id:" + id));
-    model.addAttribute("memberLRoom", memberLRoom);
+    model.addAttribute("memberLRoom", classHubMemberLRoom);
     return "show-memberlroom";
   }
 
   // Update
   @GetMapping("/edit/{id}")
   public String showUpdateForm(@PathVariable Long id, Model model) {
-    MemberLRoom memberLRoom = memberLRoomService.findMemberLRoomById(id)
+    ClassHub_MemberLRoom classHubMemberLRoom = memberLRoomService.findMemberLRoomById(id)
       .orElseThrow(() -> new IllegalArgumentException("Invalid memberLRoom Id:" + id));
-    model.addAttribute("memberLRoom", memberLRoom);
+    model.addAttribute("memberLRoom", classHubMemberLRoom);
     model.addAttribute("allRoles", Role.values());
     model.addAttribute("allPermissions", Permission.values());
     return "memberLRoom/update-memberlroom";
   }
 
   @PostMapping("/update/{id}")
-  public String updateMemberLRoom(@PathVariable Long id, @ModelAttribute MemberLRoom memberLRoom) {
-    memberLRoomService.updateMemberLRoom(id, memberLRoom);
+  public String updateMemberLRoom(@PathVariable Long id, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom) {
+    memberLRoomService.updateMemberLRoom(id, classHubMemberLRoom);
     return "redirect:/memberlroom";
   }
 

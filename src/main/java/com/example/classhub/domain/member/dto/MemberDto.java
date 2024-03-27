@@ -1,7 +1,7 @@
 package com.example.classhub.domain.member.dto;
 
 
-import com.example.classhub.domain.member.Member;
+import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.member.controller.request.MemberCreateRequest;
 import com.example.classhub.domain.member.controller.request.MemberUpdateRequest;
 import lombok.AllArgsConstructor;
@@ -39,12 +39,12 @@ public class MemberDto {
                 .build();
     }
 
-    public static MemberDto from(Member member){
+    public static MemberDto from(ClassHub_Member classHubMember){
         return MemberDto.builder()
-                .memberId(member.getMemberId())
-                .member_name(member.getMember_name())
-                .email(member.getEmail())
-                .uniqueId(member.getUniqueId())
+                .memberId(classHubMember.getMemberId())
+                .member_name(classHubMember.getMember_name())
+                .email(classHubMember.getEmail())
+                .uniqueId(classHubMember.getUniqueId())
                 .build();
     }
 }

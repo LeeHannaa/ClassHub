@@ -1,6 +1,6 @@
 package com.example.classhub.domain.member.controller.response;
 
-import com.example.classhub.domain.member.Member;
+import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.member.dto.MemberDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +13,11 @@ public class MemberResponse {
     private String email;
     private String uniqueId;
 
-    public MemberResponse(Member member) {
-        this.memberId = member.getMemberId();
-        this.member_name = member.getMember_name();
-        this.email = member.getEmail();
-        this.uniqueId = member.getUniqueId();
+    public MemberResponse(ClassHub_Member classHubMember) {
+        this.memberId = classHubMember.getMemberId();
+        this.member_name = classHubMember.getMember_name();
+        this.email = classHubMember.getEmail();
+        this.uniqueId = classHubMember.getUniqueId();
     }
 
     public MemberResponse(MemberDto memberDto) {
