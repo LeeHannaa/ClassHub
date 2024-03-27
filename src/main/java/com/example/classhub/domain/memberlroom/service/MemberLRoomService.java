@@ -37,7 +37,7 @@ public class MemberLRoomService {
   public MemberLRoom updateMemberLRoom(Long id, MemberLRoom memberLRoomDetails) {
     MemberLRoom memberLRoom = memberLRoomRepository.findById(id)
       .orElseThrow(() -> new IllegalArgumentException("MemberLRoom with id " + id + " not found"));
-    memberLRoom.setMember(memberLRoomDetails.getMember());
+    memberLRoom.setClassHubMember(memberLRoomDetails.getClassHubMember());
     memberLRoom.setLectureRoom(memberLRoomDetails.getLectureRoom());
     memberLRoom.setRole(memberLRoomDetails.getRole());
     memberLRoom.setPermission(memberLRoomDetails.getPermission());

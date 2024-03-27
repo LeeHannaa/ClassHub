@@ -1,14 +1,12 @@
 package com.example.classhub.domain.memberlroom;
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
-import com.example.classhub.domain.member.Member;
+import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Data
@@ -16,11 +14,11 @@ import lombok.Setter;
 public class MemberLRoom {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long Id;
+  private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "memberId")
-  private Member member;
+  @JoinColumn(name = "classHubMemberId")
+  private ClassHub_Member classHubMember;
 
   @ManyToOne
   @JoinColumn(name = "lRoomId")
@@ -31,9 +29,9 @@ public class MemberLRoom {
   @Enumerated(EnumType.STRING)
   private Permission permission = Permission.UNAPPROVED;
 
-  public void setMember(Member member) {
-    this.member = member;
-    member.getMemberLRooms().add(this);
+  public void setClassHubMember(ClassHub_Member classHubMember) {
+    this.classHubMember = classHubMember;
+    classHubMember.getMemberLRooms().add(this);
   }
 
   public void setLectureRoom(ClassHub_LRoom lectureRoom) {

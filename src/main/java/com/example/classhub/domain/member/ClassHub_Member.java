@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member extends BaseEntity {
+public class ClassHub_Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -27,10 +27,10 @@ public class Member extends BaseEntity {
     private String nickname;
     private int login_count;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "classHubMember")
     private List<MemberLRoom> memberLRooms = new ArrayList<>();
-    public static Member from(MemberDto memberDto) {
-        return Member.builder()
+    public static ClassHub_Member from(MemberDto memberDto) {
+        return ClassHub_Member.builder()
                 .member_name(memberDto.getMember_name())
                 .email(memberDto.getEmail())
                 .uniqueId(memberDto.getUniqueId())
