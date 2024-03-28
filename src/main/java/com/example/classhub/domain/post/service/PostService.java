@@ -3,7 +3,6 @@ package com.example.classhub.domain.post.service;
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
-import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.service.DataDetailService;
 import com.example.classhub.domain.filedata.dto.FileDataDto;
@@ -13,7 +12,6 @@ import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.controller.response.PostResponse;
 import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.repository.PostRepository;
-import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.dto.TagDto;
 import com.example.classhub.domain.tag.service.TagService;
 import jakarta.transaction.Transactional;
@@ -71,8 +69,13 @@ public class PostService {
                 int headerIndex = headers.get(headerName);
                 boolean isScore = headerName.contains("score");
 
+                String tagName = isScore ? headerName.replace("(score)", "").trim() : headerName;
+
+                if(headerName.equals("학번")){
+                    continue;
+                }
                 TagDto tagDto = TagDto.builder()
-                        .name(headerName)
+                        .name(tagName)
                         .lRoomId(lRoom.getLRoomId())
                         .nan(!isScore)
                         .build();
