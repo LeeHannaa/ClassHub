@@ -32,6 +32,12 @@ public class DataDetailController {
         model.addAttribute("dataDetails", dataDetailListResponse.getDataDetails());
         return "dataDetailList";
     }
+    @GetMapping("/data-detail/dataDetailList/{tagId}/{studentNum}")
+    public String findDataDetailListBySNum(Model model, @ModelAttribute("studentNum") String studentNum, @ModelAttribute("tagId") Long tagId){
+        DataDetailListResponse dataDetailListResponse = dataDetailService.getDataDetailList(studentNum, tagId);
+        model.addAttribute("dataDetails", dataDetailListResponse.getDataDetails());
+        return "dataDetailList";
+    }
 
     @GetMapping("/data-detail/updateForm/{dataDetailId}")
     public String updateForm(@ModelAttribute("dataDetailId") Long dataDetailId, Model model){
