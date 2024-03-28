@@ -3,6 +3,8 @@ package com.example.classhub.domain.post.service;
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
+import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
+import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.service.DataDetailService;
 import com.example.classhub.domain.filedata.dto.FileDataDto;
 import com.example.classhub.domain.filedata.service.FileDataService;
@@ -18,6 +20,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +28,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.input.BOMInputStream;
@@ -36,6 +40,7 @@ public class PostService {
     private final LectureRoomRepository lectureRoomRepository;
     private final FileDataService fileDataService;
     private final TagService tagService;
+    private final DataDetailService dataDetailService;
 
     public String getFileDataName(MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
@@ -49,31 +54,65 @@ public class PostService {
         return filenameParts.length > 1 ? filenameParts[filenameParts.length - 1] : ""; // 확장자
     }
 
-    public String processCsvFile(ClassHub_LRoom lRoom, MultipartFile csvFile) {
+    @Transactional
+    public String saveTag(ClassHub_LRoom lRoom, MultipartFile csvFile) {
         StringBuilder tagIdsBuilder = new StringBuilder();
+        List<CSVRecord> records = new ArrayList<>();
         try (BOMInputStream bomInputStream = new BOMInputStream(csvFile.getInputStream());
              BufferedReader fileReader = new BufferedReader(new InputStreamReader(bomInputStream, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
+            for (CSVRecord record : csvParser) {
+                records.add(record);
+            }
+
             Map<String, Integer> headers = csvParser.getHeaderMap();
             for (String headerName : headers.keySet()) {
-                ClassHub_Tag tag = ClassHub_Tag.builder()
+                int headerIndex = headers.get(headerName);
+                boolean isScore = headerName.contains("score");
+
+                TagDto tagDto = TagDto.builder()
                         .name(headerName)
-                        .lectureRoom(lRoom)
+                        .lRoomId(lRoom.getLRoomId())
+                        .nan(!isScore)
                         .build();
-                TagDto createdTagDto = tagService.createTag(TagDto.from(tag), lRoom.getLRoomId()); // 생성된 태그 정보 가져오기
-                Long tagId = createdTagDto.getTagId(); // 생성된 태그의 아이디 가져오기
+                TagDto createdTagDto = tagService.createTag(tagDto, lRoom.getLRoomId());
+
+                for (CSVRecord record : records) {
+                    String recordValue = record.get(headerIndex);
+                    System.out.println("Record for Header " + headerName + ": " + recordValue);
+                    if(isScore){
+                        DataDetailDto dataDetail = DataDetailDto.builder()
+                                .studentNum(record.get("학번"))
+                                .score(Double.valueOf(recordValue))
+                                .tagId(createdTagDto.getTagId())
+                                .build();
+                        dataDetailService.saveDataDetail(dataDetail);
+                    }
+                    else {
+                        DataDetailDto dataDetail = DataDetailDto.builder()
+                                .studentNum(record.get("학번"))
+                                .comment(recordValue)
+                                .tagId(createdTagDto.getTagId())
+                                .build();
+                        dataDetailService.saveDataDetail(dataDetail);
+                    }
+                }
+
+                Long tagId = createdTagDto.getTagId();
                 tagIdsBuilder.append(tagId).append(",");
             }
+
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
         String tagIds = tagIdsBuilder.toString();
         if (tagIds.endsWith(",")) {
-            tagIds = tagIds.substring(0, tagIds.length() - 1); // 마지막 쉼표 제거
+            tagIds = tagIds.substring(0, tagIds.length() - 1);
         }
         return tagIds;
     }
+
 
     @Transactional
     public void savePost(PostDto postDto, MultipartFile file) {
@@ -81,7 +120,7 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
 
         if (!file.isEmpty()) {
-            String tagIds = processCsvFile(lRoom, file);
+            String tagIds = saveTag(lRoom, file);
             ClassHub_Post post = ClassHub_Post.from(postDto, lRoom, tagIds);
             postRepository.save(post);
 
