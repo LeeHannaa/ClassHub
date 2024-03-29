@@ -49,7 +49,9 @@ public class LectureRoomController {
     @GetMapping("/lecture-room/detail/{lectureRoomId}")
     public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         model.addAttribute("lectureRoom", lectureRoomDto);
+        model.addAttribute("tags", tagListResponse.getTags());
         return "lectureRoomDetail";
     }
 
