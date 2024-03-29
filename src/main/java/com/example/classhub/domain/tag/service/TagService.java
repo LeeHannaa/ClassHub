@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,18 @@ public class TagService {
     @Transactional
     public TagListResponse getTagList() {
         List<ClassHub_Tag> tags = tagRepository.findAll();
+        List<TagResponse> tagResponses = tags.stream()
+                .map(TagResponse::new)
+                .collect(Collectors.toList());
+        return new TagListResponse(tagResponses);
+    }
+    @Transactional
+    public TagListResponse getTagListByLectureId(Long lectureId) {
+        ClassHub_LRoom lectureRoom = lectureRoomRepository.findById(lectureId).orElse(null);
+        if (lectureRoom == null) {
+            return new TagListResponse(Collections.emptyList());
+        }
+        List<ClassHub_Tag> tags = tagRepository.findByLectureRoom(lectureRoom);
         List<TagResponse> tagResponses = tags.stream()
                 .map(TagResponse::new)
                 .collect(Collectors.toList());
