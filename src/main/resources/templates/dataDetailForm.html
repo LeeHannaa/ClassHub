@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>게시물 생성 폼</title>
+    <title>상세 데이터 생성 폼</title>
 </head>
 <body>
-<h1>게시물 생성 폼</h1>
+<h1>상세 데이터 생성 폼</h1>
 <form action="#" th:action="@{/data-detail/dataDetailForm}" th:object="${dataDetail}" method="post">
     <label for="studentNum">학번:</label>
     <input type="text" id="studentNum" th:field="*{studentNum}">
