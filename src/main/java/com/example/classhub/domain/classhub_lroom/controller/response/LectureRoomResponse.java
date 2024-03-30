@@ -13,6 +13,7 @@ public class LectureRoomResponse {
     private String roomName;
     private String taInviteCode;
     private String stInviteCode;
+    private String description;
     private boolean onOff;
 
     public LectureRoomResponse(ClassHub_LRoom lectureRoom){
@@ -21,6 +22,7 @@ public class LectureRoomResponse {
         this.taInviteCode = lectureRoom.getTaInviteCode();
         this.stInviteCode = lectureRoom.getStInviteCode();
         this.onOff = lectureRoom.isOnOff();
+        this.description = lectureRoom.getDescription();
     }
 
     public LectureRoomResponse(LectureRoomDto lectureRoomDto){
@@ -29,5 +31,6 @@ public class LectureRoomResponse {
         this.taInviteCode = lectureRoomDto.getTaInviteCode();
         this.stInviteCode = lectureRoomDto.getStInviteCode();
         this.onOff = lectureRoomDto.isOnOff();
+        this.description = lectureRoomDto.getDescription();
     }
 }

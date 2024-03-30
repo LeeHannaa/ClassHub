@@ -256,50 +256,36 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">생성된 강의실 리스트</h1>
-                <table style="border-collapse: collapse; width: 100%;">
-                    <thead>
-                    <tr>
-                        <th>강의실아이디</th>
-                        <th>강의실이름</th>
-                        <th>강의실활성화</th>
-                        <th>학생입장코드</th>
-                        <th>조교입장코드</th>
-                        <th>강의실 입장</th>
-                        <th>수정</th>
-                        <th>삭제</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="lectureroom : ${lectureRooms}">
-                        <td th:text="${lectureroom.lectureRoomId}"></td>
-                        <td th:text="${lectureroom.roomName}"></td>
-                        <td th:text="${lectureroom.onOff}"></td>
-                        <td th:text="${lectureroom.stInviteCode}"></td>
-                        <td th:text="${lectureroom.taInviteCode}"></td>
-                        <td><a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">입장</a></td>
-                        <td><a th:href="@{/lecture-room/updateForm/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">수정</a></td>
-                        <td><a th:href="@{/lecture-room/delete/{lectureRoomId}(lectureRoomId=${lectureroom.lectureRoomId})}">삭제</a></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <h1 class="h3 mb-4 text-gray-800">입장 가능한 강의실 리스트</h1>
+                <div class="row row-cols-1 row-cols-md-3">
+                    <div th:each="lectureRoom : ${lectureRooms}" class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h5 class="card-title mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.roomName}"></h5>
+                                <p class="card-text text-muted mt-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.description}"></p>
+                                <a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-primary btn-sm align-self-end">강의실 입장</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <table style="border-collapse: collapse; width: 100%;">
-                    <thead>
-                    <tr>
-                        <th>태그아이디</th>
-                        <th>태그이름</th>
-                        <th>강의실아이디</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="tag : ${tags}">
-                        <td th:text="${tag.tagId}"></td>
-                        <td th:text="${tag.name}"></td>
-                        <td th:text="${tag.lectureRoomId}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+
+<!--                <table style="border-collapse: collapse; width: 100%;">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th>태그아이디</th>-->
+<!--                        <th>태그이름</th>-->
+<!--                        <th>강의실아이디</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr th:each="tag : ${tags}">-->
+<!--                        <td th:text="${tag.tagId}"></td>-->
+<!--                        <td th:text="${tag.name}"></td>-->
+<!--                        <td th:text="${tag.lectureRoomId}"></td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
                 <button class="btn btn-info fixed-bottom-right" data-toggle="modal" data-target="#LectureRoomCreateModal">강의실 생성</button>
             </div>
             <!-- /.container-fluid -->
