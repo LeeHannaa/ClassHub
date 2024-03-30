@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,19 +61,13 @@ public class LectureRoomController {
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         model.addAttribute("lectureRoom", lectureRoomDto);
         model.addAttribute("tags", tagListResponse.getTags());
-        return "/lectureRoomInfo/lectureRoomInfo";
-    }
-
-    @GetMapping("/lecture-room/updateForm/{lectureRoomId}")
-    public String updateForm(@PathVariable Long lectureRoomId, Model model) {
-        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
-        model.addAttribute("lectureRoom", lectureRoomDto);
-        return "lectureRoomUpdate";
+        return "lectureRoom/lectureRoomInfo";
     }
     @PostMapping("/lecture-room/update/{lectureRoomId}")
-    public String update(@PathVariable Long lectureRoomId, @ModelAttribute("lectureRoom") LectureRoomUpdateRequest request){
+    public String update(@PathVariable Long lectureRoomId, @ModelAttribute("lectureRoom") LectureRoomUpdateRequest request, RedirectAttributes attributes){
         lectureRoomService.update(lectureRoomId, LectureRoomDto.from(request));
-        return "redirect:/lecture-room";
+        attributes.addAttribute("success", true);
+        return "redirect:/lecture-room/detail/info/" + lectureRoomId;
     }
 
     @GetMapping("/lecture-room/delete/{lectureRoomId}")

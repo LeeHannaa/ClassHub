@@ -36,6 +36,15 @@
                 alert('코드 복사 중 오류가 발생했습니다. 수동으로 복사해주세요.');
             });
     }
+    // 페이지 로딩 후 5초 후에 수정 완료 메시지를 자동으로 사라지도록 설정
+    window.onload = function() {
+        setTimeout(function() {
+            var successMessage = document.getElementById('successMessage');
+            if (successMessage) {
+                successMessage.style.display = 'none';
+            }
+        }, 2000);
+    };
 </script>
 
 <body id="page-top">
@@ -262,9 +271,9 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
                 <!-- Page Heading -->
-                <div th:object="${lectureRoom}" class="card">
+                <div class="card">
+                    <form action="#" th:action="@{/lecture-room/update/{lectureRoomId}(lectureRoomId=${lectureRoomId})}" th:object="${lectureRoom}" method="post">
                     <div class="card-header">
                         <h1 class="h3 mb-0 text-gray-800" th:text="${lectureRoom.roomName} + ' 강의실 정보'"></h1>
                     </div>
@@ -272,13 +281,13 @@
                         <div class="form-group row">
                             <label for="name" class="col-sm-3 col-form-label">강의실 이름:</label>
                             <div class="col-sm-9">
-                                <p id="name" th:text="${lectureRoom.roomName}" class="form-control-plaintext"></p>
+                                <input type="text" id="name" class="form-control rounded bg-white border-secondary" th:field="*{roomName}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="onOff" class="col-sm-3 col-form-label">강의실 활성화 상태:</label>
                             <div class="col-sm-9">
-                                <p id="onOff" th:text="${lectureRoom.onOff}" class="form-control-plaintext"></p>
+                                <input type="checkbox" id="onOff" th:field="*{onOff}">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -302,17 +311,26 @@
                         <div class="form-group row">
                             <label for="description" class="col-sm-3 col-form-label">강의실 설명:</label>
                             <div class="col-sm-9">
-                                <p id="description" th:text="${lectureRoom.description}" class="form-control-plaintext"></p>
+                                <textarea id="description" th:field="*{description}" class="form-control rounded bg-white border-secondary" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-right">
+                                <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;"> 수정</button>
                             </div>
                         </div>
                     </div>
+                    </form>
                 </div>
-
+                <!-- 수정 성공 메시지 -->
+                <div id="successMessage" th:if="${param.success}" class="alert alert-success mt-4" role="alert">
+                    수정이 성공적으로 완료되었습니다.
+                </div>
             </div>
             <!-- /.container-fluid -->
-
         </div>
         <!-- End of Main Content -->
+
 
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
