@@ -54,6 +54,14 @@ public class LectureRoomController {
         model.addAttribute("tags", tagListResponse.getTags());
         return "lectureRoomDetail";
     }
+    @GetMapping("/lecture-room/detail/info/{lectureRoomId}")
+    public String findLectureRoomDetailInfo(@PathVariable Long lectureRoomId, Model model) {
+        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
+        model.addAttribute("lectureRoom", lectureRoomDto);
+        model.addAttribute("tags", tagListResponse.getTags());
+        return "/lectureRoomInfo/lectureRoomInfo";
+    }
 
     @GetMapping("/lecture-room/updateForm/{lectureRoomId}")
     public String updateForm(@PathVariable Long lectureRoomId, Model model) {

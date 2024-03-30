@@ -58,7 +58,7 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active" th:object="${lectureRoom}">
+        <li class="nav-item" th:object="${lectureRoom}">
             <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>대시보드</span></a>
@@ -117,17 +117,17 @@
         </div>
 
         <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
+        <li class="nav-item active">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                aria-expanded="true" aria-controls="collapseUtilities">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>설정</span>
             </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+            <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
-                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
+                    <a class="collapse-item active" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
                     <a class="collapse-item" href="index.html">강의실 구성원 정보</a>
                 </div>
             </div>
@@ -264,9 +264,50 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <div th:object="${lectureRoom}">
-                <h1 class="h3 mb-4 text-gray-800" th:text="${lectureRoom.roomName}"></h1>
+                <div th:object="${lectureRoom}" class="card">
+                    <div class="card-header">
+                        <h1 class="h3 mb-0 text-gray-800" th:text="${lectureRoom.roomName} + ' 강의실 정보'"></h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="name" class="col-sm-3 col-form-label">강의실 이름:</label>
+                            <div class="col-sm-9">
+                                <p id="name" th:text="${lectureRoom.roomName}" class="form-control-plaintext"></p>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="onOff" class="col-sm-3 col-form-label">강의실 활성화 상태:</label>
+                            <div class="col-sm-9">
+                                <p id="onOff" th:text="${lectureRoom.onOff}" class="form-control-plaintext"></p>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="stInviteCode" class="col-sm-3 col-form-label">강의실 학생 입장 코드:</label>
+                            <div class="col-sm-8">
+                                <p id="stInviteCode" th:text="${lectureRoom.stInviteCode}" class="form-control-plaintext"></p>
+                            </div>
+                            <div class="col-sm-1">
+                                <i class="fas fa-copy" onclick="copyCode('stInviteCode')" style="cursor: pointer;"></i>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="taInviteCode" class="col-sm-3 col-form-label">강의실 조교 입장 코드:</label>
+                            <div class="col-sm-8">
+                                <p id="taInviteCode" th:text="${lectureRoom.taInviteCode}" class="form-control-plaintext"></p>
+                            </div>
+                            <div class="col-sm-1">
+                                <i class="fas fa-copy" onclick="copyCode('taInviteCode')" style="cursor: pointer;"></i>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="description" class="col-sm-3 col-form-label">강의실 설명:</label>
+                            <div class="col-sm-9">
+                                <p id="description" th:text="${lectureRoom.description}" class="form-control-plaintext"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
             <!-- /.container-fluid -->
 
