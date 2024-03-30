@@ -1,6 +1,6 @@
 package com.example.classhub.domain.memberlroom.dto;
 
-import com.example.classhub.domain.memberlroom.MemberLRoom;
+import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomCreateRequest;
 import lombok.*;
 
@@ -22,11 +22,11 @@ public class MemberLRoomDto {
       .build();
   }
 
-  public static MemberLRoomDto from(MemberLRoom memberLRoom) {
+  public static MemberLRoomDto from(ClassHub_MemberLRoom classHubMemberLRoom) {
     return MemberLRoomDto.builder()
-      .memberLRoomId(memberLRoom.getId())
-      .role(memberLRoom.getRole())
-      .permission(memberLRoom.getPermission())
+      .memberLRoomId(classHubMemberLRoom.getId())
+      .role(classHubMemberLRoom.getRole())
+      .permission(classHubMemberLRoom.getPermission())
       .build();
   }
 

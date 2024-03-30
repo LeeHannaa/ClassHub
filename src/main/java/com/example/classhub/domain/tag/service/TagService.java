@@ -2,9 +2,7 @@ package com.example.classhub.domain.tag.service;
 
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
-import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
-import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.controller.response.TagResponse;
@@ -26,9 +24,17 @@ public class TagService {
 
     @Transactional
     public TagDto createTag(TagDto tagDto, Long lRoomId){
+        String tagName = tagDto.getName();
+        String newName = tagName;
+        int count = 1;
+
+        while (tagRepository.existsByNameAndLectureRoom_LRoomId(newName, lRoomId)) {
+            newName = tagName + "_" + count;
+            count++;
+        }
+
         ClassHub_LRoom lRoom = lectureRoomRepository.findById(lRoomId).get();
-        // ClassHub_Tag 엔티티 생성 및 저장
-        ClassHub_Tag tag = ClassHub_Tag.from(tagDto, lRoom);
+        ClassHub_Tag tag = ClassHub_Tag.from(tagDto, lRoom, newName);
         tagRepository.save(tag);
 
         return TagDto.from(tag);

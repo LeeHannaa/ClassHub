@@ -2,7 +2,7 @@ package com.example.classhub.domain.classhub_lroom;
 
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
-import com.example.classhub.domain.memberlroom.MemberLRoom;
+import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.tag.ClassHub_Tag;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class ClassHub_LRoom extends BaseEntity {
     private List<ClassHub_Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "lectureRoom")
-    private List<MemberLRoom> memberLRooms = new ArrayList<>();
+    private List<ClassHub_MemberLRoom> classHubMemberLRooms = new ArrayList<>();
 
     public static ClassHub_LRoom from(LectureRoomDto lectureRoomDto, String taInviteCode, String stInviteCode) {
         return ClassHub_LRoom.builder()

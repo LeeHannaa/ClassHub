@@ -20,7 +20,7 @@
   <tbody>
   <tr th:each="memberLRoom : ${memberLRooms}">
     <td th:text="${memberLRoom.lectureRoom}">강의실 아이디</td>
-    <td th:text="${memberLRoom.member}">회원 아이디</td>
+    <td th:text="${memberLRoom.classHubMember}">회원 아이디</td>
     <td th:text="${memberLRoom.role}">역할</td>
     <td th:text="${memberLRoom.permission}">권한</td>
     <td><a th:href="@{/memberlroom/edit/{id}(id=${memberLRoom.id})}">수정</a></td>

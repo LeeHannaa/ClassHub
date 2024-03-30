@@ -5,9 +5,6 @@ import com.example.classhub.domain.filedata.controller.response.FileDataListResp
 import com.example.classhub.domain.filedata.controller.response.FileDataResponse;
 import com.example.classhub.domain.filedata.dto.FileDataDto;
 import com.example.classhub.domain.filedata.repository.FileDataRepository;
-import com.example.classhub.domain.member.Member;
-import com.example.classhub.domain.member.controller.response.MemberListResponse;
-import com.example.classhub.domain.member.controller.response.MemberResponse;
 import com.example.classhub.domain.post.ClassHub_Post;
 import com.example.classhub.domain.post.repository.PostRepository;
 import jakarta.transaction.Transactional;

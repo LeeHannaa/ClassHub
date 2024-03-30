@@ -31,9 +31,9 @@ public class ClassHub_Tag extends BaseEntity {
 //        this.lectureRoom = lectureRoom;
 //    }
 
-    public static ClassHub_Tag from(TagDto tagDto, ClassHub_LRoom lectureRoom) {
+    public static ClassHub_Tag from(TagDto tagDto, ClassHub_LRoom lectureRoom, String newName) {
         return ClassHub_Tag.builder()
-                .name(tagDto.getName())
+                .name(newName)
                 .nan(tagDto.isNan())
                 .lectureRoom(lectureRoom)
                 .build();
