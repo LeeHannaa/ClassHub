@@ -19,17 +19,6 @@ public class LectureRoomController {
     private final LectureRoomService lectureRoomService;
     private final TagService tagService;
 
-    @GetMapping("/lecture-room/lectureRoomForm")
-    public String createLectureRoomFrom(Model model){
-        model.addAttribute("lectureRoom", new LectureRoomCreateRequest());
-        return "lectureRoomForm";
-    }
-    @PostMapping("/lecture-room/saveLecture")
-    public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request){
-        lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
-        return "redirect:/lecture-room";
-    }
-
     @GetMapping("/lecture-room")
     public String findLectureRoomList(Model model, @RequestParam(name = "searchKeyword", required = false, defaultValue = "")String searchKeyword){
         LectureRoomListResponse lectureRoomListResponse = null;
@@ -44,8 +33,19 @@ public class LectureRoomController {
         model.addAttribute("lectureRooms", lectureRoomListResponse.getLectureRooms());
         model.addAttribute("tags", tagListResponse.getTags());
 
+        // 강의실 생성 폼을 위한 모델
+        model.addAttribute("lectureRoomCreateRequest", new LectureRoomCreateRequest());
+
         return "index";
     }
+
+    @PostMapping("/lecture-room/saveLecture")
+    public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request){
+        lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
+        return "redirect:/lecture-room";
+    }
+
+
     @GetMapping("/lecture-room/detail/{lectureRoomId}")
     public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);

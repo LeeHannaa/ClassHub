@@ -55,7 +55,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            실전프로젝트
+            ClassHub
         </div>
 
         <!-- Nav Item - 공지 -->
@@ -65,58 +65,58 @@
                 <span>공지</span></a>
         </li>
 
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-               aria-controls="collapsePages">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>태그 모음</span>
-            </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">과제 및 평가</h6>
-                </div>
-            </div>
-        </li>
+<!--        &lt;!&ndash; Nav Item - Pages Collapse Menu &ndash;&gt;-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"-->
+<!--               aria-controls="collapsePages">-->
+<!--                <i class="fas fa-fw fa-folder"></i>-->
+<!--                <span>태그 모음</span>-->
+<!--            </a>-->
+<!--            <div id="collapsePages" class="collapse" aria-labelledby="headingPages"-->
+<!--                 data-parent="#accordionSidebar">-->
+<!--                <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                    <h6 class="collapse-header">과제 및 평가</h6>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </li>-->
 
         <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>통계자료</span></a>
-        </li>
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--                <i class="fas fa-fw fa-chart-area"></i>-->
+<!--                <span>통계자료</span></a>-->
+<!--        </li>-->
 
         <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
-        </li>
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--                <i class="fas fa-fw fa-table"></i>-->
+<!--                <span>Tables</span></a>-->
+<!--        </li>-->
 
         <!-- Divider -->
-        <hr class="sidebar-divider">
+<!--        <hr class="sidebar-divider">-->
         <!-- Heading -->
-        <div class="sidebar-heading">
-            설정
-        </div>
+<!--        <div class="sidebar-heading">-->
+<!--            설정-->
+<!--        </div>-->
 
         <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-               aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>설정</span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">수정</h6>
-                    <a class="collapse-item" href="index.html">강의실 정보</a>
-                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>
-                </div>
-            </div>
-        </li>
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"-->
+<!--               aria-expanded="true" aria-controls="collapseUtilities">-->
+<!--                <i class="fas fa-fw fa-cog"></i>-->
+<!--                <span>설정</span>-->
+<!--            </a>-->
+<!--            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"-->
+<!--                 data-parent="#accordionSidebar">-->
+<!--                <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                    <h6 class="collapse-header">수정</h6>-->
+<!--                    <a class="collapse-item" href="index.html">강의실 정보</a>-->
+<!--                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </li>-->
 
 
         <!-- Divider -->
@@ -276,7 +276,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <button><a th:href="@{/lecture-room/lectureRoomForm}">강의실 생성</a></button>
+                <button data-toggle="modal" data-target="#LectureRoomCreateModal">
+                    강의실 생성
+                </button>
+<!--                <button><a th:href="@{/lecture-room/lectureRoomForm}">강의실 생성</a></button>-->
 
                 <table style="border-collapse: collapse; width: 100%;">
                     <thead>
@@ -337,6 +340,37 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
                 <a class="btn btn-primary" href="index.html">로그아웃</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- LectureRoom Create Modal-->
+<div class="modal fade" id="LectureRoomCreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">새로운 강의실 등록</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 강의실 생성 폼 -->
+                <form th:action="@{/lecture-room/saveLecture}" th:object="${lectureRoomCreateRequest}" method="post">
+                    <label for="name">강의실 이름:</label>
+                    <input type="text" id="name" th:field="*{roomName}" class="form-control">
+                    <br>
+                    <label for="description">강의실 설명:</label>
+                    <textarea id="description" th:field="*{description}" class="form-control"></textarea>
+                    <br>
+                    <label for="onOff" style="margin-right: 40px;">강의실 활성화 상태:</label>
+                    <input type="checkbox" id="onOff" th:field="*{onOff}" class="form-check-input">
+                    <br>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;">저장</button>
+                <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">닫기</button>
             </div>
         </div>
     </div>
