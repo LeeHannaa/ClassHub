@@ -27,6 +27,8 @@
             bottom: 20px;
             right: 20px;
             z-index: 9999;
+            box-shadow: 0px 5px 9px rgba(43, 181, 74, 0.5);
+            color: white;
         }
     </style>
 </head>
@@ -66,11 +68,11 @@
         </div>
 
         <!-- Nav Item - 공지 -->
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>공지</span></a>
-        </li>
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--                <i class="fas fa-fw fa-chart-area"></i>-->
+<!--                <span>공지</span></a>-->
+<!--        </li>-->
 
 <!--        &lt;!&ndash; Nav Item - Pages Collapse Menu &ndash;&gt;-->
 <!--        <li class="nav-item">-->
@@ -235,10 +237,6 @@
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 프로필
                             </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                공간 나가기
-                            </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -263,7 +261,7 @@
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <h5 class="card-title mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.roomName}"></h5>
                                 <p class="card-text text-muted mt-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.description}"></p>
-                                <a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-primary btn-sm align-self-end">강의실 입장</a>
+                                <a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;">강의실 입장</a>
                             </div>
                         </div>
                     </div>
@@ -286,7 +284,7 @@
 <!--                    </tr>-->
 <!--                    </tbody>-->
 <!--                </table>-->
-                <button class="btn btn-info fixed-bottom-right" data-toggle="modal" data-target="#LectureRoomCreateModal">강의실 생성</button>
+                <button class="btn btn-info fixed-bottom-right" data-toggle="modal" data-target="#LectureRoomCreateModal" style="border-color: #33d657; background: #33d657;">강의실 생성</button>
             </div>
             <!-- /.container-fluid -->
 

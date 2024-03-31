@@ -70,11 +70,10 @@ public class LectureRoomController {
         return "redirect:/lecture-room/detail/info/" + lectureRoomId;
     }
 
-    @GetMapping("/lecture-room/delete/{lectureRoomId}")
+    @PostMapping("/lecture-room/delete/{lectureRoomId}")
     public String delete(@PathVariable(value = "lectureRoomId") Long lectureRoomId){
-        lectureRoomService.delete(lectureRoomId);
         //Todo: tag 매핑 후 삭제 기능 수정
-        tagService.tagDelete(lectureRoomId);
+        lectureRoomService.delete(lectureRoomId);
         return "redirect:/lecture-room";
     }
 }

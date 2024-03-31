@@ -82,11 +82,11 @@
         </div>
 
         <!-- Nav Item - 공지 -->
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>공지</span></a>
-        </li>
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--                <i class="fas fa-fw fa-chart-area"></i>-->
+<!--                <span>공지</span></a>-->
+<!--        </li>-->
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
@@ -112,11 +112,11 @@
         </li>
 
         <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
-        </li>
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--                <i class="fas fa-fw fa-table"></i>-->
+<!--                <span>Tables</span></a>-->
+<!--        </li>-->
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -330,6 +330,12 @@
             <!-- /.container-fluid -->
         </div>
         <!-- End of Main Content -->
+        <!-- 강의실 삭제 -->
+        <div class="row mr-3 mb-3">
+            <div class="col text-right">
+                <button class="btn btn-info" data-toggle="modal" data-target="#LectureRoomDeleteModal" style="background: #818183; border-color: #818183;">강의실 삭제</button>
+            </div>
+        </div>
 
 
         <!-- Footer -->
@@ -369,6 +375,29 @@
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
                 <a class="btn btn-primary" href="index.html">로그아웃</a>
             </div>
+        </div>
+    </div>
+</div>
+<!-- LectureRoom Delete Modal-->
+<div class="modal fade" id="LectureRoomDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">강의실 삭제</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form th:action="@{/lecture-room/delete/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" method="post">
+                <div class="modal-body">
+                    <h4>해당 강의실을 정말 삭제하시겠습니까?</h4>
+                    <p>삭제하시면 더 이상 해당 강의실의 정보를 확인하실 수 없습니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;">삭제</button>
+                    <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
