@@ -2,43 +2,19 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-function number_format(number, decimals, dec_point, thousands_sep) {
-  // *     example: number_format(1234.56, 2, ',', ' ');
-  // *     return: '1 234,56'
-  number = (number + '').replace(',', '').replace(' ', '');
-  var n = !isFinite(+number) ? 0 : +number,
-      prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-      sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-      dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-      s = '',
-      toFixedFix = function(n, prec) {
-        var k = Math.pow(10, prec);
-        return '' + Math.round(n * k) / k;
-      };
-  // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-  s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-  if (s[0].length > 3) {
-    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-  }
-  if ((s[1] || '').length < prec) {
-    s[1] = s[1] || '';
-    s[1] += new Array(prec - s[1].length + 1).join('0');
-  }
-  return s.join(dec);
-}
 
 // Bar Chart Example
 var ctx = document.getElementById("myBarChart");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["January", "February", "March", "April", "May", "June"],
+    labels: segmentInfo.segmentRanges,
     datasets: [{
-      label: "Revenue",
+      label: "score",
       backgroundColor: "#4e73df",
       hoverBackgroundColor: "#2e59d9",
       borderColor: "#4e73df",
-      data: [4215, 5312, 6251, 7841, 9821, 14984],
+      data: segmentInfo.segmentCounts,
     }],
   },
   options: {
@@ -54,7 +30,7 @@ var myBarChart = new Chart(ctx, {
     scales: {
       xAxes: [{
         time: {
-          unit: 'month'
+          unit: 'score'
         },
         gridLines: {
           display: false,
@@ -68,12 +44,26 @@ var myBarChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 15000,
+          max: totalStudents,
           maxTicksLimit: 5,
           padding: 10,
           // Include a dollar sign in the ticks
-          callback: function(value, index, values) {
-            return '$' + number_format(value);
+          callback: function(value) {
+            var midValue1 = totalStudents / 3; // 중간값을 계산합니다.
+            var midValue2 = totalStudents*2/ 3; // 중간값을 계산합니다.
+
+            // 총 학생 수를 기준으로 세로 축의 눈금을 0, 중간값, 총 학생 수로 나누어 설정합니다.
+            if (value === 0) {
+              return '0';
+            } else if (value === midValue1) {
+              return midValue1;
+            } else if (value === midValue2) {
+              return midValue2;
+            } else if (value === totalStudents) {
+              return totalStudents;
+            } else {
+              return 'error';
+            }
           }
         },
         gridLines: {
@@ -101,9 +91,8 @@ var myBarChart = new Chart(ctx, {
       displayColors: false,
       caretPadding: 10,
       callbacks: {
-        label: function(tooltipItem, chart) {
-          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+        label: function(tooltipItem) {
+          return number_format(tooltipItem.yLabel) + '명';
         }
       }
     },

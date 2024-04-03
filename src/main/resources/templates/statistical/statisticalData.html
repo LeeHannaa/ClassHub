@@ -250,29 +250,6 @@
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-2 text-gray-800">통계자료</h1>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>학번</th>
-                        <th>점수 데이터</th>
-                        <th>커멘트 데이터</th>
-                        <th>기타</th>
-                        <!--        <th>강의실 아이디</th>-->
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="data : ${dataStatistics}">
-                        <td th:text="${data.getId}"></td>
-                        <td th:text="${data.studentNum}"></td>
-                        <td th:text="${data.score}"></td>
-                        <td th:text="${data.comment}"></td>
-                        <td th:text="${data.tagName}"></td>
-                        <!--        <td><a th:href="@{/data-detail/updateForm/{dataDetailId}(dataDetailId=${dataDetail.getId})}">Update</a></td>-->
-                        <!--        <td><a th:href="@{/data-detail/delete/{dataDetailId}(dataDetailId=${dataDetail.getId})}">Delete</a></td>-->
-                    </tr>
-                    </tbody>
-                </table>
                 <!-- Content Row -->
                 <div class="row">
 
@@ -303,66 +280,10 @@
                                     <canvas id="myBarChart"></canvas>
                                 </div>
                                 <hr>
-                                [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 그래프입니다.
+                                [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 결과
                             </div>
-                            <hr>
                         </div>
                         <p>평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
-                        <script th:inline="javascript">
-                            /*<![CDATA[*/
-                            var dataStatistics = [[${dataStatistics}]];
-                            var scores = dataStatistics.map(function(item) {
-                                return item.score; // 각 객체의 score 속성만 추출합니다.
-                            });
-                            var studentNums = dataStatistics.map(function(item) {
-                                return item.studentNum; // 각 객체의 studentNum 속성만 추출합니다.
-                            });
-                            // 평균을 구하는 함수
-                            function calculateMean(scores) {
-                                var sum = scores.reduce(function(a, b) { return a + b; }, 0);
-                                return (sum / scores.length).toFixed(3);
-                            }
-
-                            // 표준 편차를 구하는 함수
-                            function calculateStandardDeviation(scores) {
-                                var mean = calculateMean(scores);
-                                var squareDiffs = scores.map(function(value) {
-                                    var diff = value - mean;
-                                    return diff * diff;
-                                });
-                                var avgSquareDiff = calculateMean(squareDiffs);
-                                return Math.sqrt(avgSquareDiff).toFixed(3);
-                            }
-
-                            // 최고 점수를 구하는 함수
-                            function calculateMax(scores) {
-                                return Math.max(...scores);
-                            }
-
-                            // 최저 점수를 구하는 함수
-                            function calculateMin(scores) {
-                                return Math.min(...scores);
-                            }
-                            var mean = calculateMean(scores);
-                            var standardDeviation = calculateStandardDeviation(scores);
-                            var maxScore = calculateMax(scores);
-                            var minScore = calculateMin(scores);
-
-                            console.log("평균:", mean);
-                            console.log("표준 편차:", standardDeviation);
-                            console.log("최고 점수:", maxScore);
-                            console.log("최저 점수:", minScore);
-
-                            console.log(scores, studentNums); // score만 포함된 배열 출력
-                            // 통계 데이터를 HTML에 표시합니다.
-                            document.getElementById('mean').textContent = mean;
-                            document.getElementById('standardDeviation').textContent = standardDeviation;
-                            document.getElementById('maxScore').textContent = maxScore;
-                            document.getElementById('minScore').textContent = minScore;
-                            document.getElementById('scores').textContent = scores.join(', ');
-                            document.getElementById('studentNums').textContent = studentNums.join(', ');
-                            /*]]>*/
-                        </script>
 
                     </div>
 
@@ -432,6 +353,85 @@
         </div>
     </div>
 </div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var dataStatistics = [[${dataStatistics}]];
+    var scores = dataStatistics.map(function(item) {
+        return item.score;
+    });
+    var studentNums = dataStatistics.map(function(item) {
+        return item.studentNum;
+    });
+    // 평균
+    function calculateMean(scores) {
+        var sum = scores.reduce(function(a, b) { return a + b; }, 0);
+        return (sum / scores.length).toFixed(3);
+    }
+
+    // 표준 편차
+    function calculateStandardDeviation(scores) {
+        var mean = calculateMean(scores);
+        var squareDiffs = scores.map(function(value) {
+            var diff = value - mean;
+            return diff * diff;
+        });
+        var avgSquareDiff = calculateMean(squareDiffs);
+        return Math.sqrt(avgSquareDiff).toFixed(3);
+    }
+
+    // 최고 점수
+    function calculateMax(scores) {
+        return Math.max(...scores);
+    }
+
+    // 최저 점수
+    function calculateMin(scores) {
+        return Math.min(...scores);
+    }
+    // 구간별 학생 수와 범위를 계산하는 함수
+    function calculateSegmentInfo(scores) {
+        var segmentCounts = [0, 0, 0, 0, 0];
+        var segmentRanges = [];
+        var segmentSize = (calculateMax(scores) - calculateMin(scores)) / 5;
+        for (var i = 0; i < 5; i++) {
+            var rangeStart = calculateMin(scores) + segmentSize * i;
+            var rangeEnd = calculateMin(scores) + segmentSize * (i + 1);
+            scores.forEach(function(score) {
+                if(i == 4){
+                    if(score >= rangeStart && score <= rangeEnd) segmentCounts[i]++;
+                }
+                else if(score >= rangeStart && score < rangeEnd) segmentCounts[i]++;
+            });
+            segmentRanges.push(`(${rangeStart.toFixed(1)} - ${rangeEnd.toFixed(1)})`);
+        }
+        return { segmentCounts: segmentCounts, segmentRanges: segmentRanges };
+    }
+
+    var mean = calculateMean(scores);
+    var standardDeviation = calculateStandardDeviation(scores);
+    var maxScore = calculateMax(scores);
+    var minScore = calculateMin(scores);
+    var segmentInfo = calculateSegmentInfo(scores);
+    var totalStudents = scores.length; // 총 학생 수
+
+    // console.log("평균:", mean);
+    // console.log("표준 편차:", standardDeviation);
+    // console.log("최고 점수:", maxScore);
+    // console.log("최저 점수:", minScore);
+    // console.log("구간별 학생 수:", segmentInfo.segmentCounts);
+    // console.log("구간별 범위:", segmentInfo.segmentRanges);
+    // console.log("총 학생 수:", totalStudents);
+
+    // console.log(scores, studentNums);
+    document.getElementById('mean').textContent = mean;
+    document.getElementById('standardDeviation').textContent = standardDeviation;
+    document.getElementById('maxScore').textContent = maxScore;
+    document.getElementById('minScore').textContent = minScore;
+    document.getElementById('scores').textContent = scores.join(', ');
+    document.getElementById('studentNums').textContent = studentNums.join(', ');
+    /*]]>*/
+</script>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
