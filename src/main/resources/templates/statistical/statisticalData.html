@@ -44,19 +44,19 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-<!--        <li class="nav-item" th:object="${lectureRoom}">-->
-<!--            <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">-->
-<!--                <i class="fas fa-fw fa-tachometer-alt"></i>-->
-<!--                <span>대시보드</span></a>-->
-<!--        </li>-->
+        <li class="nav-item" th:object="${lectureRoom}">
+            <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>대시보드</span></a>
+        </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider">
 
         <!-- Heading -->
-<!--        <div class="sidebar-heading" th:object="${lectureRoom}">-->
-<!--            <span for="name" th:text="${lectureRoom.roomName}"></span>-->
-<!--        </div>-->
+        <div class="sidebar-heading" th:object="${lectureRoom}">
+            <span for="name" th:text="${lectureRoom.roomName}"></span>
+        </div>
 
         <!-- Nav Item - 공지 -->
         <!--        <li class="nav-item">-->
@@ -76,7 +76,7 @@
                  data-parent="#accordionSidebar" >
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">과제 및 평가</h6>
-<!--                    <a class="collapse-item" href="index.html" th:each="tag : ${tags}" th:text="${tag.name}"></a>-->
+                    <a class="collapse-item" href="index.html" th:each="tag : ${tags}" th:text="${tag.name}"></a>
                 </div>
             </div>
         </li>
@@ -109,13 +109,13 @@
                 <i class="fas fa-fw fa-cog"></i>
                 <span>설정</span>
             </a>
-            <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
-<!--                <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">-->
-<!--                    <h6 class="collapse-header">수정</h6>-->
-<!--                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>-->
-<!--                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>-->
-<!--                </div>-->
+                <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
+                    <h6 class="collapse-header">수정</h6>
+                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
+                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>
+                </div>
             </div>
         </li>
 
@@ -250,66 +250,83 @@
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-2 text-gray-800">통계자료</h1>
-                <p class="mb-4">Chart.js is a third party plugin that is used to generate the charts in this theme.
-                    The charts below have been customized - for further customization options, please visit the <a
-                            target="_blank" href="https://www.chartjs.org/docs/latest/">official Chart.js
-                        documentation</a>.</p>
-
+                <table>
+                    <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>학번</th>
+                        <th>점수 데이터</th>
+                        <th>커멘트 데이터</th>
+                        <th>기타</th>
+                        <!--        <th>강의실 아이디</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="data : ${dataStatistics}">
+                        <td th:text="${data.getId}"></td>
+                        <td th:text="${data.studentNum}"></td>
+                        <td th:text="${data.score}"></td>
+                        <td th:text="${data.comment}"></td>
+                        <td th:text="${data.tagName}"></td>
+                        <!--        <td><a th:href="@{/data-detail/updateForm/{dataDetailId}(dataDetailId=${dataDetail.getId})}">Update</a></td>-->
+                        <!--        <td><a th:href="@{/data-detail/delete/{dataDetailId}(dataDetailId=${dataDetail.getId})}">Delete</a></td>-->
+                    </tr>
+                    </tbody>
+                </table>
                 <!-- Content Row -->
                 <div class="row">
 
                     <div class="col-xl-8 col-lg-7">
 
                         <!-- Area Chart -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="myAreaChart"></canvas>
-                                </div>
-                                <hr>
-                                Styling for the area chart can be found in the
-                                <code>/js/demo/chart-area-demo.js</code> file.
-                            </div>
-                        </div>
+<!--                        <div class="card shadow mb-4">-->
+<!--                            <div class="card-header py-3">-->
+<!--                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>-->
+<!--                            </div>-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="chart-area">-->
+<!--                                    <canvas id="myAreaChart"></canvas>-->
+<!--                                </div>-->
+<!--                                <hr>-->
+<!--                                Styling for the area chart can be found in the-->
+<!--                                <code>/js/demo/chart-area-demo.js</code> file.-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                         <!-- Bar Chart -->
-                        <div class="card shadow mb-4">
+                        <div class="card shadow mb-4" th:object="${dataStatistics}">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                                <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
                                     <canvas id="myBarChart"></canvas>
                                 </div>
                                 <hr>
-                                Styling for the bar chart can be found in the
-                                <code>/js/demo/chart-bar-demo.js</code> file.
+                                [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 그래프입니다.
                             </div>
                         </div>
 
                     </div>
 
                     <!-- Donut Chart -->
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-pie pt-4">
-                                    <canvas id="myPieChart"></canvas>
-                                </div>
-                                <hr>
-                                Styling for the donut chart can be found in the
-                                <code>/js/demo/chart-pie-demo.js</code> file.
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div class="col-xl-4 col-lg-5">-->
+<!--                        <div class="card shadow mb-4">-->
+<!--                            &lt;!&ndash; Card Header - Dropdown &ndash;&gt;-->
+<!--                            <div class="card-header py-3">-->
+<!--                                <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Card Body &ndash;&gt;-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="chart-pie pt-4">-->
+<!--                                    <canvas id="myPieChart"></canvas>-->
+<!--                                </div>-->
+<!--                                <hr>-->
+<!--                                Styling for the donut chart can be found in the-->
+<!--                                <code>/js/demo/chart-pie-demo.js</code> file.-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
 
             </div>
