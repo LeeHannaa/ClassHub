@@ -320,7 +320,7 @@
                             // 평균을 구하는 함수
                             function calculateMean(scores) {
                                 var sum = scores.reduce(function(a, b) { return a + b; }, 0);
-                                return sum / scores.length;
+                                return (sum / scores.length).toFixed(3);
                             }
 
                             // 표준 편차를 구하는 함수
