@@ -25,8 +25,8 @@
 </head>
 <script>
     function copyCode(codeId) {
-        // span 요소에서 텍스트를 가져옵니다.
-        var code = document.getElementById(codeId).textContent;
+        // input 요소에서 값(value)을 가져옵니다.
+        var code = document.getElementById(codeId).value;
         // 텍스트를 클립보드에 복사합니다.
         navigator.clipboard.writeText(code)
             .then(function() {
@@ -36,6 +36,7 @@
                 alert('코드 복사 중 오류가 발생했습니다. 수동으로 복사해주세요.');
             });
     }
+
     // 페이지 로딩 후 5초 후에 수정 완료 메시지를 자동으로 사라지도록 설정
     window.onload = function() {
         setTimeout(function() {
@@ -293,7 +294,8 @@
                         <div class="form-group row">
                             <label for="stInviteCode" class="col-sm-3 col-form-label">강의실 학생 입장 코드:</label>
                             <div class="col-sm-8">
-                                <p id="stInviteCode" th:text="${lectureRoom.stInviteCode}" class="form-control-plaintext"></p>
+                                <input type="text" id="stInviteCode" th:field="${lectureRoom.stInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자">
+                                <small class="form-text text-muted">영문숫자 포함 8글자</small>
                             </div>
                             <div class="col-sm-1">
                                 <i class="fas fa-copy" onclick="copyCode('stInviteCode')" style="cursor: pointer;"></i>
@@ -302,7 +304,8 @@
                         <div class="form-group row">
                             <label for="taInviteCode" class="col-sm-3 col-form-label">강의실 조교 입장 코드:</label>
                             <div class="col-sm-8">
-                                <p id="taInviteCode" th:text="${lectureRoom.taInviteCode}" class="form-control-plaintext"></p>
+                                <input type="text" id="taInviteCode" th:field="${lectureRoom.taInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자">
+                                <small class="form-text text-muted">영문숫자 포함 8글자</small>
                             </div>
                             <div class="col-sm-1">
                                 <i class="fas fa-copy" onclick="copyCode('taInviteCode')" style="cursor: pointer;"></i>
