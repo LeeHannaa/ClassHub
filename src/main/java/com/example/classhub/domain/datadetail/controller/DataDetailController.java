@@ -57,4 +57,10 @@ public class DataDetailController {
         dataDetailService.delete(dataDetailId);
         return "redirect:/data-detail/dataDetailList";
     }
+
+    // statistics
+    @GetMapping("/data-detail/statistics/{lectureRoomId}")
+    public String statistics(){
+        return "./statistical/statisticalData";
+    }
 }

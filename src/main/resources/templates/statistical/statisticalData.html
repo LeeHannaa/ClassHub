@@ -23,20 +23,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
-<script>
-    function copyCode(codeId) {
-        // span 요소에서 텍스트를 가져옵니다.
-        var code = document.getElementById(codeId).textContent;
-        // 텍스트를 클립보드에 복사합니다.
-        navigator.clipboard.writeText(code)
-            .then(function() {
-                alert('코드가 성공적으로 복사되었습니다: ' + code);
-            })
-            .catch(function(err) {
-                alert('코드 복사 중 오류가 발생했습니다. 수동으로 복사해주세요.');
-            });
-    }
-</script>
 
 <body id="page-top">
 
@@ -58,26 +44,26 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active" th:object="${lectureRoom}">
-            <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>대시보드</span></a>
-        </li>
+<!--        <li class="nav-item" th:object="${lectureRoom}">-->
+<!--            <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">-->
+<!--                <i class="fas fa-fw fa-tachometer-alt"></i>-->
+<!--                <span>대시보드</span></a>-->
+<!--        </li>-->
 
         <!-- Divider -->
         <hr class="sidebar-divider">
 
         <!-- Heading -->
-        <div class="sidebar-heading" th:object="${lectureRoom}">
-            <span for="name" th:text="${lectureRoom.roomName}"></span>
-        </div>
+<!--        <div class="sidebar-heading" th:object="${lectureRoom}">-->
+<!--            <span for="name" th:text="${lectureRoom.roomName}"></span>-->
+<!--        </div>-->
 
         <!-- Nav Item - 공지 -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-chart-area"></i>-->
-<!--                <span>공지</span></a>-->
-<!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="index.html">-->
+        <!--                <i class="fas fa-fw fa-chart-area"></i>-->
+        <!--                <span>공지</span></a>-->
+        <!--        </li>-->
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
@@ -90,24 +76,24 @@
                  data-parent="#accordionSidebar" >
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">과제 및 평가</h6>
-                    <a class="collapse-item" href="index.html" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+<!--                    <a class="collapse-item" href="index.html" th:each="tag : ${tags}" th:text="${tag.name}"></a>-->
                 </div>
             </div>
         </li>
 
         <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{'/data-detail/statistics/' + ${lectureRoom.lectureRoomId}}">
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>통계자료</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-table"></i>-->
-<!--                <span>Tables</span></a>-->
-<!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="index.html">-->
+        <!--                <i class="fas fa-fw fa-table"></i>-->
+        <!--                <span>Tables</span></a>-->
+        <!--        </li>-->
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -123,13 +109,13 @@
                 <i class="fas fa-fw fa-cog"></i>
                 <span>설정</span>
             </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+            <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
-                    <h6 class="collapse-header">수정</h6>
-                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
-                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>
-                </div>
+<!--                <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">-->
+<!--                    <h6 class="collapse-header">수정</h6>-->
+<!--                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>-->
+<!--                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>-->
+<!--                </div>-->
             </div>
         </li>
 
@@ -145,7 +131,6 @@
     </ul>
     <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content -->
@@ -264,9 +249,69 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <div th:object="${lectureRoom}">
-                <h1 class="h3 mb-4 text-gray-800" th:text="${lectureRoom.roomName}"></h1>
+                <h1 class="h3 mb-2 text-gray-800">통계자료</h1>
+                <p class="mb-4">Chart.js is a third party plugin that is used to generate the charts in this theme.
+                    The charts below have been customized - for further customization options, please visit the <a
+                            target="_blank" href="https://www.chartjs.org/docs/latest/">official Chart.js
+                        documentation</a>.</p>
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <div class="col-xl-8 col-lg-7">
+
+                        <!-- Area Chart -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="myAreaChart"></canvas>
+                                </div>
+                                <hr>
+                                Styling for the area chart can be found in the
+                                <code>/js/demo/chart-area-demo.js</code> file.
+                            </div>
+                        </div>
+
+                        <!-- Bar Chart -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-bar">
+                                    <canvas id="myBarChart"></canvas>
+                                </div>
+                                <hr>
+                                Styling for the bar chart can be found in the
+                                <code>/js/demo/chart-bar-demo.js</code> file.
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Donut Chart -->
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-pie pt-4">
+                                    <canvas id="myPieChart"></canvas>
+                                </div>
+                                <hr>
+                                Styling for the donut chart can be found in the
+                                <code>/js/demo/chart-pie-demo.js</code> file.
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
             <!-- /.container-fluid -->
 
@@ -323,6 +368,14 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/bootstrap/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/bootstrap/js/demo/chart-area-demo.js"></script>
+<script src="/bootstrap/js/demo/chart-pie-demo.js"></script>
+<script src="/bootstrap/js/demo/chart-bar-demo.js"></script>
 
 </body>
 
