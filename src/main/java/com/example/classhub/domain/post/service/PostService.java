@@ -19,8 +19,13 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +34,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.apache.commons.io.input.BOMInputStream;
 
 @Service
@@ -138,15 +145,29 @@ public class PostService {
             postRepository.save(post);
         }
     }
-    @Transactional
-    public PostListResponse getPostList(){
-        List<ClassHub_Post> posts = postRepository.findAll();
-        List<PostResponse> postResponses = posts.stream()
-                .map(PostResponse::new)
-                .toList();
-        return new PostListResponse(postResponses);
-   }
-    @Transactional
+//    @Transactional
+//    public PostListResponse getPostList(){
+//        List<ClassHub_Post> posts = postRepository.findAll();
+//        List<PostResponse> postResponses = posts.stream()
+//                .map(PostResponse::new)
+//                .toList();
+//        return new PostListResponse(postResponses);
+//   }
+
+  @Transactional
+  public PostListResponse getPostList(int page, int size){
+    Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
+    Page<ClassHub_Post> posts = postRepository.findAll(pageable);
+
+    List<PostResponse> postResponses = posts.getContent().stream()
+      .map(PostResponse::new)
+      .collect(Collectors.toList());
+
+    return new PostListResponse(postResponses, posts.getTotalPages(), posts.getNumber());
+  }
+
+
+  @Transactional
     public PostDto findByPostId(Long postId) {
         ClassHub_Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
         return PostDto.from(post);
