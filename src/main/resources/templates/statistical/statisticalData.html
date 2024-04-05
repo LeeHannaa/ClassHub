@@ -23,30 +23,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
-<script>
-    function copyCode(codeId) {
-        // input 요소에서 값(value)을 가져옵니다.
-        var code = document.getElementById(codeId).value;
-        // 텍스트를 클립보드에 복사합니다.
-        navigator.clipboard.writeText(code)
-            .then(function() {
-                alert('코드가 성공적으로 복사되었습니다: ' + code);
-            })
-            .catch(function(err) {
-                alert('코드 복사 중 오류가 발생했습니다. 수동으로 복사해주세요.');
-            });
-    }
-
-    // 페이지 로딩 후 5초 후에 수정 완료 메시지를 자동으로 사라지도록 설정
-    window.onload = function() {
-        setTimeout(function() {
-            var successMessage = document.getElementById('successMessage');
-            if (successMessage) {
-                successMessage.style.display = 'none';
-            }
-        }, 2000);
-    };
-</script>
 
 <body id="page-top">
 
@@ -83,20 +59,20 @@
         </div>
 
         <!-- Nav Item - 공지 -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-chart-area"></i>-->
-<!--                <span>공지</span></a>-->
-<!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="index.html">-->
+        <!--                <i class="fas fa-fw fa-chart-area"></i>-->
+        <!--                <span>공지</span></a>-->
+        <!--        </li>-->
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
+        <li class="nav-item active">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
                aria-controls="collapsePages">
                 <i class="fas fa-fw fa-folder"></i>
                 <span>태그 모음</span>
             </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages"
+            <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
                  data-parent="#accordionSidebar" >
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">과제 및 평가</h6>
@@ -106,19 +82,18 @@
         </li>
 
         <!-- Nav Item - Charts -->
-<!--   ToDo: tagId로 연결해두기   -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" th:href="@{'/data-detail/statistics/' + ${lectureRoom.lectureRoomId}}">-->
-<!--                <i class="fas fa-fw fa-chart-area"></i>-->
-<!--                <span>통계자료</span></a>-->
-<!--        </li>-->
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>통계자료</span></a>
+        </li>
 
         <!-- Nav Item - Tables -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-table"></i>-->
-<!--                <span>Tables</span></a>-->
-<!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="index.html">-->
+        <!--                <i class="fas fa-fw fa-table"></i>-->
+        <!--                <span>Tables</span></a>-->
+        <!--        </li>-->
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -128,17 +103,17 @@
         </div>
 
         <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                aria-expanded="true" aria-controls="collapseUtilities">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>설정</span>
             </a>
-            <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
-                    <a class="collapse-item active" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
+                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
                     <a class="collapse-item" href="index.html">강의실 구성원 정보</a>
                 </div>
             </div>
@@ -156,7 +131,6 @@
     </ul>
     <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content -->
@@ -273,74 +247,71 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
+
                 <!-- Page Heading -->
-                <div class="card">
-                    <form action="#" th:action="@{/lecture-room/update/{lectureRoomId}(lectureRoomId=${lectureRoomId})}" th:object="${lectureRoom}" method="post">
-                    <div class="card-header">
-                        <h1 class="h3 mb-0 text-gray-800" th:text="${lectureRoom.roomName} + ' 강의실 정보'"></h1>
+                <h1 class="h3 mb-2 text-gray-800">통계자료</h1>
+                <!-- Content Row -->
+                <div class="row">
+
+                    <div class="col-xl-8 col-lg-7">
+
+                        <!-- Area Chart -->
+<!--                        <div class="card shadow mb-4">-->
+<!--                            <div class="card-header py-3">-->
+<!--                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>-->
+<!--                            </div>-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="chart-area">-->
+<!--                                    <canvas id="myAreaChart"></canvas>-->
+<!--                                </div>-->
+<!--                                <hr>-->
+<!--                                Styling for the area chart can be found in the-->
+<!--                                <code>/js/demo/chart-area-demo.js</code> file.-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                        <!-- Bar Chart -->
+                        <div class="card shadow mb-4" th:object="${dataStatistics}">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-bar">
+                                    <canvas id="myBarChart"></canvas>
+                                </div>
+                                <hr>
+                                [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 결과
+                            </div>
+                        </div>
+                        <p>평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
+
                     </div>
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-3 col-form-label">강의실 이름:</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="name" class="form-control rounded bg-white border-secondary" th:field="*{roomName}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="onOff" class="col-sm-3 col-form-label">강의실 활성화 상태:</label>
-                            <div class="col-sm-9">
-                                <input type="checkbox" id="onOff" th:field="*{onOff}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="stInviteCode" class="col-sm-3 col-form-label">강의실 학생 입장 코드:</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="stInviteCode" th:field="${lectureRoom.stInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자">
-                                <small class="form-text text-muted">영문숫자 포함 8글자</small>
-                            </div>
-                            <div class="col-sm-1">
-                                <i class="fas fa-copy" onclick="copyCode('stInviteCode')" style="cursor: pointer;"></i>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="taInviteCode" class="col-sm-3 col-form-label">강의실 조교 입장 코드:</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="taInviteCode" th:field="${lectureRoom.taInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자">
-                                <small class="form-text text-muted">영문숫자 포함 8글자</small>
-                            </div>
-                            <div class="col-sm-1">
-                                <i class="fas fa-copy" onclick="copyCode('taInviteCode')" style="cursor: pointer;"></i>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="description" class="col-sm-3 col-form-label">강의실 설명:</label>
-                            <div class="col-sm-9">
-                                <textarea id="description" th:field="*{description}" class="form-control rounded bg-white border-secondary" rows="5"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col text-right">
-                                <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;"> 수정</button>
-                            </div>
-                        </div>
-                    </div>
-                    </form>
+
+                    <!-- Donut Chart -->
+<!--                    <div class="col-xl-4 col-lg-5">-->
+<!--                        <div class="card shadow mb-4">-->
+<!--                            &lt;!&ndash; Card Header - Dropdown &ndash;&gt;-->
+<!--                            <div class="card-header py-3">-->
+<!--                                <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Card Body &ndash;&gt;-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="chart-pie pt-4">-->
+<!--                                    <canvas id="myPieChart"></canvas>-->
+<!--                                </div>-->
+<!--                                <hr>-->
+<!--                                Styling for the donut chart can be found in the-->
+<!--                                <code>/js/demo/chart-pie-demo.js</code> file.-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
-                <!-- 수정 성공 메시지 -->
-                <div id="successMessage" th:if="${param.success}" class="alert alert-success mt-4" role="alert">
-                    수정이 성공적으로 완료되었습니다.
-                </div>
+
             </div>
             <!-- /.container-fluid -->
+
         </div>
         <!-- End of Main Content -->
-        <!-- 강의실 삭제 -->
-        <div class="row mr-3 mb-3">
-            <div class="col text-right">
-                <button class="btn btn-info" data-toggle="modal" data-target="#LectureRoomDeleteModal" style="background: #818183; border-color: #818183;">강의실 삭제</button>
-            </div>
-        </div>
-
 
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
@@ -382,29 +353,85 @@
         </div>
     </div>
 </div>
-<!-- LectureRoom Delete Modal-->
-<div class="modal fade" id="LectureRoomDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">강의실 삭제</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <form th:action="@{/lecture-room/delete/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" method="post">
-                <div class="modal-body">
-                    <h4>해당 강의실을 정말 삭제하시겠습니까?</h4>
-                    <p>삭제하시면 더 이상 해당 강의실의 정보를 확인하실 수 없습니다.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;">삭제</button>
-                    <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var dataStatistics = [[${dataStatistics}]];
+    var scores = dataStatistics.map(function(item) {
+        return item.score;
+    });
+    var studentNums = dataStatistics.map(function(item) {
+        return item.studentNum;
+    });
+    // 평균
+    function calculateMean(scores) {
+        var sum = scores.reduce(function(a, b) { return a + b; }, 0);
+        return (sum / scores.length).toFixed(3);
+    }
+
+    // 표준 편차
+    function calculateStandardDeviation(scores) {
+        var mean = calculateMean(scores);
+        var squareDiffs = scores.map(function(value) {
+            var diff = value - mean;
+            return diff * diff;
+        });
+        var avgSquareDiff = calculateMean(squareDiffs);
+        return Math.sqrt(avgSquareDiff).toFixed(3);
+    }
+
+    // 최고 점수
+    function calculateMax(scores) {
+        return Math.max(...scores);
+    }
+
+    // 최저 점수
+    function calculateMin(scores) {
+        return Math.min(...scores);
+    }
+    // 구간별 학생 수와 범위를 계산하는 함수
+    function calculateSegmentInfo(scores) {
+        var segmentCounts = [0, 0, 0, 0, 0];
+        var segmentRanges = [];
+        var segmentSize = (calculateMax(scores) - calculateMin(scores)) / 5;
+        for (var i = 0; i < 5; i++) {
+            var rangeStart = calculateMin(scores) + segmentSize * i;
+            var rangeEnd = calculateMin(scores) + segmentSize * (i + 1);
+            scores.forEach(function(score) {
+                if(i == 4){
+                    if(score >= rangeStart && score <= rangeEnd) segmentCounts[i]++;
+                }
+                else if(score >= rangeStart && score < rangeEnd) segmentCounts[i]++;
+            });
+            segmentRanges.push(`(${rangeStart.toFixed(1)} - ${rangeEnd.toFixed(1)})`);
+        }
+        return { segmentCounts: segmentCounts, segmentRanges: segmentRanges };
+    }
+
+    var mean = calculateMean(scores);
+    var standardDeviation = calculateStandardDeviation(scores);
+    var maxScore = calculateMax(scores);
+    var minScore = calculateMin(scores);
+    var segmentInfo = calculateSegmentInfo(scores);
+    var totalStudents = scores.length; // 총 학생 수
+
+    // console.log("평균:", mean);
+    // console.log("표준 편차:", standardDeviation);
+    // console.log("최고 점수:", maxScore);
+    // console.log("최저 점수:", minScore);
+    // console.log("구간별 학생 수:", segmentInfo.segmentCounts);
+    // console.log("구간별 범위:", segmentInfo.segmentRanges);
+    // console.log("총 학생 수:", totalStudents);
+
+    // console.log(scores, studentNums);
+    document.getElementById('mean').textContent = mean;
+    document.getElementById('standardDeviation').textContent = standardDeviation;
+    document.getElementById('maxScore').textContent = maxScore;
+    document.getElementById('minScore').textContent = minScore;
+    document.getElementById('scores').textContent = scores.join(', ');
+    document.getElementById('studentNums').textContent = studentNums.join(', ');
+    /*]]>*/
+</script>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
@@ -415,6 +442,14 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/bootstrap/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/bootstrap/js/demo/chart-area-demo.js"></script>
+<script src="/bootstrap/js/demo/chart-pie-demo.js"></script>
+<script src="/bootstrap/js/demo/chart-bar-demo.js"></script>
 
 </body>
 

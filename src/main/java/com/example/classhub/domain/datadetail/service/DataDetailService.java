@@ -3,6 +3,8 @@ package com.example.classhub.domain.datadetail.service;
 import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
 import com.example.classhub.domain.datadetail.controller.response.DataDetailListResponse;
 import com.example.classhub.domain.datadetail.controller.response.DataDetailResponse;
+import com.example.classhub.domain.datadetail.controller.response.DataStatisticListResponse;
+import com.example.classhub.domain.datadetail.controller.response.DataStatisticResponse;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.repository.DataDetailRepository;
 import com.example.classhub.domain.tag.ClassHub_Tag;
@@ -58,5 +60,16 @@ public class DataDetailService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 데이터 상세가 존재하지 않습니다."));
         dataDetail.update(dataDetailDto);
         return DataDetailDto.from(dataDetail);
+    }
+
+
+    //statistics
+    @Transactional
+    public DataStatisticListResponse getDataStatisticsList(Long tagId) {
+        List<ClassHub_DataDetail> dataStatistics = dataDetailRepository.findByTagTagId(tagId);
+        List<DataStatisticResponse> dataStatisticResponses = dataStatistics.stream()
+                .map(DataStatisticResponse::new)
+                .toList();
+        return new DataStatisticListResponse(dataStatisticResponses);
     }
 }

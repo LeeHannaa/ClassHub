@@ -1,9 +1,14 @@
 package com.example.classhub.domain.datadetail.controller;
 
+import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
+import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.datadetail.controller.request.DataDetailCreateRequest;
 import com.example.classhub.domain.datadetail.controller.response.DataDetailListResponse;
+import com.example.classhub.domain.datadetail.controller.response.DataStatisticListResponse;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.service.DataDetailService;
+import com.example.classhub.domain.tag.controller.response.TagListResponse;
+import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class DataDetailController {
     private final DataDetailService dataDetailService;
+    private final LectureRoomService lectureRoomService;
+    private final TagService tagService;
 
     @GetMapping("/data-detail/dataDetailForm")
     public String createDataDetailForm(Model model){
@@ -56,5 +63,20 @@ public class DataDetailController {
     public String delete(@ModelAttribute("dataDetailId") Long dataDetailId){
         dataDetailService.delete(dataDetailId);
         return "redirect:/data-detail/dataDetailList";
+    }
+
+    // statistics
+    @GetMapping("/data-detail/statistics/{tagId}")
+    public String statisticsByTagId(Model model, @ModelAttribute("tagId") Long tagId){
+        DataStatisticListResponse dataStatisticListResponse = dataDetailService.getDataStatisticsList(tagId);
+        model.addAttribute("dataStatistics", dataStatisticListResponse.getDataStatistic());
+
+        Long lectureRoomId = dataStatisticListResponse.getDataStatistic().get(0).getLRoomId();
+        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        model.addAttribute("lectureRoom", lectureRoomDto);
+
+        TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
+        model.addAttribute("tags", tagListResponse.getTags());
+        return "./statistical/statisticalData";
     }
 }

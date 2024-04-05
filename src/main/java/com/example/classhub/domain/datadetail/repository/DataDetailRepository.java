@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface DataDetailRepository extends JpaRepository<ClassHub_DataDetail, Long> {
     List<ClassHub_DataDetail> findByStudentNumAndTagTagId(String studentNum, Long tagId);
+    List<ClassHub_DataDetail> findByTagTagId(Long tagId);
 }
