@@ -49,15 +49,18 @@ var myBarChart = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value) {
-            var midValue1 = totalStudents / 3; // 중간값을 계산합니다.
-            var midValue2 = totalStudents*2/ 3; // 중간값을 계산합니다.
+            var midValue1 = Math.floor(totalStudents / 3); // 중간값을 계산합니다.
+            var midValue2 = Math.floor(totalStudents * 2 / 3); // 중간값을 계산합니다.
+            //
+            // console.log("총 학생 수1 :", midValue1);
+            // console.log("총 학생 수2 :", midValue2);
 
             // 총 학생 수를 기준으로 세로 축의 눈금을 0, 중간값, 총 학생 수로 나누어 설정합니다.
             if (value === 0) {
               return '0';
-            } else if (value === midValue1) {
+            } else if (midValue1 <= value && value<midValue2) {
               return midValue1;
-            } else if (value === midValue2) {
+            } else if (midValue2 <= value  && value<totalStudents) {
               return midValue2;
             } else if (value === totalStudents) {
               return totalStudents;
