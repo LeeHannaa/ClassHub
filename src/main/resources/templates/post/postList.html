@@ -20,8 +20,14 @@
     .fixed-bottom-right {
       position: fixed;
       bottom: 20px;
-      right: 20px;
+      right: 70px;
       z-index: 9999;
+    }
+
+    .card{
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
     }
   </style>
 
@@ -39,7 +45,7 @@
   <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.html">
       <div class="sidebar-brand-icon rotate-n-15">
         <i class="fas fa-laugh-wink"></i>
       </div>
@@ -51,7 +57,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="../index.html">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>대시보드</span></a>
     </li>
@@ -66,7 +72,7 @@
 
     <!-- Nav Item - 공지 -->
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="../index.html">
         <i class="fas fa-fw fa-chart-area"></i>
         <span>공지</span></a>
     </li>
@@ -82,22 +88,22 @@
            data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">과제 및 평가</h6>
-          <a class="collapse-item" href="index.html">전체</a>
-          <a class="collapse-item" href="index.html">중간고사</a>
+          <a class="collapse-item" href="../index.html">전체</a>
+          <a class="collapse-item" href="../index.html">중간고사</a>
         </div>
       </div>
     </li>
 
     <!-- Nav Item - Charts -->
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="../index.html">
         <i class="fas fa-fw fa-chart-area"></i>
         <span>통계자료</span></a>
     </li>
 
     <!-- Nav Item - Tables -->
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="../index.html">
         <i class="fas fa-fw fa-table"></i>
         <span>Tables</span></a>
     </li>
@@ -120,8 +126,8 @@
            data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">수정</h6>
-          <a class="collapse-item" href="index.html">강의실 정보</a>
-          <a class="collapse-item" href="index.html">강의실 구성원 정보</a>
+          <a class="collapse-item" href="../index.html">강의실 정보</a>
+          <a class="collapse-item" href="../index.html">강의실 구성원 정보</a>
         </div>
       </div>
     </li>
@@ -239,35 +245,6 @@
       <!-- End of Topbar -->
 
       <!-- Begin Page Content -->
-<!--      <div class="container-fluid">-->
-<!--        &lt;!&ndash; Page Heading &ndash;&gt;-->
-<!--        <h1 class="h3 mb-4 text-gray-800">등록된 게시물 목록</h1>-->
-<!--        <table style="border-collapse: collapse; width: 100%;">-->
-<!--            <thead>-->
-<!--            <tr>-->
-<!--              <th>No.</th>-->
-<!--              <th>제목</th>-->
-<!--              <th>내용</th>-->
-<!--              <th>공유 범위</th>-->
-<!--              <th>강의실</th>-->
-<!--              <th>수정</th>-->
-<!--              <th>삭제</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--            <tr th:each="post : ${posts}">-->
-<!--              <td th:text="${post.id}"></td>-->
-<!--              <td th:text="${post.postTitle}"></td>-->
-<!--              <td th:text="${post.postContent}"></td>-->
-<!--              <td th:text="${post.postShareRange}"></td>-->
-<!--              <td th:text="${post.getLRoomId()}"></td>-->
-<!--              <td><a th:href="@{/post/updateForm/{postId}(postId=${post.id})}">Update</a></td>-->
-<!--              <td><a th:href="@{/post/delete/{postId}(postId=${post.id})}">Delete</a></td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--          </table>-->
-<!--          <button onclick="location.href='/post/postForm'">게시물 등록</button>-->
-<!--      </div>-->
       <div class="container-fluid">
         <div class="container">
           <h1 class="h3 mb-4 text-gray-800">등록된 게시물 목록</h1>
@@ -295,7 +272,29 @@
                 </div>
               </div>
             </div>
-        </div>
+            <div class="row">
+              <div class="col">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination">
+                    <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="page-item">
+                      <a class="page-link" th:href="@{/post(page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">
+                      <a class="page-link" th:href="@{/post(page=${pageNum})}" th:text="${pageNum + 1}">1</a>
+                    </li>
+                    <li th:classappend="${currentPage + 1 == totalPages} ? 'disabled' : ''" class="page-item">
+                      <a class="page-link" th:href="@{/post(page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+
+          </div>
       </div>
         <button onclick="location.href='/post/postForm'" class="btn btn-success fixed-bottom-right">게시물 등록</button>
       </div>
@@ -339,7 +338,7 @@
       <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-        <a class="btn btn-primary" href="index.html">로그아웃</a>
+        <a class="btn btn-primary" href="../index.html">로그아웃</a>
       </div>
     </div>
   </div>
@@ -358,14 +357,4 @@
 </body>
 
 </html>
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <title>게시물 목록</title>-->
 
-<!--</head>-->
-<!--<body>-->
-<!--<h2>게시물 목록</h2>-->
-
-<!--</body>-->
-<!--</html>-->
