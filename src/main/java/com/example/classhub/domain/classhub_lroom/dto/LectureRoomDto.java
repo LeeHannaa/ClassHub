@@ -31,6 +31,8 @@ public class LectureRoomDto {
         return LectureRoomDto.builder()
                 .roomName(request.getRoomName())
                 .description(request.getDescription())
+                .taInviteCode(request.getTaInviteCode())
+                .stInviteCode(request.getStInviteCode())
                 .onOff(request.isOnOff())
                 .build();
     }

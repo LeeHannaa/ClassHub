@@ -11,4 +11,6 @@ public class LectureRoomUpdateRequest {
     private String roomName;
     private boolean OnOff;
     private String description;
+    private String taInviteCode;
+    private String stInviteCode;
 }
