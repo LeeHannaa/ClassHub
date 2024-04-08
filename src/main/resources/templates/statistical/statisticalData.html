@@ -394,19 +394,32 @@
         var segmentCounts = [0, 0, 0, 0, 0];
         var segmentRanges = [];
         var segmentSize = (calculateMax(scores) - calculateMin(scores)) / 5;
+        var maxStudents = 0; // 초기값을 0으로 설정
+
         for (var i = 0; i < 5; i++) {
             var rangeStart = calculateMin(scores) + segmentSize * i;
             var rangeEnd = calculateMin(scores) + segmentSize * (i + 1);
+            var count = 0; // 각 범위의 학생 수를 카운트
+
             scores.forEach(function(score) {
-                if(i == 4){
-                    if(score >= rangeStart && score <= rangeEnd) segmentCounts[i]++;
+                if ((i == 4 && score >= rangeStart && score <= rangeEnd) ||
+                    (score >= rangeStart && score < rangeEnd)) {
+                    count++;
                 }
-                else if(score >= rangeStart && score < rangeEnd) segmentCounts[i]++;
             });
+
+            segmentCounts[i] = count;
             segmentRanges.push(`(${rangeStart.toFixed(1)} - ${rangeEnd.toFixed(1)})`);
+
+            // 최대 학생 수 업데이트
+            if (count > maxStudents) {
+                maxStudents = count;
+            }
         }
-        return { segmentCounts: segmentCounts, segmentRanges: segmentRanges };
+
+        return { segmentCounts: segmentCounts, segmentRanges: segmentRanges, maxStudents: maxStudents };
     }
+
 
     var mean = calculateMean(scores);
     var standardDeviation = calculateStandardDeviation(scores);
@@ -414,6 +427,7 @@
     var minScore = calculateMin(scores);
     var segmentInfo = calculateSegmentInfo(scores);
     var totalStudents = scores.length; // 총 학생 수
+
 
     // console.log("평균:", mean);
     // console.log("표준 편차:", standardDeviation);
