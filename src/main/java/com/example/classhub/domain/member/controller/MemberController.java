@@ -1,28 +1,35 @@
 package com.example.classhub.domain.member.controller;
 
+import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
+import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.member.controller.request.MemberCreateRequest;
 import com.example.classhub.domain.member.controller.response.MemberListResponse;
 import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.service.MemberService;
+import com.example.classhub.domain.tag.controller.response.TagListResponse;
+import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member")
 public class MemberController {
   private final MemberService memberService;
+  private final LectureRoomService lectureRoomService;
+  private final TagService tagService;
 
-  @GetMapping //member list 보여주기
-  public String findMemberList(Model model){
+  @GetMapping ("/lecture-room/member/info/{lectureRoomId}")//member list 보여주기
+  public String findMemberList(@PathVariable Long lectureRoomId, Model model){
     MemberListResponse memberListResponse = memberService.getMemberList();
     model.addAttribute("members", memberListResponse.getMembers());
+
+    LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+    TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
+    model.addAttribute("lectureRoom", lectureRoomDto);
+    model.addAttribute("tags", tagListResponse.getTags());
     return "/member/memberList";
   }
 

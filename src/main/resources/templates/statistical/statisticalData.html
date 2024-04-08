@@ -114,7 +114,7 @@
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
                     <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
-                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>
+                    <a class="collapse-item" th:href="@{'/lecture-room/member/info/' + ${lectureRoom.lectureRoomId}}">강의실 구성원 정보</a>
                 </div>
             </div>
         </li>
@@ -145,19 +145,19 @@
                 </button>
 
                 <!-- Topbar Search -->
-                <form th:action="@{/lecture-room}" method="get" class="form-inline mr-auto w-100 navbar-search">
-                    <div class="input-group w-50">
-                        <input type="text" name="searchKeyword" th:value="${param.searchKeyword}"
-                               class="form-control bg-light border-0 small"
-                               placeholder="Search for..." aria-label="Search"
-                               aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+<!--                <form th:action="@{/lecture-room}" method="get" class="form-inline mr-auto w-100 navbar-search">-->
+<!--                    <div class="input-group w-50">-->
+<!--                        <input type="text" name="searchKeyword" th:value="${param.searchKeyword}"-->
+<!--                               class="form-control bg-light border-0 small"-->
+<!--                               placeholder="Search for..." aria-label="Search"-->
+<!--                               aria-describedby="basic-addon2">-->
+<!--                        <div class="input-group-append">-->
+<!--                            <button type="submit" class="btn btn-primary">-->
+<!--                                <i class="fas fa-search fa-sm"></i>-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">

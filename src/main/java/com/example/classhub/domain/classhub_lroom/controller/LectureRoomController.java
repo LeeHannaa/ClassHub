@@ -15,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class LectureRoomController {
     private final LectureRoomService lectureRoomService;
     private final TagService tagService;
