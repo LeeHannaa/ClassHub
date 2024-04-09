@@ -1,12 +1,15 @@
 package com.example.classhub.domain.post.dto;
 
 import com.example.classhub.domain.post.ClassHub_Post;
+import com.example.classhub.domain.post.controller.request.PostCheckRequest;
 import com.example.classhub.domain.post.controller.request.PostCreateRequest;
 import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,14 +22,32 @@ public class PostDto {
     private String postShareRange;
     private String tagId;
     private Long lRoomId;
+    private List<Boolean> isSelected;
+    private List<Boolean> isScore;
 
     public static PostDto from(PostCreateRequest postCreateRequest) {
         return PostDto.builder()
                 .postTitle(postCreateRequest.getPostTitle())
                 .postContent(postCreateRequest.getPostContent())
                 .postShareRange(postCreateRequest.getPostShareRange())
-//                .tagId(postCreateRequest.getTagId())
                 .lRoomId(postCreateRequest.getLRoomId())
+                .build();
+    }
+    public static PostDto from(PostCheckRequest postCheckRequest) {
+        return PostDto.builder()
+                .isSelected(postCheckRequest.getIsSelected())
+                .isScore(postCheckRequest.getIsScore())
+                .build();
+    }
+
+    public static PostDto from(PostCreateRequest postCreateRequest, PostCheckRequest postCheckRequest){
+        return PostDto.builder()
+                .postTitle(postCreateRequest.getPostTitle())
+                .postContent(postCreateRequest.getPostContent())
+                .postShareRange(postCreateRequest.getPostShareRange())
+                .lRoomId(postCreateRequest.getLRoomId())
+                .isSelected(postCheckRequest.getIsSelected())
+                .isScore(postCheckRequest.getIsScore())
                 .build();
     }
 

@@ -1,0 +1,32 @@
+<form action="#" th:action="@{/post/postHeaderCheckForm}" th:object="${headers}" method="post" enctype="multipart/form-data">
+    <h2>생성될 태그 목록</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>찾은 헤더 이름</th>
+            <th>점수 여부</th>
+            <th>태그 생성 여부</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="header, index : ${headers}">
+            <td th:text="${index.index + 1}"></td>
+            <td th:text="${header}"></td>
+            <td>
+                <!-- name을 isSelected로 변경 -->
+                <input type="checkbox" th:id="'scoreCheckbox' + ${index}" th:name="'isScore'" th:value="true">
+                <!-- 선택되지 않은 경우를 위해 숨겨진 필드 추가 -->
+                <input type="hidden" th:name="'isScore'" th:value="false">
+            </td>
+            <td>
+                <!-- name을 isScore로 변경 -->
+                <input type="checkbox" th:id="'createCheckbox' + ${index}" th:name="'isSelected'" th:value="true">
+                <!-- 선택되지 않은 경우를 위해 숨겨진 필드 추가 -->
+                <input type="hidden" th:name="'isSelected'" th:value="false">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="submit">게시물 등록</button>
+</form>
