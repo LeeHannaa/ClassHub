@@ -110,13 +110,50 @@
                 <span>태그 모음</span>
             </a>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages"
-                 data-parent="#accordionSidebar" >
+                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">과제 및 평가</h6>
-                    <a class="collapse-item " th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                    <div class="input-group mb-2" style="max-width: 180px; margin: 0 auto;">
+                        <input type="text" class="form-control" placeholder="태그 검색" id="tagSearchInput">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="tagSearchButton">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="tagList">
+                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                    </div>
                 </div>
             </div>
         </li>
+
+        <script>
+            document.getElementById("tagSearchButton").addEventListener("click", function () {
+                filterTags(document.getElementById('tagSearchInput').value.toUpperCase());
+            });
+            document.getElementById("tagSearchInput").addEventListener("keypress", function(event) {
+                if (event.key === 'Enter') {
+                    filterTags(document.getElementById('tagSearchInput').value.toUpperCase());
+                }
+            });
+
+            function filterTags(filter) {
+                var ul, li, a, i, txtValue;
+                ul = document.getElementById("tagList");
+                li = ul.getElementsByTagName('a');
+                for (i = 0; i < li.length; i++) {
+                    txtValue = li[i].textContent || li[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            }
+
+            // Show all tags by default
+            filterTags('');
+        </script>
 
         <!-- Nav Item - Charts -->
         <!--   ToDo: tagId로 연결해두기   -->
