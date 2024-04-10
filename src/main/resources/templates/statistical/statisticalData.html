@@ -284,7 +284,25 @@
                             </div>
                         </div>
                         <p>평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
-
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>학번</th>
+                                    <th>점수</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="data : ${dataStatistics}">
+                                    <td th:text="${data.studentNum}"></td>
+                                    <td th:text="${data.score}"></td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>
+                                </tr>
+                                </tfoot>
+                            </table>
                     </div>
 
                     <!-- Donut Chart -->
