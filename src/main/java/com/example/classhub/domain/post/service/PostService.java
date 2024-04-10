@@ -27,10 +27,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,62 +46,64 @@ public class PostService {
     private final TagService tagService;
     private final DataDetailService dataDetailService;
 
-    public String getFileDataName(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-        String[] filenameParts = originalFilename.split("\\.");
-        return filenameParts[0]; // 파일 이름
-    }
-
-    public String getFileDataType(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-        String[] filenameParts = originalFilename.split("\\.");
-        return filenameParts.length > 1 ? filenameParts[filenameParts.length - 1] : ""; // 확장자
-    }
-
-    @Transactional
-    public String saveTag(ClassHub_LRoom lRoom, MultipartFile csvFile) {
-        StringBuilder tagIdsBuilder = new StringBuilder();
+    public List<String> checkHeader(File file) { // 수정된 부분: MultipartFile 대신 File 사용
         List<CSVRecord> records = new ArrayList<>();
-        try (BOMInputStream bomInputStream = new BOMInputStream(csvFile.getInputStream());
-             BufferedReader fileReader = new BufferedReader(new InputStreamReader(bomInputStream, StandardCharsets.UTF_8));
-             CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
+        try (FileInputStream fis = new FileInputStream(file);
+             BOMInputStream bomInputStream = new BOMInputStream(fis, false); // BOMInputStream을 사용하여 BOM을 처리
+             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bomInputStream, StandardCharsets.UTF_8));
+             CSVParser csvParser = new CSVParser(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
             for (CSVRecord record : csvParser) {
                 records.add(record);
             }
+        } catch (IOException e) {
+            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+        }
+        return new ArrayList<>(records.get(0).toMap().keySet());
+    }
 
+    @Transactional
+    public String saveTag(ClassHub_LRoom lRoom, File csvFile, List<Boolean> isSelected, List<Boolean> isScore) throws IOException {
+        StringBuilder tagIdsBuilder = new StringBuilder();
+        List<CSVRecord> records = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(csvFile);
+             BOMInputStream bomInputStream = new BOMInputStream(fis, false); // BOMInputStream을 사용하여 BOM을 처리
+             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bomInputStream, StandardCharsets.UTF_8));
+             CSVParser csvParser = new CSVParser(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
+
+            records.addAll(csvParser.getRecords());
             Map<String, Integer> headers = csvParser.getHeaderMap();
-            for (String headerName : headers.keySet()) {
-                int headerIndex = headers.get(headerName);
-                boolean isScore = headerName.contains("score");
+            List<String> headerNames = new ArrayList<>(headers.keySet());
 
-                String tagName = isScore ? headerName.replace("(score)", "").trim() : headerName;
+            for (int i = 0; i < headerNames.size(); i++) {
+                if (!isSelected.get(i)) continue;
 
-                if(headerName.equals("학번")){
-                    continue;
-                }
+                String headerName = headerNames.get(i);
+                boolean isScoreTag = isScore.get(i);
+
                 TagDto tagDto = TagDto.builder()
-                        .name(tagName)
+                        .name(headerName)
                         .lRoomId(lRoom.getLRoomId())
-                        .nan(!isScore)
+                        .nan(!isScoreTag)
                         .build();
                 TagDto createdTagDto = tagService.createTag(tagDto, lRoom.getLRoomId());
 
+                // 각 레코드에 대해 처리합니다.
                 for (CSVRecord record : records) {
-                    String recordValue = record.get(headerIndex);
-                    System.out.println("Record for Header " + headerName + ": " + recordValue);
-                    if(isScore){
+                    if (isScoreTag) {
+                        // 점수 태그인 경우
                         DataDetailDto dataDetail = DataDetailDto.builder()
                                 .studentNum(record.get("학번"))
-                                .score(Double.valueOf(recordValue))
+                                .score(Double.parseDouble(record.get(headerName)))
                                 .tagId(createdTagDto.getTagId())
                                 .build();
                         dataDetailService.saveDataDetail(dataDetail);
-                    }
-                    else {
+                    } else {
+                        // 코멘트 태그인 경우
                         DataDetailDto dataDetail = DataDetailDto.builder()
                                 .studentNum(record.get("학번"))
-                                .comment(recordValue)
+                                .comment(record.get(headerName))
                                 .tagId(createdTagDto.getTagId())
                                 .build();
                         dataDetailService.saveDataDetail(dataDetail);
@@ -112,10 +113,8 @@ public class PostService {
                 Long tagId = createdTagDto.getTagId();
                 tagIdsBuilder.append(tagId).append(",");
             }
-
-        } catch (IOException e) {
-            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
+
         String tagIds = tagIdsBuilder.toString();
         if (tagIds.endsWith(",")) {
             tagIds = tagIds.substring(0, tagIds.length() - 1);
@@ -125,25 +124,33 @@ public class PostService {
 
 
     @Transactional
-    public void savePost(PostDto postDto, MultipartFile file) {
+    public void createPost(PostDto postDto, File file) throws IOException {
         ClassHub_LRoom lRoom = lectureRoomRepository.findById(postDto.getLRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
 
-        if (!file.isEmpty()) {
-            String tagIds = saveTag(lRoom, file);
+        if (file.length() == 0) {
+            ClassHub_Post post = ClassHub_Post.from(postDto, lRoom);
+            System.out.println("Post: " + post);
+            postRepository.save(post);
+        } else {
+            String tagIds = saveTag(lRoom, file, postDto.getIsSelected(), postDto.getIsScore());
+
+            System.out.println("TagIds: " + tagIds);
             ClassHub_Post post = ClassHub_Post.from(postDto, lRoom, tagIds);
             postRepository.save(post);
 
+            String fileDataName = file.getName();
+            String fileDataType = Files.probeContentType(file.toPath());
+
             FileDataDto fileDataDto = FileDataDto.builder()
-                    .fileDataName(getFileDataName(file))
-                    .fileDataType(getFileDataType(file))
+                    .fileDataName(fileDataName)
+                    .fileDataType(fileDataType)
                     .postId(post.getPostId())
                     .build();
             fileDataService.saveFileData(fileDataDto);
-        } else {
-            ClassHub_Post post = ClassHub_Post.from(postDto, lRoom);
-            postRepository.save(post);
         }
+
+        file.delete();
     }
 //    @Transactional
 //    public PostListResponse getPostList(){
