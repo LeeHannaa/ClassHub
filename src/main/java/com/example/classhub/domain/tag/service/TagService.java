@@ -81,4 +81,22 @@ public class TagService {
         ClassHub_Tag tag = tagRepository.findByName(name);
         return TagDto.from(tag);
     }
+
+    @Transactional
+    public TagDto createOrUpdateTag(TagDto tagDto, boolean isCover, Long lRoomId) {
+        String tagName = tagDto.getName();
+        ClassHub_Tag tag = tagRepository.findByNameAndLectureRoom_LRoomId(tagName, lRoomId);
+
+        if (isCover) {
+            tag.update(tagDto);
+            tagRepository.save(tag);
+            System.out.println("isCover / tag: " + tag);
+        }
+        else {
+            TagDto newTagDto = createTag(tagDto, lRoomId);
+            System.out.println("isCover else / new tag: " + newTagDto);
+            return newTagDto;
+        }
+        return TagDto.from(tag);
+    }
 }

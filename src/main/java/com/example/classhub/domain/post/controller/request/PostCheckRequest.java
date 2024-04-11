@@ -9,6 +9,8 @@ import java.util.List;
 @Data
 public class PostCheckRequest {
     private List<String> tagNames;
-    private List<Boolean> isSelected;
-    private List<Boolean> isScore;
+    private List<Long> isSelected;
+    private List<Long> isScore;
+    private Long keyId;
+    private List<Long> isCover; // 덮어쓰기 여부
 }
