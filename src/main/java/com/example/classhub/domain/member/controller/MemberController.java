@@ -21,7 +21,7 @@ public class MemberController {
   private final LectureRoomService lectureRoomService;
   private final TagService tagService;
 
-  @GetMapping ("/lecture-room/member/info/{lectureRoomId}")//member list 보여주기
+  @GetMapping //member list 보여주기 ("/lecture-room/member/info/{lectureRoomId}")
   public String findMemberList(@PathVariable Long lectureRoomId, Model model){
     MemberListResponse memberListResponse = memberService.getMemberList();
     model.addAttribute("members", memberListResponse.getMembers());
@@ -30,7 +30,7 @@ public class MemberController {
     TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
     model.addAttribute("lectureRoom", lectureRoomDto);
     model.addAttribute("tags", tagListResponse.getTags());
-    return "/member/memberList";
+    return "/member";
   }
 
   @GetMapping("/memberForm") // member form 보여주기

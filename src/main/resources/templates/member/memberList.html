@@ -333,17 +333,24 @@
                             <th scope="col">이름</th>
                             <th scope="col" class="d-none d-sm-table-cell">이메일</th>
                             <th scope="col">학번</th>
-                            <th scope="col">수정</th>
+                            <th scope="col">역할</th>
+                            <th scope="col">권한</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="member : ${members}">
-                            <td th:text="${member.memberId}"></td>
-                            <td th:text="${member.member_name}"></td>
-                            <td th:text="${member.email}" class="d-none d-sm-table-cell"></td>
-                            <td th:text="${member.uniqueId}"></td>
-                            <td><a class="btn btn-primary btn-sm" th:href="@{/updateForm/{memberId}(memberId=${member.memberId})}">수정</a></td>
+                        <tbody th:if="${not #lists.isEmpty(memberLRooms)}">
+                        <tr th:each="member, index : ${memberLRooms}">
+                            <td th:text="${index.index + 1}"></td>
+                            <td th:text="${member.getClassHubMember().getMember_name()}"></td>
+                            <td th:text="${member.getClassHubMember().getEmail()}" class="d-none d-sm-table-cell"></td>
+                            <td th:text="${member.getClassHubMember().getUniqueId()}"></td>
+                            <td th:text="${member.role}">역할</td>
+                            <td th:text="${member.permission}">권한</td>
                         </tr>
+                        </tbody>
+                        <tbody th:unless="${not #lists.isEmpty(memberLRooms)}">
+                            <tr>
+                                <td colspan="6" style="text-align: center;">강의실 구성원이 없습니다.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

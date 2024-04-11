@@ -1,5 +1,6 @@
 package com.example.classhub.domain.memberlroom.service;
 
+import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.memberlroom.repository.MemberLRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,23 @@ public class MemberLRoomService {
     return memberLRoomRepository.findAll();
   }
 
+
   // Read One
   public Optional<ClassHub_MemberLRoom> findMemberLRoomById(Long id) {
     return memberLRoomRepository.findById(id);
   }
+
+  // 강의실 아이디에 따라 해당 멤버 불러오기
+  public List<ClassHub_MemberLRoom> findMembersByLRoomId(Long LRoomId) {
+    return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
+  }
+  // 강의실 아이디에 따라 강의실 정보 불러오기
+  public ClassHub_MemberLRoom findMemberByLRoomId(Long LRoomId) {
+    List<ClassHub_MemberLRoom> classHub_memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
+    ClassHub_MemberLRoom result = classHub_memberLRoom.get(0);
+    return result;
+  }
+
 
   // Update
   public ClassHub_MemberLRoom updateMemberLRoom(Long id, ClassHub_MemberLRoom classHubMemberLRoomDetails) {
