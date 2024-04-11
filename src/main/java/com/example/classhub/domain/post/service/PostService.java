@@ -46,10 +46,10 @@ public class PostService {
     private final TagService tagService;
     private final DataDetailService dataDetailService;
 
-    public List<String> checkHeader(File file) { // 수정된 부분: MultipartFile 대신 File 사용
+    public List<String> checkHeader(File file) {
         List<CSVRecord> records = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(file);
-             BOMInputStream bomInputStream = new BOMInputStream(fis, false); // BOMInputStream을 사용하여 BOM을 처리
+             BOMInputStream bomInputStream = new BOMInputStream(fis, false);
              BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bomInputStream, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
@@ -63,63 +63,71 @@ public class PostService {
     }
 
     @Transactional
-    public String saveTag(ClassHub_LRoom lRoom, File csvFile, List<Boolean> isSelected, List<Boolean> isScore) throws IOException {
+    public String saveTag(ClassHub_LRoom lRoom, File csvFile, PostDto postDto) throws IOException {
+        List<String> headers = checkHeader(csvFile);
         StringBuilder tagIdsBuilder = new StringBuilder();
-        List<CSVRecord> records = new ArrayList<>();
+        List<CSVRecord> records = readCsvRecords(csvFile);
+        String keyHeaderName = headers.get(postDto.getKeyId().intValue());
 
+        for (Long selectedId : postDto.getIsSelected()) {
+            String headerName = headers.get(selectedId.intValue());
+            boolean isScoreTag = postDto.getIsScore().contains(selectedId);
+            boolean isCover = postDto.getIsCover() != null && postDto.getIsCover().contains(selectedId);
+
+            TagDto tagDto = TagDto.builder()
+                    .name(headerName)
+                    .lRoomId(lRoom.getLRoomId())
+                    .nan(!isScoreTag)
+                    .build();
+            TagDto createdTagDto = tagService.createOrUpdateTag(tagDto, isCover, lRoom.getLRoomId());
+
+            for (CSVRecord record : records) {
+                String keyIdValue = record.get(keyHeaderName);
+                saveDataDetail(record, createdTagDto, headerName, keyIdValue, isScoreTag);
+            }
+            tagIdsBuilder.append(createdTagDto.getTagId()).append(",");
+        }
+        return trimTrailingComma(tagIdsBuilder.toString());
+    }
+
+    private List<CSVRecord> readCsvRecords(File csvFile) throws IOException {
         try (FileInputStream fis = new FileInputStream(csvFile);
-             BOMInputStream bomInputStream = new BOMInputStream(fis, false); // BOMInputStream을 사용하여 BOM을 처리
+             BOMInputStream bomInputStream = new BOMInputStream(fis, false);
              BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bomInputStream, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
-            records.addAll(csvParser.getRecords());
-            Map<String, Integer> headers = csvParser.getHeaderMap();
-            List<String> headerNames = new ArrayList<>(headers.keySet());
+            return csvParser.getRecords();
+        } catch (IOException e) {
+            throw new IOException("CSV 파일을 읽는 중 오류 발생: " + e.getMessage(), e);
+        }
+    }
 
-            for (int i = 0; i < headerNames.size(); i++) {
-                if (!isSelected.get(i)) continue;
-
-                String headerName = headerNames.get(i);
-                boolean isScoreTag = isScore.get(i);
-
-                TagDto tagDto = TagDto.builder()
-                        .name(headerName)
-                        .lRoomId(lRoom.getLRoomId())
-                        .nan(!isScoreTag)
-                        .build();
-                TagDto createdTagDto = tagService.createTag(tagDto, lRoom.getLRoomId());
-
-                // 각 레코드에 대해 처리합니다.
-                for (CSVRecord record : records) {
-                    if (isScoreTag) {
-                        // 점수 태그인 경우
-                        DataDetailDto dataDetail = DataDetailDto.builder()
-                                .studentNum(record.get("학번"))
-                                .score(Double.parseDouble(record.get(headerName)))
-                                .tagId(createdTagDto.getTagId())
-                                .build();
-                        dataDetailService.saveDataDetail(dataDetail);
-                    } else {
-                        // 코멘트 태그인 경우
-                        DataDetailDto dataDetail = DataDetailDto.builder()
-                                .studentNum(record.get("학번"))
-                                .comment(record.get(headerName))
-                                .tagId(createdTagDto.getTagId())
-                                .build();
-                        dataDetailService.saveDataDetail(dataDetail);
-                    }
-                }
-
-                Long tagId = createdTagDto.getTagId();
-                tagIdsBuilder.append(tagId).append(",");
-            }
+    private void saveDataDetail(CSVRecord record, TagDto tagDto, String headerName, String keyIdValue, boolean isScoreTag) {
+        DataDetailDto dataDetail;
+        if (isScoreTag) {
+            double score = Double.parseDouble(record.get(headerName));
+            dataDetail = DataDetailDto.builder()
+                    .tagId(tagDto.getTagId())
+                    .score(score)
+                    .studentNum(keyIdValue)
+                    .build();
+        } else {
+            String comment = record.get(headerName);
+            dataDetail = DataDetailDto.builder()
+                    .tagId(tagDto.getTagId())
+                    .comment(comment)
+                    .studentNum(keyIdValue)
+                    .build();
         }
 
-        String tagIds = tagIdsBuilder.toString();
-        if (tagIds.endsWith(",")) {
-            tagIds = tagIds.substring(0, tagIds.length() - 1);
+        dataDetailService.saveDataDetail(dataDetail);
+    }
+
+    private String trimTrailingComma(String str) {
+        if (str != null && str.endsWith(",")) {
+            return str.substring(0, str.length() - 1);
         }
-        return tagIds;
+        return str;
     }
 
 
@@ -133,7 +141,7 @@ public class PostService {
             System.out.println("Post: " + post);
             postRepository.save(post);
         } else {
-            String tagIds = saveTag(lRoom, file, postDto.getIsSelected(), postDto.getIsScore());
+            String tagIds = saveTag(lRoom, file, postDto);
 
             System.out.println("TagIds: " + tagIds);
             ClassHub_Post post = ClassHub_Post.from(postDto, lRoom, tagIds);
@@ -152,14 +160,6 @@ public class PostService {
 
         file.delete();
     }
-//    @Transactional
-//    public PostListResponse getPostList(){
-//        List<ClassHub_Post> posts = postRepository.findAll();
-//        List<PostResponse> postResponses = posts.stream()
-//                .map(PostResponse::new)
-//                .toList();
-//        return new PostListResponse(postResponses);
-//   }
 
   @Transactional
   public PostListResponse getPostList(int page, int size){
