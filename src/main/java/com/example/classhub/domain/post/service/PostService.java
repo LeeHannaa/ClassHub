@@ -31,6 +31,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,7 +60,21 @@ public class PostService {
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
-        return new ArrayList<>(records.get(0).toMap().keySet());
+
+        List<String> headers = new ArrayList<>(records.get(0).toMap().keySet());
+        headers.sort(Comparator.comparingInt(this::getKoreanOrder));
+
+        return headers;
+    }
+
+    private int getKoreanOrder(String s) {
+        if (s == null || s.isEmpty()) return Integer.MAX_VALUE;
+        char c = s.charAt(0);
+        if (c >= '가' && c <= '힣') {
+            return (c - '가');
+        } else {
+            return c;
+        }
     }
 
     @Transactional

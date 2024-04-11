@@ -8,8 +8,6 @@ import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.service.PostService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,7 +49,7 @@ public class PostController {
 
         model.addAttribute("headers", headers);
         model.addAttribute("file", file);
-        return "postHeaderCheckForm";
+        return "post/postHeaderCheckForm";
     }
 
     @PostMapping("/post/postHeaderCheckForm")
