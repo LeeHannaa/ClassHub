@@ -21,6 +21,8 @@
     <link th:href="@{/bootstrap/css/sb-admin-2.min.css}" rel="stylesheet" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         /* 스마트폰 화면에서 버튼과 텍스트 크기 조절 */
         @media (max-width: 576px) {
@@ -36,30 +38,6 @@
     </style>
 
 </head>
-<script>
-    function copyCode(codeId) {
-        // input 요소에서 값(value)을 가져옵니다.
-        var code = document.getElementById(codeId).value;
-        // 텍스트를 클립보드에 복사합니다.
-        navigator.clipboard.writeText(code)
-            .then(function() {
-                alert('코드가 성공적으로 복사되었습니다: ' + code);
-            })
-            .catch(function(err) {
-                alert('코드 복사 중 오류가 발생했습니다. 수동으로 복사해주세요.');
-            });
-    }
-
-    // 페이지 로딩 후 5초 후에 수정 완료 메시지를 자동으로 사라지도록 설정
-    window.onload = function() {
-        setTimeout(function() {
-            var successMessage = document.getElementById('successMessage');
-            if (successMessage) {
-                successMessage.style.display = 'none';
-            }
-        }, 2000);
-    };
-</script>
 
 <body id="page-top">
 
@@ -343,8 +321,21 @@
                             <td th:text="${member.getClassHubMember().getMember_name()}"></td>
                             <td th:text="${member.getClassHubMember().getEmail()}" class="d-none d-sm-table-cell"></td>
                             <td th:text="${member.getClassHubMember().getUniqueId()}"></td>
-                            <td th:text="${member.role}">역할</td>
-                            <td th:text="${member.permission}">권한</td>
+                            <td>
+                                <select class="form-control" th:attr="name='role' + ${index.index}">
+                                    <option value="" th:selected="${member.role == null}">Select Role</option>
+                                    <option value="STUDENT" th:selected="${member.role.toString() == 'STUDENT'}">STUDENT</option>
+                                    <option value="TA" th:selected="${member.role.toString() == 'TA'}">TA</option>
+                                    <option value="PROFESSOR" th:selected="${member.role.toString() == 'PROFESSOR'}">PROFESSOR</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control" th:attr="name='permission' + ${index.index}">
+                                    <option value="APPROVED" th:selected="${member.permission.toString() == 'APPROVED'}">APPROVED</option>
+                                    <option value="UNAPPROVED" th:selected="${member.permission.toString() == 'UNAPPROVED'}">UNAPPROVED</option>
+                                    <option value="BLOCKED" th:selected="${member.permission.toString() == 'BLOCKED'}">BLOCKED</option>
+                                </select>
+                            </td>
                         </tr>
                         </tbody>
                         <tbody th:unless="${not #lists.isEmpty(memberLRooms)}">
