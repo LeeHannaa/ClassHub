@@ -59,5 +59,7 @@ public class ClassHub_LRoom extends BaseEntity {
         this.description = lectureRoomDto.getDescription();
         this.roomName = lectureRoomDto.getRoomName();
         this.onOff = lectureRoomDto.isOnOff();
+        this.stInviteCode = lectureRoomDto.getStInviteCode();
+        this.taInviteCode = lectureRoomDto.getTaInviteCode();
     }
 }
