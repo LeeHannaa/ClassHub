@@ -24,7 +24,7 @@
     <style>
         .fixed-bottom-right {
             position: fixed;
-            bottom: 20px;
+            top: 100px;
             right: 20px;
             z-index: 9999;
             box-shadow: 0px 5px 9px rgba(43, 181, 74, 0.5);
@@ -66,67 +66,6 @@
         <div class="sidebar-heading">
             ClassHub
         </div>
-
-        <!-- Nav Item - 공지 -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-chart-area"></i>-->
-<!--                <span>공지</span></a>-->
-<!--        </li>-->
-
-<!--        &lt;!&ndash; Nav Item - Pages Collapse Menu &ndash;&gt;-->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"-->
-<!--               aria-controls="collapsePages">-->
-<!--                <i class="fas fa-fw fa-folder"></i>-->
-<!--                <span>태그 모음</span>-->
-<!--            </a>-->
-<!--            <div id="collapsePages" class="collapse" aria-labelledby="headingPages"-->
-<!--                 data-parent="#accordionSidebar">-->
-<!--                <div class="bg-white py-2 collapse-inner rounded">-->
-<!--                    <h6 class="collapse-header">과제 및 평가</h6>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </li>-->
-
-        <!-- Nav Item - Charts -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-chart-area"></i>-->
-<!--                <span>통계자료</span></a>-->
-<!--        </li>-->
-
-        <!-- Nav Item - Tables -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-table"></i>-->
-<!--                <span>Tables</span></a>-->
-<!--        </li>-->
-
-        <!-- Divider -->
-<!--        <hr class="sidebar-divider">-->
-        <!-- Heading -->
-<!--        <div class="sidebar-heading">-->
-<!--            설정-->
-<!--        </div>-->
-
-        <!-- Nav Item - Utilities Collapse Menu -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"-->
-<!--               aria-expanded="true" aria-controls="collapseUtilities">-->
-<!--                <i class="fas fa-fw fa-cog"></i>-->
-<!--                <span>설정</span>-->
-<!--            </a>-->
-<!--            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"-->
-<!--                 data-parent="#accordionSidebar">-->
-<!--                <div class="bg-white py-2 collapse-inner rounded">-->
-<!--                    <h6 class="collapse-header">수정</h6>-->
-<!--                    <a class="collapse-item" href="index.html">강의실 정보</a>-->
-<!--                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </li>-->
-
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
@@ -268,22 +207,6 @@
                 </div>
 
 
-<!--                <table style="border-collapse: collapse; width: 100%;">-->
-<!--                    <thead>-->
-<!--                    <tr>-->
-<!--                        <th>태그아이디</th>-->
-<!--                        <th>태그이름</th>-->
-<!--                        <th>강의실아이디</th>-->
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                    <tr th:each="tag : ${tags}">-->
-<!--                        <td th:text="${tag.tagId}"></td>-->
-<!--                        <td th:text="${tag.name}"></td>-->
-<!--                        <td th:text="${tag.lectureRoomId}"></td>-->
-<!--                    </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
                 <button class="btn btn-info fixed-bottom-right" data-toggle="modal" data-target="#LectureRoomCreateModal" style="border-color: #33d657; background: #33d657;">강의실 생성</button>
             </div>
             <!-- /.container-fluid -->
