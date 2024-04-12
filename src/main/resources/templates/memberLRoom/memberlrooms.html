@@ -13,14 +13,18 @@
   <tr>
     <th>강의실 아이디</th>
     <th>회원 아이디</th>
+    <th>회원 학번</th>
+    <th>회원 이름</th>
     <th>역할</th>
     <th>권한</th>
   </tr>
   </thead>
   <tbody>
   <tr th:each="memberLRoom : ${memberLRooms}">
-    <td th:text="${memberLRoom.lectureRoom}">강의실 아이디</td>
-    <td th:text="${memberLRoom.classHubMember}">회원 아이디</td>
+    <td th:text="${memberLRoom.lectureRoom.LRoomId}">강의실 아이디</td>
+    <td th:text="${memberLRoom.classHubMember.getMemberId()}">회원 아이디</td>
+    <td th:text="${memberLRoom.classHubMember.getUniqueId()}">회원 학번</td>
+    <td th:text="${memberLRoom.classHubMember.getMember_name()}">회원 이름</td>
     <td th:text="${memberLRoom.role}">역할</td>
     <td th:text="${memberLRoom.permission}">권한</td>
     <td><a th:href="@{/memberlroom/edit/{id}(id=${memberLRoom.id})}">수정</a></td>

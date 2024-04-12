@@ -44,13 +44,13 @@ var myBarChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: totalStudents,
+          max: segmentInfo.maxStudents,
           maxTicksLimit: 5,
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value) {
-            var midValue1 = Math.floor(totalStudents / 3); // 중간값을 계산합니다.
-            var midValue2 = Math.floor(totalStudents * 2 / 3); // 중간값을 계산합니다.
+            var midValue1 = Math.floor(segmentInfo.maxStudents / 3); // 중간값을 계산합니다.
+            var midValue2 = Math.floor(segmentInfo.maxStudents * 2 / 3); // 중간값을 계산합니다.
             //
             // console.log("총 학생 수1 :", midValue1);
             // console.log("총 학생 수2 :", midValue2);
@@ -60,10 +60,10 @@ var myBarChart = new Chart(ctx, {
               return '0';
             } else if (midValue1 <= value && value<midValue2) {
               return midValue1;
-            } else if (midValue2 <= value  && value<totalStudents) {
+            } else if (midValue2 <= value  && value<segmentInfo.maxStudents) {
               return midValue2;
-            } else if (value === totalStudents) {
-              return totalStudents;
+            } else if (value === segmentInfo.maxStudents) {
+              return segmentInfo.maxStudents;
             } else {
               return 'error';
             }

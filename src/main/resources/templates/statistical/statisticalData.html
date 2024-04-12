@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Blank</title>
+    <title>ClassHub</title>
 
     <!-- Custom fonts for this template-->
     <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
@@ -73,13 +73,53 @@
                 <span>태그 모음</span>
             </a>
             <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
-                 data-parent="#accordionSidebar" >
+                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">과제 및 평가</h6>
-                    <a class="collapse-item " th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                    <div class="input-group mb-2" style="max-width: 180px; margin: 0 auto;">
+                        <input type="text" class="form-control" placeholder="태그 검색" id="tagSearchInput">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="tagSearchButton">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="tagList">
+                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                    </div>
                 </div>
             </div>
         </li>
+
+        <script>
+            document.getElementById("tagSearchButton").addEventListener("click", function () {
+                filterTags(document.getElementById('tagSearchInput').value.toUpperCase());
+            });
+            document.getElementById("tagSearchInput").addEventListener("keypress", function(event) {
+                if (event.key === 'Enter') {
+                    filterTags(document.getElementById('tagSearchInput').value.toUpperCase());
+                }
+            });
+
+            function filterTags(filter) {
+                var ul, li, a, i, txtValue;
+                ul = document.getElementById("tagList");
+                li = ul.getElementsByTagName('a');
+                for (i = 0; i < li.length; i++) {
+                    txtValue = li[i].textContent || li[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            }
+
+            // Show all tags by default
+            filterTags('');
+        </script>
+
+
+
 
         <!-- Nav Item - Charts -->
         <li class="nav-item active">
@@ -114,7 +154,7 @@
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
                     <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
-                    <a class="collapse-item" href="index.html">강의실 구성원 정보</a>
+                    <a class="collapse-item" th:href="@{'/lecture-room/member/info/' + ${lectureRoom.lectureRoomId}}">강의실 구성원 정보</a>
                 </div>
             </div>
         </li>
@@ -145,19 +185,19 @@
                 </button>
 
                 <!-- Topbar Search -->
-                <form th:action="@{/lecture-room}" method="get" class="form-inline mr-auto w-100 navbar-search">
-                    <div class="input-group w-50">
-                        <input type="text" name="searchKeyword" th:value="${param.searchKeyword}"
-                               class="form-control bg-light border-0 small"
-                               placeholder="Search for..." aria-label="Search"
-                               aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+<!--                <form th:action="@{/lecture-room}" method="get" class="form-inline mr-auto w-100 navbar-search">-->
+<!--                    <div class="input-group w-50">-->
+<!--                        <input type="text" name="searchKeyword" th:value="${param.searchKeyword}"-->
+<!--                               class="form-control bg-light border-0 small"-->
+<!--                               placeholder="Search for..." aria-label="Search"-->
+<!--                               aria-describedby="basic-addon2">-->
+<!--                        <div class="input-group-append">-->
+<!--                            <button type="submit" class="btn btn-primary">-->
+<!--                                <i class="fas fa-search fa-sm"></i>-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -284,7 +324,25 @@
                             </div>
                         </div>
                         <p>평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
-
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>학번</th>
+                                    <th>점수</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="data : ${dataStatistics}">
+                                    <td th:text="${data.studentNum}"></td>
+                                    <td th:text="${data.score}"></td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>
+                                </tr>
+                                </tfoot>
+                            </table>
                     </div>
 
                     <!-- Donut Chart -->
@@ -394,19 +452,32 @@
         var segmentCounts = [0, 0, 0, 0, 0];
         var segmentRanges = [];
         var segmentSize = (calculateMax(scores) - calculateMin(scores)) / 5;
+        var maxStudents = 0; // 초기값을 0으로 설정
+
         for (var i = 0; i < 5; i++) {
             var rangeStart = calculateMin(scores) + segmentSize * i;
             var rangeEnd = calculateMin(scores) + segmentSize * (i + 1);
+            var count = 0; // 각 범위의 학생 수를 카운트
+
             scores.forEach(function(score) {
-                if(i == 4){
-                    if(score >= rangeStart && score <= rangeEnd) segmentCounts[i]++;
+                if ((i == 4 && score >= rangeStart && score <= rangeEnd) ||
+                    (score >= rangeStart && score < rangeEnd)) {
+                    count++;
                 }
-                else if(score >= rangeStart && score < rangeEnd) segmentCounts[i]++;
             });
+
+            segmentCounts[i] = count;
             segmentRanges.push(`(${rangeStart.toFixed(1)} - ${rangeEnd.toFixed(1)})`);
+
+            // 최대 학생 수 업데이트
+            if (count > maxStudents) {
+                maxStudents = count;
+            }
         }
-        return { segmentCounts: segmentCounts, segmentRanges: segmentRanges };
+
+        return { segmentCounts: segmentCounts, segmentRanges: segmentRanges, maxStudents: maxStudents };
     }
+
 
     var mean = calculateMean(scores);
     var standardDeviation = calculateStandardDeviation(scores);
@@ -414,6 +485,7 @@
     var minScore = calculateMin(scores);
     var segmentInfo = calculateSegmentInfo(scores);
     var totalStudents = scores.length; // 총 학생 수
+
 
     // console.log("평균:", mean);
     // console.log("표준 편차:", standardDeviation);
