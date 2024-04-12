@@ -26,13 +26,8 @@ public class ClassHub_Post extends BaseEntity {
     @Column(nullable = false)
     private String postContent;
 
-    @Column(nullable = false)
-    private String postShareRange;
-
     @Column(nullable = true)
     private String tagId;
-
-//    private Long lRoomId;
 
     @ManyToOne(targetEntity = ClassHub_LRoom.class)
     @JoinColumn(name = "lRoomId" )
@@ -43,7 +38,6 @@ public class ClassHub_Post extends BaseEntity {
         return ClassHub_Post.builder()
                 .postTitle(postDto.getPostTitle())
                 .postContent(postDto.getPostContent())
-                .postShareRange(postDto.getPostShareRange())
                 .tagId("1")
                 .lRoom(lRoom)
                 .build();
@@ -53,7 +47,6 @@ public class ClassHub_Post extends BaseEntity {
         return ClassHub_Post.builder()
                 .postTitle(postDto.getPostTitle())
                 .postContent(postDto.getPostContent())
-                .postShareRange(postDto.getPostShareRange())
                 .tagId(tagId)
                 .lRoom(lRoom)
                 .build();
@@ -62,7 +55,6 @@ public class ClassHub_Post extends BaseEntity {
     public void update(PostDto from) {
         this.postTitle = from.getPostTitle();
         this.postContent = from.getPostContent();
-        this.postShareRange = from.getPostShareRange();
         this.tagId = from.getTagId();
     }
 }

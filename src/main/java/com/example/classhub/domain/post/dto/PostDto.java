@@ -19,7 +19,6 @@ public class PostDto {
     private Long id;
     private String postTitle;
     private String postContent;
-    private String postShareRange;
     private String tagId;
     private Long lRoomId;
     private Long keyId;
@@ -31,7 +30,6 @@ public class PostDto {
         return PostDto.builder()
                 .postTitle(postCreateRequest.getPostTitle())
                 .postContent(postCreateRequest.getPostContent())
-                .postShareRange(postCreateRequest.getPostShareRange())
                 .lRoomId(postCreateRequest.getLRoomId())
                 .build();
     }
@@ -48,7 +46,6 @@ public class PostDto {
         return PostDto.builder()
                 .postTitle(postCreateRequest.getPostTitle())
                 .postContent(postCreateRequest.getPostContent())
-                .postShareRange(postCreateRequest.getPostShareRange())
                 .lRoomId(postCreateRequest.getLRoomId())
                 .keyId(postCheckRequest.getKeyId())
                 .isSelected(postCheckRequest.getIsSelected())
@@ -61,7 +58,6 @@ public class PostDto {
         return PostDto.builder()
                 .postTitle(postUpdateRequest.getPostTitle())
                 .postContent(postUpdateRequest.getPostContent())
-                .postShareRange(postUpdateRequest.getPostShareRange())
                 .tagId(postUpdateRequest.getTagId())
                 .build();
     }
@@ -71,7 +67,6 @@ public class PostDto {
                 .id(post.getPostId())
                 .postTitle(post.getPostTitle())
                 .postContent(post.getPostContent())
-                .postShareRange(post.getPostShareRange())
                 .tagId(post.getTagId())
                 .lRoomId(post.getLRoom().getLRoomId())
                 .build();
