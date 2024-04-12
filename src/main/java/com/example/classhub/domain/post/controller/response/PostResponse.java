@@ -11,7 +11,6 @@ public class PostResponse {
     private Long id;
     private String postTitle;
     private String postContent;
-    private String postShareRange;
     private String tagId;
     private Long lRoomId;
 
@@ -19,7 +18,6 @@ public class PostResponse {
         this.id = post.getPostId();
         this.postTitle = post.getPostTitle();
         this.postContent = post.getPostContent();
-        this.postShareRange = post.getPostShareRange();
         this.tagId = post.getTagId();
         this.lRoomId = post.getLRoom().getLRoomId();
     }
@@ -27,7 +25,6 @@ public class PostResponse {
         this.id = postDto.getId();
         this.postTitle = postDto.getPostTitle();
         this.postContent = postDto.getPostContent();
-        this.postShareRange = postDto.getPostShareRange();
         this.tagId = postDto.getTagId();
         this.lRoomId = postDto.getLRoomId();
     }
