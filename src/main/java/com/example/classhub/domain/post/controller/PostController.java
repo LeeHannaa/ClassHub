@@ -35,7 +35,6 @@ public class PostController {
   }
     @PostMapping("/post/postForm")
     public String postForm(@ModelAttribute("postForm") PostCreateRequest request, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, HttpSession session) throws IOException {
-        // 임시 파일 생성 및 세션에 파일 경로 저장
         String tempDir = System.getProperty("java.io.tmpdir");
         File tempFile = new File(tempDir, file.getOriginalFilename());
         file.transferTo(tempFile);
@@ -43,7 +42,7 @@ public class PostController {
         session.setAttribute("filePath", tempFile.getAbsolutePath());
         session.setAttribute("postForm", request);
 
-        List<String> headers = postService.checkHeader(tempFile); // 수정된 부분: MultipartFile 대신 File 사용
+        List<String> headers = postService.checkHeader(tempFile);
         redirectAttributes.addFlashAttribute("headers", headers);
         return "redirect:/post/postHeaderCheckForm";
     }
@@ -58,27 +57,16 @@ public class PostController {
     }
 
     @PostMapping("/post/postHeaderCheckForm")
-    public String savePost(@RequestParam(required = false) List<Boolean> isSelected,
-                           @RequestParam(required = false) List<Boolean> isScore,
+    public String savePost(@ModelAttribute PostCheckRequest postCheckRequest,
                            HttpSession session) throws IOException {
 
         String filePath = (String) session.getAttribute("filePath");
         File file = new File(filePath);
 
         PostCreateRequest postCreateRequest = (PostCreateRequest) session.getAttribute("postForm");
-        PostCheckRequest postCheckRequest = new PostCheckRequest();
-
-        postCheckRequest.setIsSelected(isSelected);
-        postCheckRequest.setIsScore(isScore);
-
-        if (isSelected != null && isSelected.contains(true)) {
-            postCheckRequest.setTagNames(postService.checkHeader(file));
-        }
-        System.out.println("postCheckRequest.getTagNames()" + postCheckRequest.getTagNames());
-
 
         postService.createPost(PostDto.from(postCreateRequest, postCheckRequest), file);
-        return "redirect:/post/postList";
+        return "redirect:/post";
     }
 
   @GetMapping("/post")

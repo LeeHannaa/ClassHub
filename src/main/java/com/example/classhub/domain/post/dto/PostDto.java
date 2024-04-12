@@ -22,8 +22,10 @@ public class PostDto {
     private String postShareRange;
     private String tagId;
     private Long lRoomId;
-    private List<Boolean> isSelected;
-    private List<Boolean> isScore;
+    private Long keyId;
+    private List<Long> isSelected;
+    private List<Long> isScore;
+    private List<Long> isCover;
 
     public static PostDto from(PostCreateRequest postCreateRequest) {
         return PostDto.builder()
@@ -35,8 +37,10 @@ public class PostDto {
     }
     public static PostDto from(PostCheckRequest postCheckRequest) {
         return PostDto.builder()
+                .keyId(postCheckRequest.getKeyId())
                 .isSelected(postCheckRequest.getIsSelected())
                 .isScore(postCheckRequest.getIsScore())
+                .isCover(postCheckRequest.getIsCover())
                 .build();
     }
 
@@ -46,8 +50,10 @@ public class PostDto {
                 .postContent(postCreateRequest.getPostContent())
                 .postShareRange(postCreateRequest.getPostShareRange())
                 .lRoomId(postCreateRequest.getLRoomId())
+                .keyId(postCheckRequest.getKeyId())
                 .isSelected(postCheckRequest.getIsSelected())
                 .isScore(postCheckRequest.getIsScore())
+                .isCover(postCheckRequest.getIsCover())
                 .build();
     }
 
