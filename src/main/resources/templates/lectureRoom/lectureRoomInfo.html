@@ -23,6 +23,70 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
+<style>
+  /* 스위치 스타일 */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  /* 스위치 슬라이더 */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* 슬라이더 모양을 동그랗게 */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+</style>
 <script>
     function copyCode(codeId) {
         // input 요소에서 값(value)을 가져옵니다.
@@ -37,6 +101,24 @@
             });
     }
 
+    document.addEventListener('DOMContentLoaded', function () {
+      var checkbox = document.getElementById('onOff');
+      var label = document.getElementById('onOffLabel');
+
+      // 초기 체크 상태에 따른 라벨 설정
+      updateLabel(checkbox.checked);
+
+      // 체크박스 상태 변경 시 라벨 업데이트
+      checkbox.addEventListener('change', function() {
+        updateLabel(this.checked);
+      });
+
+      function updateLabel(checked) {
+        label.textContent = checked ? '공개' : '비공개';
+      }
+    });
+
+
     // 페이지 로딩 후 5초 후에 수정 완료 메시지를 자동으로 사라지도록 설정
     window.onload = function() {
         setTimeout(function() {
@@ -46,6 +128,8 @@
             }
         }, 2000);
     };
+
+
 </script>
 
 <body id="page-top">
@@ -82,12 +166,6 @@
             <span for="name" th:text="${lectureRoom.roomName}"></span>
         </div>
 
-        <!-- Nav Item - 공지 -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-chart-area"></i>-->
-<!--                <span>공지</span></a>-->
-<!--        </li>-->
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
@@ -104,21 +182,6 @@
                 </div>
             </div>
         </li>
-
-        <!-- Nav Item - Charts -->
-<!--   ToDo: tagId로 연결해두기   -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" th:href="@{'/data-detail/statistics/' + ${lectureRoom.lectureRoomId}}">-->
-<!--                <i class="fas fa-fw fa-chart-area"></i>-->
-<!--                <span>통계자료</span></a>-->
-<!--        </li>-->
-
-        <!-- Nav Item - Tables -->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-table"></i>-->
-<!--                <span>Tables</span></a>-->
-<!--        </li>-->
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -286,16 +349,20 @@
                                 <input type="text" id="name" class="form-control rounded bg-white border-secondary" th:field="*{roomName}">
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="onOff" class="col-sm-3 col-form-label">강의실 활성화 상태:</label>
-                            <div class="col-sm-9">
-                                <input type="checkbox" id="onOff" th:field="*{onOff}">
-                            </div>
+                      <div class="form-group row">
+                        <label for="onOff" class="col-sm-3 col-form-label">강의실 공개 / 비공개:</label>
+                        <div class="col-sm-9">
+                          <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input"  id="onOff" th:field="*{onOff}">
+                            <label class="custom-control-label" for="onOff" id="onOffLabel">비공개</label>
+                          </div>
                         </div>
-                        <div class="form-group row">
+                      </div>
+
+                      <div class="form-group row">
                             <label for="stInviteCode" class="col-sm-3 col-form-label">강의실 학생 입장 코드:</label>
                             <div class="col-sm-8">
-                                <input type="text" id="stInviteCode" th:field="${lectureRoom.stInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자">
+                                <input type="text" id="stInviteCode" th:field="${lectureRoom.stInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자" readonly>
                                 <small class="form-text text-muted">영문숫자 포함 8글자</small>
                             </div>
                             <div class="col-sm-1">
@@ -305,7 +372,7 @@
                         <div class="form-group row">
                             <label for="taInviteCode" class="col-sm-3 col-form-label">강의실 조교 입장 코드:</label>
                             <div class="col-sm-8">
-                                <input type="text" id="taInviteCode" th:field="${lectureRoom.taInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자">
+                                <input type="text" id="taInviteCode" th:field="${lectureRoom.taInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자" readonly>
                                 <small class="form-text text-muted">영문숫자 포함 8글자</small>
                             </div>
                             <div class="col-sm-1">
@@ -330,6 +397,7 @@
                 <div id="successMessage" th:if="${param.success}" class="alert alert-success mt-4" role="alert">
                     수정이 성공적으로 완료되었습니다.
                 </div>
+
             </div>
             <!-- /.container-fluid -->
         </div>
@@ -415,6 +483,8 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/bootstrap/js/sb-admin-2.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 </body>
 
