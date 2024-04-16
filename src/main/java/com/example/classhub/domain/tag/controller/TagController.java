@@ -45,13 +45,14 @@ public class TagController {
     }
 
     @PostMapping("/tag/update/{tagId}")
-    public String updateTag(@PathVariable Long tagId, @ModelAttribute("tag") TagRequest request){
+    public void updateTag(@PathVariable Long tagId, @ModelAttribute("tag") TagRequest request){
         tagService.update(tagId, TagDto.from(request));
-        return "redirect:/tag";
     }
-    @GetMapping("/tag/delete/{tagId}")
+
+    //ToDo: tag 삭제 외래키 해결해야함
+    @PostMapping("/tag/delete/{tagId}")
     public String tagDelete(@PathVariable(value = "tagId") Long tagId){
         tagService.tagDelete(tagId);
-        return "redirect:/tag";
+        return "redirect:/lectureRoom/lectureRoomInfo";
     }
 }

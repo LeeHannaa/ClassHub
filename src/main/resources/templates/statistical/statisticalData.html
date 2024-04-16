@@ -84,7 +84,23 @@
                         </div>
                     </div>
                     <div id="tagList">
-                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                        <div class="collapse-item d-flex align-items-center justify-content-between" id="tagContainer" th:each="tag : ${tags}">
+                            <div class = "tagNameDiv">
+                                <a class="item" th:id="'tagItem_' + ${tag.tagId}" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:text="${tag.name}" style="text-decoration: none; color: inherit;"></a>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <!-- 세 개의 점 아이콘 -->
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <!-- 수정 옵션 -->
+                                    <button class="dropdown-item edit-tag" data-tagid="${tag.tagId}" data-tagname="${tag.name}" data-toggle="modal" data-target="#TagUpdateModal">수정</button>
+                                    <!-- 삭제 옵션 -->
+                                    <button class="dropdown-item delete-tag" data-tagid="${tag.tagId}" data-toggle="modal" data-target="#TagDeleteModal">삭제</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,32 +117,69 @@
             });
 
             function filterTags(filter) {
-                var ul, li, a, i, txtValue;
+                var ul, tagName, i, txtValue, deleteElement;
                 ul = document.getElementById("tagList");
-                li = ul.getElementsByTagName('a');
-                for (i = 0; i < li.length; i++) {
-                    txtValue = li[i].textContent || li[i].innerText;
+                tagName = ul.getElementsByTagName('a');
+                deleteElement = ul.getElementsByClassName('dropdown');
+                for (i = 0; i < tagName.length; i++) {
+                    txtValue = tagName[i].textContent || tagName[i].innerText;
+                    var collapseItem = tagName[i].parentNode.parentNode; // 부모 요소인 .collapse-item을 찾음
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        li[i].style.display = "";
+                        tagName[i].style.display = "";
+                        deleteElement[i].style.display = "";
+                        if (collapseItem) {
+                            collapseItem.classList.add('collapse-item');
+                            collapseItem.classList.add('d-flex');
+                            collapseItem.classList.add('align-items-center');
+                            collapseItem.classList.add('justify-content-between');
+                            collapseItem.style.display = ""; // collapse-item도 보이도록 함
+                        }
                     } else {
-                        li[i].style.display = "none";
+                        tagName[i].style.display = "none";
+                        deleteElement[i].style.display = "none";
+                        if (collapseItem) {
+                            collapseItem.classList.remove('collapse-item');
+                            collapseItem.classList.remove('d-flex');
+                            collapseItem.classList.remove('align-items-center');
+                            collapseItem.classList.remove('justify-content-between');
+                            collapseItem.style.display = "none"; // collapse-item 숨김
+                        }
                     }
                 }
             }
 
             // Show all tags by default
             filterTags('');
+
+            // 페이지가 로드될 때 실행되는 함수
+            window.onload = function() {
+                // 현재 URL에서 경로를 추출합니다.
+                var path = window.location.pathname;
+                // 경로에서 tagId를 추출합니다.
+                var tagId = path.substring(path.lastIndexOf('/') + 1);
+
+                // tagId가 존재하면 해당 태그의 색상 변경
+                if (tagId) {
+                    changeTagColor(tagId);
+                }
+            }
+            // 클릭한 태그의 색상을 변경하는 함수
+            function changeTagColor(tagId) {
+                var tagElement = document.getElementById('tagItem_' + tagId);
+                if (tagElement) {
+                    tagElement.style.color = 'blue'; // 원하는 색상으로 변경하세요.
+                }
+            }
+
         </script>
 
 
-
-
-        <!-- Nav Item - Charts -->
-        <li class="nav-item active">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>통계자료</span></a>
-        </li>
+            <!-- Nav Item - Charts -->
+<!--        <li class="nav-item active">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--                <i class="fas fa-fw fa-chart-area"></i>-->
+<!--                <span>통계자료</span></a>-->
+<!--        </li>-->
 
         <!-- Nav Item - Tables -->
         <!--        <li class="nav-item">-->
@@ -408,6 +461,30 @@
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
                 <a class="btn btn-primary" href="index.html">로그아웃</a>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tag Delete Modal-->
+<div class="modal fade" id="TagDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">태그 삭제</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form th:action="@{/tag/delete/{tagId}(tagId=${tagId})}" method="post">
+                <div class="modal-body">
+                    <h4>해당 태그를 정말 삭제하시겠습니까?</h4>
+                    <p>삭제하시면 더 이상 태그의 정보를 확인하실 수 없습니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;">삭제</button>
+                    <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

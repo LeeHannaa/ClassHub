@@ -206,7 +206,23 @@
                         </div>
                     </div>
                     <div id="tagList">
-                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                        <div class="collapse-item d-flex align-items-center justify-content-between" th:each="tag : ${tags}">
+                            <div>
+                                <a class="item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:text="${tag.name}" style="text-decoration: none; color: inherit;"></a>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <!-- 세 개의 점 아이콘 -->
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <!-- 수정 옵션 -->
+                                    <a class="dropdown-item edit-tag" data-tagid="${tag.tagId}" data-tagname="${tag.name}" href="#">수정</a>
+                                    <!-- 삭제 옵션 -->
+                                    <a class="dropdown-item delete-tag" data-tagid="${tag.tagId}" href="#">삭제</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
