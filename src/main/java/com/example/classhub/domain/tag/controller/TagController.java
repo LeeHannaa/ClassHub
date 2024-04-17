@@ -7,12 +7,12 @@ import com.example.classhub.domain.tag.dto.TagDto;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,17 +37,22 @@ public class TagController {
         return "index";
     }
 
-    @GetMapping("/tag/updateForm/{tagId}")
-    public String updateTagForm(@PathVariable Long tagId, Model model){
-        TagDto tagDto = tagService.findByTagId(tagId);
-        model.addAttribute("tag", tagDto);
-        return "tagUpdate";
-    }
+//    @GetMapping("/tag/updateForm/{tagId}")
+//    public String updateTagForm(@PathVariable Long tagId, Model model){
+//        TagDto tagDto = tagService.findByTagId(tagId);
+//        model.addAttribute("tag", tagDto);
+//        return "tagUpdate";
+//    }
 
     @PostMapping("/tag/update/{tagId}")
-    public void updateTag(@PathVariable Long tagId, @ModelAttribute("tag") TagRequest request){
-        tagService.update(tagId, TagDto.from(request));
+    public ResponseEntity<String> updateTag(@PathVariable Long tagId, @RequestBody Map<String, String> requestBody) {
+        String newTagName = requestBody.get("tagName");
+        // TagDto의 생성자를 이용하여 객체 생성 및 초기화
+        TagDto tagDto = new TagDto(tagId, newTagName);
+        tagService.update(tagId, tagDto); // 태그 업데이트 로직 수행
+        return ResponseEntity.ok("Tag updated successfully");
     }
+
 
     //ToDo: tag 삭제 외래키 해결해야함
     @PostMapping("/tag/delete/{tagId}")

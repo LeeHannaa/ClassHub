@@ -88,14 +88,14 @@
                             <div class = "tagNameDiv">
                                 <a class="item" th:id="'tagItem_' + ${tag.tagId}" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:text="${tag.name}" style="text-decoration: none; color: inherit;"></a>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown" th:id="'dropdownItem_' + ${tag.tagId}">
                                 <button class="btn btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <!-- 세 개의 점 아이콘 -->
                                     <i class="fas fa-ellipsis-v"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <!-- 수정 옵션 -->
-                                    <button class="dropdown-item edit-tag" data-tagid="${tag.tagId}" data-tagname="${tag.name}" data-toggle="modal" data-target="#TagUpdateModal">수정</button>
+                                    <button class="dropdown-item edit-tag" data-tagid="${tag.tagId}" data-tagname="${tag.name}" th:onclick="'clickTagUpdate(\'' + ${tag.tagId} + '\')'">수정</button>
                                     <!-- 삭제 옵션 -->
                                     <button class="dropdown-item delete-tag" data-tagid="${tag.tagId}" data-toggle="modal" data-target="#TagDeleteModal">삭제</button>
                                 </div>
@@ -167,11 +167,61 @@
             function changeTagColor(tagId) {
                 var tagElement = document.getElementById('tagItem_' + tagId);
                 if (tagElement) {
-                    tagElement.style.color = 'blue'; // 원하는 색상으로 변경하세요.
+                    tagElement.style.color = '#4e73df'; // 원하는 색상으로 변경하세요.
                 }
             }
+            function clickTagUpdate(tagId) {
+                // 해당 태그 아이디의 <a> 태그를 찾습니다.
+                var tagItem = document.getElementById('tagItem_' + tagId);
 
+                // 해당 태그 아이디의 <div> 태그를 찾습니다.
+                var dropdownItem = document.getElementById('dropdownItem_' + tagId);
+
+                // 태그 이름을 가져옵니다.
+                var tagName = tagItem.textContent.trim();
+
+                // <input> 태그로 교체합니다.
+                var inputElement = document.createElement('input');
+                inputElement.setAttribute('type', 'text');
+                inputElement.setAttribute('value', tagName);
+                inputElement.setAttribute('id', 'tagInput_' + tagId);
+
+                // 이전 태그를 숨깁니다.
+                tagItem.style.display = 'none';
+                // 해당 dropdownItem을 숨깁니다.
+                dropdownItem.style.display = 'none';
+
+                // 입력 필드를 삽입합니다.
+                tagItem.parentNode.insertBefore(inputElement, tagItem.nextSibling);
+
+                // 수정한 값을 저장하고 업데이트합니다.
+                inputElement.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        var newTagName = inputElement.value.trim();
+                        // AJAX 요청
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/tag/update/' + tagId); // tagId를 URL에 포함하여 전송
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.onload = function () {
+                            if (xhr.status === 200) {
+                                console.log('Tag updated successfully');
+                            } else {
+                                console.error('Failed to update tag. Status:', xhr.status);
+                            }
+                        };
+                    }
+                    xhr.send(JSON.stringify({ tagName: newTagName }));
+                    console.log('New Tag Name:', newTagName);
+
+                    tagItem.textContent = newTagName;
+                    tagItem.style.display = 'inline';
+                    dropdownItem.style.display = '';
+
+                    inputElement.parentNode.removeChild(inputElement);
+                });
+            }
         </script>
+
 
 
             <!-- Nav Item - Charts -->
