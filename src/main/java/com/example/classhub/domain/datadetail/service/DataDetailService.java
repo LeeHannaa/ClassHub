@@ -34,6 +34,7 @@ public class DataDetailService {
                 .toList();
         return new DataDetailListResponse(dataDetailResponses);
     }
+
     public DataDetailListResponse getDataDetailList(String studentNum, Long tagId) {
         List<ClassHub_DataDetail> dataDetails = dataDetailRepository.findByStudentNumAndTagTagId(studentNum, tagId);
         List<DataDetailResponse> dataDetailResponses = dataDetails.stream()

@@ -10,6 +10,13 @@
     <meta name="author" content="">
 
     <title>ClassHub</title>
+    <style>
+      .statistics-container {
+        display: flex;
+        align-items: center;
+        gap: 20px; /* 각 항목 사이의 간격 */
+      }
+    </style>
 
     <!-- Custom fonts for this template-->
     <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
@@ -57,13 +64,6 @@
         <div class="sidebar-heading" th:object="${lectureRoom}">
             <span for="name" th:text="${lectureRoom.roomName}"></span>
         </div>
-
-        <!-- Nav Item - 공지 -->
-        <!--        <li class="nav-item">-->
-        <!--            <a class="nav-link" href="index.html">-->
-        <!--                <i class="fas fa-fw fa-chart-area"></i>-->
-        <!--                <span>공지</span></a>-->
-        <!--        </li>-->
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item active">
@@ -290,25 +290,14 @@
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-2 text-gray-800">통계자료</h1>
+                <div class="statistics-container" th:each="statistic : ${dataStatistics[0]}">
+                  <p>데이터 등록일 : <span th:text="${#temporals.format(statistic.regDate, 'yyyy-MM-dd')}"></span></p>
+                  <p>데이터 수정일: <span th:text="${#temporals.format(statistic.modDate, 'yyyy-MM-dd')}"></span></p>
+                </div>
                 <!-- Content Row -->
                 <div class="row">
 
                     <div class="col-xl-8 col-lg-7">
-
-                        <!-- Area Chart -->
-<!--                        <div class="card shadow mb-4">-->
-<!--                            <div class="card-header py-3">-->
-<!--                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>-->
-<!--                            </div>-->
-<!--                            <div class="card-body">-->
-<!--                                <div class="chart-area">-->
-<!--                                    <canvas id="myAreaChart"></canvas>-->
-<!--                                </div>-->
-<!--                                <hr>-->
-<!--                                Styling for the area chart can be found in the-->
-<!--                                <code>/js/demo/chart-area-demo.js</code> file.-->
-<!--                            </div>-->
-<!--                        </div>-->
 
                         <!-- Bar Chart -->
                         <div class="card shadow mb-4" th:object="${dataStatistics}">
@@ -328,12 +317,14 @@
                                 <thead>
                                 <tr>
                                     <th>학번</th>
+                                    <th>이름</th>
                                     <th>점수</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="data : ${dataStatistics}">
                                     <td th:text="${data.studentNum}"></td>
+<!--                                    <td th:text="${data.studentName}"></td>-->
                                     <td th:text="${data.score}"></td>
                                 </tr>
                                 </tbody>
