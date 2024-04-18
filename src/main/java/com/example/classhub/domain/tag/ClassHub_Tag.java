@@ -16,6 +16,8 @@ import org.hibernate.annotations.Where;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE class_hub_tag SET deleted = true WHERE tag_id = ?")
+@Where(clause = "deleted = false")
 public class ClassHub_Tag extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +25,9 @@ public class ClassHub_Tag extends BaseEntity {
 
     private String name;
     private boolean nan;
+
+    // 소프트 딜리트
+    private boolean deleted = Boolean.FALSE;
 
     @ManyToOne
     @JoinColumn(name = "lRoomId")

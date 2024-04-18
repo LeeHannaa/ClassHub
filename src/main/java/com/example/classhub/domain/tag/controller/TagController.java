@@ -53,11 +53,9 @@ public class TagController {
         return ResponseEntity.ok(tagDto.getName());
     }
 
-
-    //ToDo: tag 삭제 외래키 해결해야함
-    @PostMapping("/tag/delete/{tagId}")
-    public String tagDelete(@PathVariable(value = "tagId") Long tagId){
+    @GetMapping("/tag/delete/{tagId}")
+    public String tagDelete(@PathVariable(value = "tagId") Long tagId, @RequestParam(value = "lectureRoomId") Long lectureRoomId){
         tagService.tagDelete(tagId);
-        return "redirect:/lectureRoom/lectureRoomInfo";
+        return "redirect:/lecture-room/detail/" + lectureRoomId;
     }
 }

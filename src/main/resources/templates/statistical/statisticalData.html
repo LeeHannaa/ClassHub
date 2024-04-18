@@ -526,10 +526,12 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form th:action="@{/tag/delete/{tagId}(tagId=${tagId})}" method="post">
+            <form th:action="@{/tag/delete/{tagId}(tagId=${tagId})}" method="get">
+                <input type="hidden" name="lectureRoomId" th:value="${lectureRoom.lectureRoomId}" />
                 <div class="modal-body">
                     <h4>해당 태그를 정말 삭제하시겠습니까?</h4>
                     <p>삭제하시면 더 이상 태그의 정보를 확인하실 수 없습니다.</p>
+                    <span>삭제 후 해당 강의실의 메인페이지로 이동됩니다.</span>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;">삭제</button>
