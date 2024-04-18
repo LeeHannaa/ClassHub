@@ -295,7 +295,7 @@
                 <!-- Page Heading -->
                 <div th:object="${lectureRoom}">
                     <h1 class="h3 mb-4 text-gray-800" th:text="${lectureRoom.roomName}"></h1>
-                    <button id="createPostButton" class="btn btn-primary">게시물 생성하기</button>
+                    <a id="createPostButton" th:href="@{/post/postForm(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-primary">게시물 생성하기</a>
                 </div>
             </div>
             <!-- /.container-fluid -->
@@ -344,11 +344,6 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('createPostButton').addEventListener('click', function() {
-        window.location.href = '/post/postForm';
-    });
-</script>
 <!-- Bootstrap core JavaScript-->
 <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
 <script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
