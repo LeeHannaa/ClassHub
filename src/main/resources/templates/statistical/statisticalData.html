@@ -10,7 +10,13 @@
     <meta name="author" content="">
 
     <title>ClassHub</title>
-
+    <style>
+      .statistics-container {
+        display: flex;
+        align-items: center;
+        gap: 20px; /* 각 항목 사이의 간격 */
+      }
+    </style>
     <!-- Custom fonts for this template-->
     <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
     <link
@@ -27,7 +33,7 @@
 <body id="page-top">
 
 <!-- Page Wrapper -->
-<div id="wrapper">
+  <div id="wrapper">
 
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -57,13 +63,6 @@
         <div class="sidebar-heading" th:object="${lectureRoom}">
             <span for="name" th:text="${lectureRoom.roomName}"></span>
         </div>
-
-        <!-- Nav Item - 공지 -->
-        <!--        <li class="nav-item">-->
-        <!--            <a class="nav-link" href="index.html">-->
-        <!--                <i class="fas fa-fw fa-chart-area"></i>-->
-        <!--                <span>공지</span></a>-->
-        <!--        </li>-->
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item active">
@@ -128,13 +127,6 @@
                 <span>통계자료</span></a>
         </li>
 
-        <!-- Nav Item - Tables -->
-        <!--        <li class="nav-item">-->
-        <!--            <a class="nav-link" href="index.html">-->
-        <!--                <i class="fas fa-fw fa-table"></i>-->
-        <!--                <span>Tables</span></a>-->
-        <!--        </li>-->
-
         <!-- Divider -->
         <hr class="sidebar-divider">
         <!-- Heading -->
@@ -183,21 +175,6 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-
-                <!-- Topbar Search -->
-<!--                <form th:action="@{/lecture-room}" method="get" class="form-inline mr-auto w-100 navbar-search">-->
-<!--                    <div class="input-group w-50">-->
-<!--                        <input type="text" name="searchKeyword" th:value="${param.searchKeyword}"-->
-<!--                               class="form-control bg-light border-0 small"-->
-<!--                               placeholder="Search for..." aria-label="Search"-->
-<!--                               aria-describedby="basic-addon2">-->
-<!--                        <div class="input-group-append">-->
-<!--                            <button type="submit" class="btn btn-primary">-->
-<!--                                <i class="fas fa-search fa-sm"></i>-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </form>-->
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -288,86 +265,59 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">통계자료</h1>
-                <!-- Content Row -->
-                <div class="row">
+              <!-- Page Heading -->
+              <h1 class="h3 mb-2 text-gray-800">통계자료</h1>
+              <div class="statistics-container" th:each="statistic : ${dataStatistics[0]}">
+                <p>데이터 등록일 : <span th:text="${#temporals.format(statistic.regDate, 'yyyy-MM-dd')}"></span></p>
+                <p>데이터 수정일: <span th:text="${#temporals.format(statistic.modDate, 'yyyy-MM-dd')}"></span></p>
+              </div>
+              <!-- Content Row -->
+              <div class="row">
 
-                    <div class="col-xl-8 col-lg-7">
+                <div class="col-xl-8 col-lg-7">
 
-                        <!-- Area Chart -->
-<!--                        <div class="card shadow mb-4">-->
-<!--                            <div class="card-header py-3">-->
-<!--                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>-->
-<!--                            </div>-->
-<!--                            <div class="card-body">-->
-<!--                                <div class="chart-area">-->
-<!--                                    <canvas id="myAreaChart"></canvas>-->
-<!--                                </div>-->
-<!--                                <hr>-->
-<!--                                Styling for the area chart can be found in the-->
-<!--                                <code>/js/demo/chart-area-demo.js</code> file.-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-                        <!-- Bar Chart -->
-                        <div class="card shadow mb-4" th:object="${dataStatistics}">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-bar">
-                                    <canvas id="myBarChart"></canvas>
-                                </div>
-                                <hr>
-                                [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 결과
-                            </div>
-                        </div>
-                        <p>평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>학번</th>
-                                    <th>점수</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="data : ${dataStatistics}">
-                                    <td th:text="${data.studentNum}"></td>
-                                    <td th:text="${data.score}"></td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                  <!-- Bar Chart -->
+                  <div class="card shadow mb-4" th:object="${dataStatistics}">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
                     </div>
-
-                    <!-- Donut Chart -->
-<!--                    <div class="col-xl-4 col-lg-5">-->
-<!--                        <div class="card shadow mb-4">-->
-<!--                            &lt;!&ndash; Card Header - Dropdown &ndash;&gt;-->
-<!--                            <div class="card-header py-3">-->
-<!--                                <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Card Body &ndash;&gt;-->
-<!--                            <div class="card-body">-->
-<!--                                <div class="chart-pie pt-4">-->
-<!--                                    <canvas id="myPieChart"></canvas>-->
-<!--                                </div>-->
-<!--                                <hr>-->
-<!--                                Styling for the donut chart can be found in the-->
-<!--                                <code>/js/demo/chart-pie-demo.js</code> file.-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="card-body">
+                      <div class="chart-bar">
+                        <canvas id="myBarChart"></canvas>
+                      </div>
+                      <hr>
+                      [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 결과
+                    </div>
+                  </div>
+                  <p>평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
+                  <div class = "card-body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                          <th>학번</th>
+                          <!--                                    <th>이름</th>-->
+                          <th>점수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="data : ${dataStatistics}">
+                          <td th:text="${data.studentNum}"></td>
+                          <!--                                    <td th:text="${data.studentName}"></td>-->
+                          <td th:text="${data.score}"></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                          <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>
+                        </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-
-            </div>
+              </div>
             <!-- /.container-fluid -->
-
         </div>
         <!-- End of Main Content -->
 
@@ -384,145 +334,138 @@
     </div>
     <!-- End of Content Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+    </div>
+  </div>
+    <!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">로그아웃하시겠습니까?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                <a class="btn btn-primary" href="index.html">로그아웃</a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">로그아웃하시겠습니까?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-primary" href="index.html">로그아웃</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var dataStatistics = [[${dataStatistics}]];
-    var scores = dataStatistics.map(function(item) {
-        return item.score;
-    });
-    var studentNums = dataStatistics.map(function(item) {
-        return item.studentNum;
-    });
-    // 평균
-    function calculateMean(scores) {
-        var sum = scores.reduce(function(a, b) { return a + b; }, 0);
-        return (sum / scores.length).toFixed(3);
-    }
-
-    // 표준 편차
-    function calculateStandardDeviation(scores) {
-        var mean = calculateMean(scores);
-        var squareDiffs = scores.map(function(value) {
-            var diff = value - mean;
-            return diff * diff;
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var dataStatistics = [[${dataStatistics}]];
+        var scores = dataStatistics.map(function(item) {
+            return item.score;
         });
-        var avgSquareDiff = calculateMean(squareDiffs);
-        return Math.sqrt(avgSquareDiff).toFixed(3);
-    }
-
-    // 최고 점수
-    function calculateMax(scores) {
-        return Math.max(...scores);
-    }
-
-    // 최저 점수
-    function calculateMin(scores) {
-        return Math.min(...scores);
-    }
-    // 구간별 학생 수와 범위를 계산하는 함수
-    function calculateSegmentInfo(scores) {
-        var segmentCounts = [0, 0, 0, 0, 0];
-        var segmentRanges = [];
-        var segmentSize = (calculateMax(scores) - calculateMin(scores)) / 5;
-        var maxStudents = 0; // 초기값을 0으로 설정
-
-        for (var i = 0; i < 5; i++) {
-            var rangeStart = calculateMin(scores) + segmentSize * i;
-            var rangeEnd = calculateMin(scores) + segmentSize * (i + 1);
-            var count = 0; // 각 범위의 학생 수를 카운트
-
-            scores.forEach(function(score) {
-                if ((i == 4 && score >= rangeStart && score <= rangeEnd) ||
-                    (score >= rangeStart && score < rangeEnd)) {
-                    count++;
-                }
-            });
-
-            segmentCounts[i] = count;
-            segmentRanges.push(`(${rangeStart.toFixed(1)} - ${rangeEnd.toFixed(1)})`);
-
-            // 최대 학생 수 업데이트
-            if (count > maxStudents) {
-                maxStudents = count;
-            }
+        var studentNums = dataStatistics.map(function(item) {
+            return item.studentNum;
+        });
+        // 평균
+        function calculateMean(scores) {
+            var sum = scores.reduce(function(a, b) { return a + b; }, 0);
+            return (sum / scores.length).toFixed(3);
         }
 
-        return { segmentCounts: segmentCounts, segmentRanges: segmentRanges, maxStudents: maxStudents };
-    }
+        // 표준 편차
+        function calculateStandardDeviation(scores) {
+            var mean = calculateMean(scores);
+            var squareDiffs = scores.map(function(value) {
+                var diff = value - mean;
+                return diff * diff;
+            });
+            var avgSquareDiff = calculateMean(squareDiffs);
+            return Math.sqrt(avgSquareDiff).toFixed(3);
+        }
+
+        // 최고 점수
+        function calculateMax(scores) {
+            return Math.max(...scores);
+        }
+
+        // 최저 점수
+        function calculateMin(scores) {
+            return Math.min(...scores);
+        }
+        // 구간별 학생 수와 범위를 계산하는 함수
+        function calculateSegmentInfo(scores) {
+            var segmentCounts = [0, 0, 0, 0, 0];
+            var segmentRanges = [];
+            var segmentSize = (calculateMax(scores) - calculateMin(scores)) / 5;
+            var maxStudents = 0; // 초기값을 0으로 설정
+
+            for (var i = 0; i < 5; i++) {
+                var rangeStart = calculateMin(scores) + segmentSize * i;
+                var rangeEnd = calculateMin(scores) + segmentSize * (i + 1);
+                var count = 0; // 각 범위의 학생 수를 카운트
+
+                scores.forEach(function(score) {
+                    if ((i == 4 && score >= rangeStart && score <= rangeEnd) ||
+                        (score >= rangeStart && score < rangeEnd)) {
+                        count++;
+                    }
+                });
+
+                segmentCounts[i] = count;
+                segmentRanges.push(`(${rangeStart.toFixed(1)} - ${rangeEnd.toFixed(1)})`);
+
+                // 최대 학생 수 업데이트
+                if (count > maxStudents) {
+                    maxStudents = count;
+                }
+            }
+
+            return { segmentCounts: segmentCounts, segmentRanges: segmentRanges, maxStudents: maxStudents };
+        }
 
 
-    var mean = calculateMean(scores);
-    var standardDeviation = calculateStandardDeviation(scores);
-    var maxScore = calculateMax(scores);
-    var minScore = calculateMin(scores);
-    var segmentInfo = calculateSegmentInfo(scores);
-    var totalStudents = scores.length; // 총 학생 수
+        var mean = calculateMean(scores);
+        var standardDeviation = calculateStandardDeviation(scores);
+        var maxScore = calculateMax(scores);
+        var minScore = calculateMin(scores);
+        var segmentInfo = calculateSegmentInfo(scores);
+        var totalStudents = scores.length; // 총 학생 수
 
+        document.getElementById('mean').textContent = mean;
+        document.getElementById('standardDeviation').textContent = standardDeviation;
+        document.getElementById('maxScore').textContent = maxScore;
+        document.getElementById('minScore').textContent = minScore;
+        document.getElementById('scores').textContent = scores.join(', ');
+        document.getElementById('studentNums').textContent = studentNums.join(', ');
+        /*]]>*/
+    </script>
 
-    // console.log("평균:", mean);
-    // console.log("표준 편차:", standardDeviation);
-    // console.log("최고 점수:", maxScore);
-    // console.log("최저 점수:", minScore);
-    // console.log("구간별 학생 수:", segmentInfo.segmentCounts);
-    // console.log("구간별 범위:", segmentInfo.segmentRanges);
-    // console.log("총 학생 수:", totalStudents);
+    <!-- Bootstrap core JavaScript-->
+    <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    // console.log(scores, studentNums);
-    document.getElementById('mean').textContent = mean;
-    document.getElementById('standardDeviation').textContent = standardDeviation;
-    document.getElementById('maxScore').textContent = maxScore;
-    document.getElementById('minScore').textContent = minScore;
-    document.getElementById('scores').textContent = scores.join(', ');
-    document.getElementById('studentNums').textContent = studentNums.join(', ');
-    /*]]>*/
-</script>
+    <!-- Core plugin JavaScript-->
+    <script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Bootstrap core JavaScript-->
-<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
-<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="/bootstrap/js/sb-admin-2.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Page level plugins -->
+    <script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="/bootstrap/js/sb-admin-2.min.js"></script>
+  <!-- Page level custom scripts -->
+    <script src="/bootstrap/js/demo/chart-area-demo.js"></script>
+    <script src="/bootstrap/js/demo/chart-pie-demo.js"></script>
+    <script src="/bootstrap/js/demo/chart-bar-demo.js"></script>
 
-<!-- Page level plugins -->
-<script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="/bootstrap/js/demo/chart-area-demo.js"></script>
-<script src="/bootstrap/js/demo/chart-pie-demo.js"></script>
-<script src="/bootstrap/js/demo/chart-bar-demo.js"></script>
-
-</body>
+  </body>
 
 </html>

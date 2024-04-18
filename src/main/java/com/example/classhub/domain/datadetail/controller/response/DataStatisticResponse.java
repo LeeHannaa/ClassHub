@@ -5,6 +5,8 @@ import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class DataStatisticResponse {
@@ -15,6 +17,8 @@ public class DataStatisticResponse {
     private Long tagId;
     private String tagName;
     private Long lRoomId;
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
 
     public DataStatisticResponse(ClassHub_DataDetail detail){
         this.id = detail.getId();
@@ -24,6 +28,8 @@ public class DataStatisticResponse {
         this.tagId = detail.getTag().getTagId();
         this.tagName = detail.getTag().getName();
         this.lRoomId = detail.getTag().getLectureRoom().getLRoomId();
+        this.regDate = detail.getRegDate();
+        this.modDate = detail.getModDate();
 
         System.out.println("getLectureRoom" + detail.getTag().getLectureRoom().getRoomName());
     }
