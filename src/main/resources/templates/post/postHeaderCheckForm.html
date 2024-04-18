@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -30,50 +29,49 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div class="container-fluid">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <form action="#" th:action="@{/post/postHeaderCheckForm}" th:object="${headers}" method="post" enctype="multipart/form-data">
-
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>번호</th>
-                                    <th>찾은 헤더 이름</th>
-                                    <th>키로 사용</th>
-                                    <th>점수 여부</th>
-                                    <th>태그 생성 여부</th>
-                                    <th>중복 허용</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="header, index : ${headers}">
-                                    <td th:text="${index.index + 1}"></td>
-                                    <td th:text="${header}"></td>
-                                    <td>
+                <div class="modal-body">
+                    <form action="#" th:action="@{/post/postHeaderCheckForm}" th:object="${headers}" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>찾은 헤더 이름</th>
+                                <th>키로 사용</th>
+                                <th>점수 여부</th>
+                                <th>태그 생성 여부</th>
+                                <th>중복 허용</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="header, index : ${headers}">
+                                <td th:text="${index.index + 1}"></td>
+                                <td th:text="${header}"></td>
+                                <td>
+                                    <label>
                                         <input type="radio" th:id="'keyRadio' + ${index.index}" th:name="'keyId'" th:value="${index.index}">
-                                    </td>
-                                    <td>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
                                         <input type="checkbox" th:id="'scoreCheckbox' + ${index.index}" th:name="'isScore'" th:value="${index.index}">
-                                    </td>
-                                    <td>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
                                         <input type="checkbox" th:id="'createCheckbox' + ${index.index}" th:name="'isSelected'" th:value="${index.index}">
-                                    </td>
-                                    <td>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
                                         <input type="checkbox" th:id="'duplicateCheckbox' + ${index.index}" th:name="'isCover'" th:value="${index.index}">
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <button type="submit" class="btn btn-primary">저장하기</button>
-                            </form>
-                        </div>
-                    </div>
+                                    </label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary">저장하기</button>
+                    </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -82,43 +80,6 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bootstrap core JavaScript-->
-<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
-<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="/bootstrap/js/sb-admin-2.min.js"></script>
-
-<!-- Page level plugins -->
-<script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="/bootstrap/js/demo/datatables-demo.js"></script>
 
 </body>
 
