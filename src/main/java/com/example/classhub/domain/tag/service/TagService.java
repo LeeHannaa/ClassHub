@@ -87,16 +87,24 @@ public class TagService {
         String tagName = tagDto.getName();
         ClassHub_Tag tag = tagRepository.findByNameAndLectureRoom_LRoomId(tagName, lRoomId);
 
-        if (isCover) {
-            tag.update(tagDto);
-            tagRepository.save(tag);
-            System.out.println("isCover / tag: " + tag);
-        }
-        else {
-            TagDto newTagDto = createTag(tagDto, lRoomId);
-            System.out.println("isCover else / new tag: " + newTagDto);
-            return newTagDto;
+        if (tag == null) {
+            if (isCover) {
+                System.out.println("isCover true / tag not found, creating new tag.");
+                return createTag(tagDto, lRoomId);
+            } else {
+                throw new IllegalArgumentException("태그를 찾을 수 없습니다. 새 태그를 생성하려면 isCover를 false로 설정해야 합니다.");
+            }
+        } else {
+            if (isCover) {
+                tag.update(tagDto);
+                tagRepository.save(tag);
+                System.out.println("isCover true / updating existing tag: " + tag);
+            } else {
+                System.out.println("isCover false / tag already exists: " + tag);
+                return TagDto.from(tag);
+            }
         }
         return TagDto.from(tag);
     }
+
 }
