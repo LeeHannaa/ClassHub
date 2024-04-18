@@ -19,8 +19,8 @@
     </style>
 
     <!-- Custom fonts for this template-->
-    <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
-    <link
+<!--  <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />-->
+  <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
@@ -28,7 +28,6 @@
     <link th:href="@{/bootstrap/css/sb-admin-2.min.css}" rel="stylesheet" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 </head>
 
 <body id="page-top">
@@ -118,22 +117,12 @@
             filterTags('');
         </script>
 
-
-
-
         <!-- Nav Item - Charts -->
         <li class="nav-item active">
             <a class="nav-link" href="index.html">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>통계자료</span></a>
         </li>
-
-        <!-- Nav Item - Tables -->
-        <!--        <li class="nav-item">-->
-        <!--            <a class="nav-link" href="index.html">-->
-        <!--                <i class="fas fa-fw fa-table"></i>-->
-        <!--                <span>Tables</span></a>-->
-        <!--        </li>-->
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -183,21 +172,6 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-
-                <!-- Topbar Search -->
-<!--                <form th:action="@{/lecture-room}" method="get" class="form-inline mr-auto w-100 navbar-search">-->
-<!--                    <div class="input-group w-50">-->
-<!--                        <input type="text" name="searchKeyword" th:value="${param.searchKeyword}"-->
-<!--                               class="form-control bg-light border-0 small"-->
-<!--                               placeholder="Search for..." aria-label="Search"-->
-<!--                               aria-describedby="basic-addon2">-->
-<!--                        <div class="input-group-append">-->
-<!--                            <button type="submit" class="btn btn-primary">-->
-<!--                                <i class="fas fa-search fa-sm"></i>-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </form>-->
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -305,8 +279,8 @@
                                 <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
                             </div>
                             <div class="card-body">
-                                <div class="chart-bar">
-                                    <canvas id="myBarChart"></canvas>
+                                <div class="chart-area">
+                                    <canvas id="myAreaChart"></canvas>
                                 </div>
                                 <hr>
                                 [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 결과
@@ -321,23 +295,23 @@
                           <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                               <thead>
-                              <tr>
-                                <th>학번</th>
-                                <!-- <th>이름</th> -->
-                                <th>점수</th>
-                              </tr>
+                                <tr>
+                                  <th>학번</th>
+                                  <!-- <th>이름</th> -->
+                                  <th>점수</th>
+                                </tr>
                               </thead>
                               <tbody>
-                              <tr th:each="data : ${dataStatistics}">
-                                <td th:text="${data.studentNum}"></td>
-                                <!-- <td th:text="${data.studentName}"></td> -->
-                                <td th:text="${data.score}"></td>
-                              </tr>
+                                <tr th:each="data : ${dataStatistics}">
+                                  <td th:text="${data.studentNum}"></td>
+                                  <!-- <td th:text="${data.studentName}"></td> -->
+                                  <td th:text="${data.score}"></td>
+                                </tr>
                               </tbody>
                               <tfoot>
-                              <tr>
-                                <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>
-                              </tr>
+<!--                                <tr>-->
+<!--                                  <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>-->
+<!--                                </tr>-->
                               </tfoot>
                             </table>
                           </div>
@@ -349,9 +323,19 @@
 
             </div>
             <!-- /.container-fluid -->
-
         </div>
         <!-- End of Main Content -->
+<!--      <div class="card shadow mb-4" th:object="${dataStatistics}">-->
+<!--        <div class="card-header py-3">-->
+<!--          <h6 class="m-0 font-weight-bold text-primary">[[${dataStatistics[0].tagName}]]</h6>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <div class="chart-area">-->
+<!--            <canvas id="myAreaChart"></canvas>-->
+<!--          </div>-->
+<!--          <hr>-->
+<!--        </div>-->
+<!--      </div>-->
 
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
@@ -430,7 +414,7 @@
         return Math.min(...scores);
     }
     // 구간별 학생 수와 범위를 계산하는 함수
-    function calculateSegmentInfo(scores) {
+    function calculateSegmentInfo(scores, studentNums) {
         var segmentCounts = [0, 0, 0, 0, 0];
         var segmentRanges = [];
         var segmentSize = (calculateMax(scores) - calculateMin(scores)) / 5;
@@ -457,7 +441,7 @@
             }
         }
 
-        return { segmentCounts: segmentCounts, segmentRanges: segmentRanges, maxStudents: maxStudents };
+        return { segmentCounts: scores, segmentRanges: studentNums, maxStudents: maxStudents  };
     }
 
 
@@ -465,19 +449,9 @@
     var standardDeviation = calculateStandardDeviation(scores);
     var maxScore = calculateMax(scores);
     var minScore = calculateMin(scores);
-    var segmentInfo = calculateSegmentInfo(scores);
+    var segmentInfo = calculateSegmentInfo(scores, studentNums);
     var totalStudents = scores.length; // 총 학생 수
 
-
-    // console.log("평균:", mean);
-    // console.log("표준 편차:", standardDeviation);
-    // console.log("최고 점수:", maxScore);
-    // console.log("최저 점수:", minScore);
-    // console.log("구간별 학생 수:", segmentInfo.segmentCounts);
-    // console.log("구간별 범위:", segmentInfo.segmentRanges);
-    // console.log("총 학생 수:", totalStudents);
-
-    // console.log(scores, studentNums);
     document.getElementById('mean').textContent = mean;
     document.getElementById('standardDeviation').textContent = standardDeviation;
     document.getElementById('maxScore').textContent = maxScore;
@@ -501,6 +475,7 @@
 <script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
 <script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
 
 <!-- Page level custom scripts -->
 <script src="/bootstrap/js/demo/chart-area-demo.js"></script>
