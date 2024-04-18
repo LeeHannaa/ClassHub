@@ -313,47 +313,38 @@
                             </div>
                         </div>
                         <p>평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>학번</th>
-                                    <th>이름</th>
-                                    <th>점수</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="data : ${dataStatistics}">
-                                    <td th:text="${data.studentNum}"></td>
-<!--                                    <td th:text="${data.studentName}"></td>-->
-                                    <td th:text="${data.score}"></td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>
-                                </tr>
-                                </tfoot>
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 점수</h6>
+                        </div>
+                        <div class="card-body">
+                          <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                              <thead>
+                              <tr>
+                                <th>학번</th>
+                                <!-- <th>이름</th> -->
+                                <th>점수</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr th:each="data : ${dataStatistics}">
+                                <td th:text="${data.studentNum}"></td>
+                                <!-- <td th:text="${data.studentName}"></td> -->
+                                <td th:text="${data.score}"></td>
+                              </tr>
+                              </tbody>
+                              <tfoot>
+                              <tr>
+                                <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>
+                              </tr>
+                              </tfoot>
                             </table>
-                    </div>
+                          </div>
+                        </div>
+                      </div>
 
-                    <!-- Donut Chart -->
-<!--                    <div class="col-xl-4 col-lg-5">-->
-<!--                        <div class="card shadow mb-4">-->
-<!--                            &lt;!&ndash; Card Header - Dropdown &ndash;&gt;-->
-<!--                            <div class="card-header py-3">-->
-<!--                                <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Card Body &ndash;&gt;-->
-<!--                            <div class="card-body">-->
-<!--                                <div class="chart-pie pt-4">-->
-<!--                                    <canvas id="myPieChart"></canvas>-->
-<!--                                </div>-->
-<!--                                <hr>-->
-<!--                                Styling for the donut chart can be found in the-->
-<!--                                <code>/js/demo/chart-pie-demo.js</code> file.-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    </div>
                 </div>
 
             </div>
@@ -508,11 +499,14 @@
 
 <!-- Page level plugins -->
 <script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
+<script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- Page level custom scripts -->
 <script src="/bootstrap/js/demo/chart-area-demo.js"></script>
 <script src="/bootstrap/js/demo/chart-pie-demo.js"></script>
 <script src="/bootstrap/js/demo/chart-bar-demo.js"></script>
+<script src="/bootstrap/js/demo/datatables-demo.js"></script>
 
 </body>
 
