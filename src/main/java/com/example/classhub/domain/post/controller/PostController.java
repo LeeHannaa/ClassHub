@@ -78,6 +78,12 @@ public class PostController {
         model.addAttribute("currentPage", postListResponse.getCurrentPage());
         return "post/postList"; // Thymeleaf 파일 경로 수정
     }
+    @GetMapping("/post/{lRoomId}")
+    public String findPostListByLectureRoomId(@PathVariable Long lRoomId, Model model) {
+        List<PostDto> postList = postService.getPostListByLectureRoomId(lRoomId);
+        model.addAttribute("posts", postList);
+        return "post/postList"; // Thymeleaf 파일 경로 수정
+    }
 
 
     @GetMapping("/post/updateForm/{postId}")
