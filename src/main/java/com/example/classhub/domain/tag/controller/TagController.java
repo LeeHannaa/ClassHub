@@ -50,7 +50,7 @@ public class TagController {
         // TagDto의 생성자를 이용하여 객체 생성 및 초기화
         TagDto tagDto = new TagDto(tagId, newTagName);
         tagService.update(tagId, tagDto); // 태그 업데이트 로직 수행
-        return ResponseEntity.ok("Tag updated successfully");
+        return ResponseEntity.ok(tagDto.getName());
     }
 
 
