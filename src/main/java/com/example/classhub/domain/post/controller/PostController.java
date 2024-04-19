@@ -63,8 +63,10 @@ public class PostController {
         PostCreateRequest postCreateRequest = (PostCreateRequest) session.getAttribute("postForm");
         postService.createPost(PostDto.from(postCreateRequest, postCheckRequest), file);
 
+        Long lRoomId = postCreateRequest.getLRoomId();
+
         file.delete();
-        return "redirect:/post";
+        return "redirect:/lecture-room/detail/" + lRoomId;
     }
 
 

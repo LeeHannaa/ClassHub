@@ -19,9 +19,9 @@
     <h1>게시물 생성 페이지</h1>
     <hr>
 
-    <a th:href="@{/post}" class="btn btn-primary">게시물 목록으로 돌아가기</a>
+<!--    <a th:href="@{'/lecture-room/detail/' + ${param.lectureRoomId}}" class="btn btn-primary">게시물 목록으로 돌아가기</a>-->
 
-    <hr>
+<!--    <hr>-->
 
     <form id="postForm" action="#" th:action="@{/post/postForm}" th:object="${post}" method="post" enctype="multipart/form-data">
         <div class="form-group">
