@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<ClassHub_Post, Long> {
 
+    List<ClassHub_Post> findBylRoom_lRoomId(Long lRoomId);
 }

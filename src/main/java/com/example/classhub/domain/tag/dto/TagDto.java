@@ -25,6 +25,10 @@ public class TagDto {
                 .nan(request.isNan())
                 .build();
     }
+    public TagDto(Long id, String name) {
+        this.tagId = id;
+        this.name = name;
+    }
 
     public static TagDto from(ClassHub_Tag tag){
         return TagDto.builder()

@@ -33,7 +33,7 @@
 <body id="page-top">
 
 <!-- Page Wrapper -->
-<div id="wrapper">
+  <div id="wrapper">
 
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -83,12 +83,29 @@
                         </div>
                     </div>
                     <div id="tagList">
-                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                        <div class="collapse-item d-flex align-items-center justify-content-between" id="tagContainer" th:each="tag : ${tags}">
+                            <div class = "tagNameDiv">
+                                <a class="item" th:id="'tagItem_' + ${tag.tagId}" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:text="${tag.name}" style="text-decoration: none; color: inherit;"></a>
+                            </div>
+                            <div class="dropdown" th:id="'dropdownItem_' + ${tag.tagId}">
+                                <button class="btn btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <!-- 세 개의 점 아이콘 -->
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <!-- 수정 옵션 -->
+                                    <button class="dropdown-item edit-tag" data-tagid="${tag.tagId}" data-tagname="${tag.name}" th:onclick="'clickTagUpdate(\'' + ${tag.tagId} + '\')'">수정</button>
+                                    <!-- 삭제 옵션 -->
+                                    <button class="dropdown-item delete-tag" data-tagid="${tag.tagId}" data-toggle="modal" data-target="#TagDeleteModal">삭제</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </li>
 
+<!--        태그 필터링 및 수정 관련 코드       -->
         <script>
             document.getElementById("tagSearchButton").addEventListener("click", function () {
                 filterTags(document.getElementById('tagSearchInput').value.toUpperCase());
@@ -100,29 +117,119 @@
             });
 
             function filterTags(filter) {
-                var ul, li, a, i, txtValue;
+                var ul, tagName, i, txtValue, deleteElement;
                 ul = document.getElementById("tagList");
-                li = ul.getElementsByTagName('a');
-                for (i = 0; i < li.length; i++) {
-                    txtValue = li[i].textContent || li[i].innerText;
+                tagName = ul.getElementsByTagName('a');
+                deleteElement = ul.getElementsByClassName('dropdown');
+                for (i = 0; i < tagName.length; i++) {
+                    txtValue = tagName[i].textContent || tagName[i].innerText;
+                    var collapseItem = tagName[i].parentNode.parentNode; // 부모 요소인 .collapse-item을 찾음
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        li[i].style.display = "";
+                        tagName[i].style.display = "";
+                        deleteElement[i].style.display = "";
+                        if (collapseItem) {
+                            collapseItem.classList.add('collapse-item');
+                            collapseItem.classList.add('d-flex');
+                            collapseItem.classList.add('align-items-center');
+                            collapseItem.classList.add('justify-content-between');
+                            collapseItem.style.display = ""; // collapse-item도 보이도록 함
+                        }
                     } else {
-                        li[i].style.display = "none";
+                        tagName[i].style.display = "none";
+                        deleteElement[i].style.display = "none";
+                        if (collapseItem) {
+                            collapseItem.classList.remove('collapse-item');
+                            collapseItem.classList.remove('d-flex');
+                            collapseItem.classList.remove('align-items-center');
+                            collapseItem.classList.remove('justify-content-between');
+                            collapseItem.style.display = "none"; // collapse-item 숨김
+                        }
                     }
                 }
             }
 
             // Show all tags by default
             filterTags('');
+
+            // 페이지가 로드될 때 실행되는 함수
+            window.onload = function() {
+                // 현재 URL에서 경로를 추출합니다.
+                var path = window.location.pathname;
+                // 경로에서 tagId를 추출합니다.
+                var tagId = path.substring(path.lastIndexOf('/') + 1);
+
+                // tagId가 존재하면 해당 태그의 색상 변경
+                if (tagId) {
+                    changeTagColor(tagId);
+                }
+            }
+            // 클릭한 태그의 색상을 변경하는 함수
+            function changeTagColor(tagId) {
+                var tagElement = document.getElementById('tagItem_' + tagId);
+                if (tagElement) {
+                    tagElement.style.color = '#4e73df'; // 원하는 색상으로 변경하세요.
+                }
+            }
+            function clickTagUpdate(tagId) {
+                // 해당 태그 아이디의 <a> 태그를 찾습니다.
+                var tagItem = document.getElementById('tagItem_' + tagId);
+
+                // 해당 태그 아이디의 <div> 태그를 찾습니다.
+                var dropdownItem = document.getElementById('dropdownItem_' + tagId);
+
+                // 태그 이름을 가져옵니다.
+                var tagName = tagItem.textContent.trim();
+
+                // <input> 태그로 교체합니다.
+                var inputElement = document.createElement('input');
+                inputElement.setAttribute('type', 'text');
+                inputElement.setAttribute('value', tagName);
+                inputElement.setAttribute('id', 'tagInput_' + tagId);
+
+                // 이전 태그를 숨깁니다.
+                tagItem.style.display = 'none';
+                // 해당 dropdownItem을 숨깁니다.
+                dropdownItem.style.display = 'none';
+
+                // 입력 필드를 삽입합니다.
+                tagItem.parentNode.insertBefore(inputElement, tagItem.nextSibling);
+
+                // 수정한 값을 저장하고 업데이트합니다.
+                inputElement.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        var newTagName = inputElement.value.trim();
+                        // AJAX 요청
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/tag/update/' + tagId); // tagId를 URL에 포함하여 전송
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.onload = function () {
+                            if (xhr.status === 200) {
+                                console.log('Tag updated successfully');
+                            } else {
+                                console.error('Failed to update tag. Status:', xhr.status);
+                            }
+                        };
+                    }
+                    xhr.send(JSON.stringify({ tagName: newTagName }));
+                    console.log('New Tag Name:', newTagName);
+
+                    tagItem.textContent = newTagName;
+                    tagItem.style.display = 'inline';
+                    dropdownItem.style.display = '';
+
+                    inputElement.parentNode.removeChild(inputElement);
+                });
+            }
         </script>
 
-        <!-- Nav Item - Charts -->
-        <li class="nav-item active">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>통계자료</span></a>
-        </li>
+
+
+            <!-- Nav Item - Charts -->
+<!--        <li class="nav-item active">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--                <i class="fas fa-fw fa-chart-area"></i>-->
+<!--                <span>통계자료</span></a>-->
+<!--        </li>-->
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -320,8 +427,7 @@
 
                     </div>
                 </div>
-
-            </div>
+              </div>
             <!-- /.container-fluid -->
         </div>
         <!-- End of Main Content -->
@@ -339,30 +445,58 @@
     </div>
     <!-- End of Content Wrapper -->
 
+    </div>
+  </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">로그아웃하시겠습니까?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-primary" href="index.html">로그아웃</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<!-- Tag Delete Modal-->
+<div class="modal fade" id="TagDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">로그아웃하시겠습니까?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">태그 삭제</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                <a class="btn btn-primary" href="index.html">로그아웃</a>
-            </div>
+            <form th:action="@{/tag/delete/{tagId}(tagId=${tagId})}" method="get">
+                <input type="hidden" name="lectureRoomId" th:value="${lectureRoom.lectureRoomId}" />
+                <div class="modal-body">
+                    <h4>해당 태그를 정말 삭제하시겠습니까?</h4>
+                    <p>삭제하시면 더 이상 태그의 정보를 확인하실 수 없습니다.</p>
+                    <span>삭제 후 해당 강의실의 메인페이지로 이동됩니다.</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;">삭제</button>
+                    <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -449,7 +583,6 @@
     document.getElementById('studentNums').textContent = studentNums.join(', ');
     /*]]>*/
 </script>
-
 <!-- Bootstrap core JavaScript-->
 <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
 <script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -473,5 +606,4 @@
 <script src="/bootstrap/js/demo/datatables-demo.js"></script>
 
 </body>
-
 </html>

@@ -5,6 +5,8 @@ import com.example.classhub.domain.classhub_lroom.controller.request.LectureRoom
 import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomListResponse;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
+import com.example.classhub.domain.post.dto.PostDto;
+import com.example.classhub.domain.post.service.PostService;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class LectureRoomController {
     private final LectureRoomService lectureRoomService;
     private final TagService tagService;
+    private final PostService postService;
 
     @GetMapping("/lecture-room")
     public String findLectureRoomList(Model model, @RequestParam(name = "searchKeyword", required = false, defaultValue = "")String searchKeyword){
@@ -50,6 +55,8 @@ public class LectureRoomController {
     public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
+        List<PostDto> postList = postService.getPostListByLectureRoomId(lectureRoomId);
+        model.addAttribute("posts", postList);
         model.addAttribute("lectureRoom", lectureRoomDto);
         model.addAttribute("tags", tagListResponse.getTags());
         return "lectureRoomDetail";
