@@ -263,7 +263,7 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">통계자료</h1>
+                <h1 class="h3 mb-2 text-gray-800">데이터 분석</h1>
                 <div class="statistics-container" th:each="statistic : ${dataStatistics[0]}">
                   <p>데이터 등록일 : <span th:text="${#temporals.format(statistic.regDate, 'yyyy-MM-dd')}"></span></p>
                   <p>데이터 수정일: <span th:text="${#temporals.format(statistic.modDate, 'yyyy-MM-dd')}"></span></p>
@@ -273,8 +273,8 @@
 
                     <div class="col-xl-8 col-lg-7">
 
-                        <!-- Bar Chart -->
-                        <div class="card shadow mb-4" th:object="${dataStatistics}">
+                        <!-- Area Chart -->
+                        <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" class="card shadow mb-4" th:object="${dataStatistics}">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
                             </div>
@@ -286,10 +286,10 @@
                                 [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 결과
                             </div>
                         </div>
-                        <p>평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
+                        <p th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" >평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                          <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 점수</h6>
+                          <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 데이터</h6>
                         </div>
                         <div class="card-body">
                           <div class="table-responsive">
@@ -325,17 +325,6 @@
             <!-- /.container-fluid -->
         </div>
         <!-- End of Main Content -->
-<!--      <div class="card shadow mb-4" th:object="${dataStatistics}">-->
-<!--        <div class="card-header py-3">-->
-<!--          <h6 class="m-0 font-weight-bold text-primary">[[${dataStatistics[0].tagName}]]</h6>-->
-<!--        </div>-->
-<!--        <div class="card-body">-->
-<!--          <div class="chart-area">-->
-<!--            <canvas id="myAreaChart"></canvas>-->
-<!--          </div>-->
-<!--          <hr>-->
-<!--        </div>-->
-<!--      </div>-->
 
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
