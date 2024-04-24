@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <!-- Custom fonts for this template-->
-    <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
+<!--    <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />-->
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
@@ -301,7 +301,20 @@
                     <label for="studentInfo">기본 학생 정보
                         <i class="far fa-question-circle custom-tooltip-icon" data-toggle="tooltip" data-placement="right" title="이 강의를 수강하는 학생들의 기본적인 정보(이름, 학번, 학부 등) 중 저장할 항목들을 입력하세요!"></i>
                     </label>
-                    <input type="text" id="studentInfo" th:field="*{studentInfo}" placeholder="이름, 학부 ..." class="form-control">
+                    <div id="studentInfo" class="form-group">
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" id="studentId" class="form-check-input" name="studentInfo" value="학번" checked>
+                            <label class="form-check-label" for="studentId">학번</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" id="studentName" class="form-check-input" name="studentInfo" value="이름">
+                            <label class="form-check-label" for="studentName">이름</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" id="studentDepartment" class="form-check-input" name="studentInfo" value="학부">
+                            <label class="form-check-label" for="studentDepartment">학부</label>
+                        </div>
+                    </div>
                     <button class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;" onclick="downloadCSV()">학생 정보 CSV 양식 다운로드</button>
                     <button class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;">학생 정보 업로드</button>
                 </div>
@@ -324,18 +337,26 @@
 <!-- Custom scripts for all pages-->
 <script src="/bootstrap/js/sb-admin-2.min.js"></script>
 <!-- 부트스트랩 JavaScript 파일 링크 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
+
 <script>
     $(document).ready(function(){
         $('.custom-tooltip-icon').tooltip();
-    });
-</script>
 
-<script>
+        $('#LectureRoomCreateModal').submit(function(event) {
+            const checkedBoxes = $('#studentInfo input[type="checkbox"]:checked');
+            if (checkedBoxes.length === 0) {
+                event.preventDefault(); // 폼 제출을 막습니다.
+                alert('최소한 한 가지의 학생 정보를 선택해야 합니다.'); // 사용자에게 경고합니다.
+            }
+        });
+    });
+
     function downloadCSV() {
-        const studentInfoFields = document.getElementById('studentInfo').value;
-        const fileName = document.getElementById('name').value + '_학생_정보';
-        const headers = studentInfoFields.split(',').join(',');
+        const checkboxes = $('#studentInfo input[type="checkbox"]:checked');
+        const selectedInfo = checkboxes.map(function() { return this.value; }).get();
+        const fileName = $('#name').val() + '_학생_정보';
+        const headers = selectedInfo.join(',');
         const BOM = "\uFEFF";
         const csvContent = `data:text/csv;charset=utf-8,${BOM}${headers}\n`;
         const encodedUri = encodeURI(csvContent);
