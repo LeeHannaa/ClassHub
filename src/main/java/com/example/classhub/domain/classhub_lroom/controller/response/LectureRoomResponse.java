@@ -15,6 +15,7 @@ public class LectureRoomResponse {
     private String stInviteCode;
     private String description;
     private boolean onOff;
+    private String studentInfo;
 
     public LectureRoomResponse(ClassHub_LRoom lectureRoom){
         this.lectureRoomId = lectureRoom.getLRoomId();
@@ -23,6 +24,7 @@ public class LectureRoomResponse {
         this.stInviteCode = lectureRoom.getStInviteCode();
         this.onOff = lectureRoom.isOnOff();
         this.description = lectureRoom.getDescription();
+        this.studentInfo = lectureRoom.getStudentInfo();
     }
 
     public LectureRoomResponse(LectureRoomDto lectureRoomDto){

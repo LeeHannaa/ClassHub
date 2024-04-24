@@ -19,12 +19,14 @@ public class LectureRoomDto {
     private String stInviteCode;
     private String description;
     private boolean onOff;
+    private String studentInfo;
 
     public static LectureRoomDto from(LectureRoomCreateRequest request) {
         return LectureRoomDto.builder()
                 .roomName(request.getRoomName())
                 .description(request.getDescription())
                 .onOff(request.isOnOff())
+                .studentInfo(request.getStudentInfo())
                 .build();
     }
     public static LectureRoomDto from(LectureRoomUpdateRequest request) {
@@ -34,6 +36,7 @@ public class LectureRoomDto {
                 .taInviteCode(request.getTaInviteCode())
                 .stInviteCode(request.getStInviteCode())
                 .onOff(request.isOnOff())
+                .studentInfo(request.getStudentInfo())
                 .build();
     }
 
@@ -45,6 +48,7 @@ public class LectureRoomDto {
                 .taInviteCode(lectureRoom.getTaInviteCode())
                 .stInviteCode(lectureRoom.getStInviteCode())
                 .onOff(lectureRoom.isOnOff())
+                .studentInfo(lectureRoom.getStudentInfo())
                 .build();
     }
 }

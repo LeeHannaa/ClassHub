@@ -13,4 +13,5 @@ public class LectureRoomUpdateRequest {
     private String description;
     private String taInviteCode;
     private String stInviteCode;
+    private String studentInfo;
 }
