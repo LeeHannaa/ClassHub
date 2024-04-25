@@ -53,9 +53,9 @@ public class TagController {
         return ResponseEntity.ok(tagDto.getName());
     }
 
-    @GetMapping("/tag/delete/{tagId}")
-    public String tagDelete(@PathVariable(value = "tagId") Long tagId, @RequestParam(value = "lectureRoomId") Long lectureRoomId){
+    @PostMapping("/tag/delete/{tagId}")
+    public ResponseEntity<String> tagDelete(@PathVariable(value = "tagId") Long tagId){
         tagService.tagDelete(tagId);
-        return "redirect:/lecture-room/detail/" + lectureRoomId;
+        return ResponseEntity.ok(tagId+"삭제");
     }
 }

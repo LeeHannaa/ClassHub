@@ -10,6 +10,7 @@ import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -76,12 +77,16 @@ public class MemberLRoomController {
     return "memberLRoom/update-memberlroom";
   }
 
-  @PostMapping("/memberlroom/update/{id}")
-  public String updateMemberLRoom(@PathVariable Long id, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom) {
-    memberLRoomService.updateMemberLRoom(id, classHubMemberLRoom);
-    return "redirect:/memberlroom";
+  @PostMapping("/memberlroom/update/role/{id}")
+  public ResponseEntity<String> updateMemberLRoomRole(@PathVariable Long id, @RequestBody ClassHub_MemberLRoom classHubMemberLRoom) {
+    memberLRoomService.updateMemberLRoomRole(id, classHubMemberLRoom);
+    return ResponseEntity.ok().body("MemberLRoom Role updated successfully.");
   }
-
+  @PostMapping("/memberlroom/update/permission/{id}")
+  public ResponseEntity<String> updateMemberLRoomPermission(@PathVariable Long id, @RequestBody ClassHub_MemberLRoom classHubMemberLRoom) {
+    memberLRoomService.updateMemberLRoomPermission(id, classHubMemberLRoom);
+    return ResponseEntity.ok().body("MemberLRoom Permission updated successfully.");
+  }
   // Delete
   @GetMapping("/memberlroom/delete/{id}")
   public String deleteMemberLRoom(@PathVariable Long id) {

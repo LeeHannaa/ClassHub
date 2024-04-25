@@ -96,8 +96,8 @@
                                     <!-- 수정 옵션 -->
                                     <button class="dropdown-item edit-tag" data-tagid="${tag.tagId}" data-tagname="${tag.name}" th:onclick="'clickTagUpdate(\'' + ${tag.tagId} + '\')'">수정</button>
                                     <!-- 삭제 옵션 -->
-                                    <button class="dropdown-item delete-tag" data-tagid="${tag.tagId}" data-toggle="modal" data-target="#TagDeleteModal">삭제</button>
-                                </div>
+                                    <button class="dropdown-item delete-tag" data-tagid="${tag.tagId}" data-toggle="modal" data-target="#TagDeleteModal" th:onclick="'setDeleteTagId(\'' + ${tag.tagId} + '\')'">삭제</button>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -170,6 +170,8 @@
                     tagElement.style.color = '#4e73df'; // 원하는 색상으로 변경하세요.
                 }
             }
+
+            // 태그 이름 수정하기
             function clickTagUpdate(tagId) {
                 // 해당 태그 아이디의 <a> 태그를 찾습니다.
                 var tagItem = document.getElementById('tagItem_' + tagId);
@@ -485,21 +487,49 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form th:action="@{/tag/delete/{tagId}(tagId=${tagId})}" method="get">
-                <input type="hidden" name="lectureRoomId" th:value="${lectureRoom.lectureRoomId}" />
-                <div class="modal-body">
-                    <h4>해당 태그를 정말 삭제하시겠습니까?</h4>
-                    <p>삭제하시면 더 이상 태그의 정보를 확인하실 수 없습니다.</p>
-                    <span>삭제 후 해당 강의실의 메인페이지로 이동됩니다.</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;">삭제</button>
-                    <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
-                </div>
-            </form>
+            <div class="modal-body">
+                <h4>해당 태그를 정말 삭제하시겠습니까?</h4>
+                <p>삭제하시면 더 이상 태그의 정보를 확인하실 수 없습니다.</p>
+                <span>삭제 후 해당 강의실의 메인페이지로 이동됩니다.</span>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDelete" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;" onclick="deleteSelectedTag()">삭제</button>
+                <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
+            </div>
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    var deleteTagId; // 전역 변수로 삭제할 태그의 ID를 저장할 변수
+    var lectureRoomId = /*[[${lectureRoom.lectureRoomId}]]*/ '';
+
+    // 삭제할 태그의 ID를 저장하는 함수
+    function setDeleteTagId(tagId) {
+        deleteTagId = tagId;
+    }
+    // 태그 삭제 함수
+    function deleteTag(tagId) {
+        $.ajax({
+            type: "POST",
+            url: "/tag/delete/" + tagId,
+            success: function(response) {
+                console.log("태그가 성공적으로 삭제되었습니다.");
+                location.href = '/lecture-room/detail/' + lectureRoomId;
+            },
+            error: function(xhr, status, error) {
+                // 삭제 중 에러가 발생했을 때 실행할 작업
+                console.error("태그 삭제 중 에러가 발생했습니다:", error);
+                // 여기에 에러 처리를 위한 작업을 수행할 수 있습니다.
+            }
+        });
+    }
+
+    function deleteSelectedTag() {
+        // var tagId = $('#confirmDelete').data("data-tagid"); // 선택한 태그의 tagId 가져오기
+        console.log("태그 아이디: ", deleteTagId);
+        deleteTag(deleteTagId); // deleteTag 함수 호출
+    }
+</script>
 
 <script th:inline="javascript">
     /*<![CDATA[*/

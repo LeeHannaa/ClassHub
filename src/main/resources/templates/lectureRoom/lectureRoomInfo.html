@@ -60,6 +60,7 @@
     bottom: 4px;
     background-color: white;
     -webkit-transition: .4s;
+    -webkit-transition: .4s;
     transition: .4s;
   }
 
@@ -432,7 +433,7 @@
                         <div class="form-group row">
                             <label for="stInviteCode" class="col-sm-3 col-form-label">강의실 학생 입장 코드:</label>
                             <div class="col-sm-8">
-                                <input type="text" id="stInviteCode" th:field="${lectureRoom.stInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자" >
+                                <input type="text" id="stInviteCode" th:field="${lectureRoom.stInviteCode}" class="form-control rounded bg-white border-secondary" maxlength="8" pattern="[A-Za-z0-9]{8}" title="영문숫자 포함 8글자" readonly>
                                 <small class="form-text text-muted">영문숫자 포함 8글자</small>
                             </div>
                             <div class="col-sm-1">
