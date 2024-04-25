@@ -48,12 +48,15 @@ public class MemberLRoomService {
 
 
   // Update
-  public ClassHub_MemberLRoom updateMemberLRoom(Long id, ClassHub_MemberLRoom classHubMemberLRoomDetails) {
+  public ClassHub_MemberLRoom updateMemberLRoomRole(Long id, ClassHub_MemberLRoom classHubMemberLRoomDetails) {
     ClassHub_MemberLRoom classHubMemberLRoom = memberLRoomRepository.findById(id)
       .orElseThrow(() -> new IllegalArgumentException("MemberLRoom with id " + id + " not found"));
-    classHubMemberLRoom.setClassHubMember(classHubMemberLRoomDetails.getClassHubMember());
-    classHubMemberLRoom.setLectureRoom(classHubMemberLRoomDetails.getLectureRoom());
     classHubMemberLRoom.setRole(classHubMemberLRoomDetails.getRole());
+    return memberLRoomRepository.save(classHubMemberLRoom);
+  }
+  public ClassHub_MemberLRoom updateMemberLRoomPermission(Long id, ClassHub_MemberLRoom classHubMemberLRoomDetails) {
+    ClassHub_MemberLRoom classHubMemberLRoom = memberLRoomRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("MemberLRoom with id " + id + " not found"));
     classHubMemberLRoom.setPermission(classHubMemberLRoomDetails.getPermission());
     return memberLRoomRepository.save(classHubMemberLRoom);
   }
