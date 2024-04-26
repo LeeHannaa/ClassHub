@@ -24,7 +24,7 @@ public class ClassHub_Member extends BaseEntity {
     private String member_name;
     private String email;
     private String uniqueId;
-    private String nickname;
+    private String department;
     private int login_count;
 
     @OneToMany(mappedBy = "classHubMember")
@@ -34,7 +34,7 @@ public class ClassHub_Member extends BaseEntity {
                 .member_name(memberDto.getMember_name())
                 .email(memberDto.getEmail())
                 .uniqueId(memberDto.getUniqueId())
-                .nickname(memberDto.getNickname())
+                .department(memberDto.getDepartment())
                 .login_count(memberDto.getLogin_count())
                 .build();
     }
