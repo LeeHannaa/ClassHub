@@ -28,7 +28,7 @@ public class ClassHub_LRoom extends BaseEntity {
     private String creator;
     private String description;
     private boolean onOff;
-    private String studentInfo;
+    private String studentInfoKey;
 
     @OneToMany(mappedBy = "lectureRoom")
     private List<ClassHub_Tag> tags = new ArrayList<>();
@@ -43,7 +43,7 @@ public class ClassHub_LRoom extends BaseEntity {
                 .stInviteCode(stInviteCode)
                 .description(lectureRoomDto.getDescription())
                 .onOff(lectureRoomDto.isOnOff())
-                .studentInfo(lectureRoomDto.getStudentInfo())
+                .studentInfoKey(lectureRoomDto.getStudentInfoKey())
                 .build();
     }
 
@@ -54,7 +54,7 @@ public class ClassHub_LRoom extends BaseEntity {
                 .stInviteCode(lectureRoomDto.getStInviteCode())
                 .description(lectureRoomDto.getDescription())
                 .onOff(lectureRoomDto.isOnOff())
-                .studentInfo(lectureRoomDto.getStudentInfo())
+                .studentInfoKey(lectureRoomDto.getStudentInfoKey())
                 .build();
     }
 
@@ -64,6 +64,6 @@ public class ClassHub_LRoom extends BaseEntity {
         this.onOff = lectureRoomDto.isOnOff();
         this.stInviteCode = lectureRoomDto.getStInviteCode();
         this.taInviteCode = lectureRoomDto.getTaInviteCode();
-        this.studentInfo = lectureRoomDto.getStudentInfo();
+        this.studentInfoKey = lectureRoomDto.getStudentInfoKey();
     }
 }

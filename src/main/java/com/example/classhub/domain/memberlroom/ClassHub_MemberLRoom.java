@@ -1,17 +1,22 @@
 package com.example.classhub.domain.memberlroom;
 
+import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class ClassHub_MemberLRoom {
+@Builder
+@AllArgsConstructor
+public class ClassHub_MemberLRoom extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
