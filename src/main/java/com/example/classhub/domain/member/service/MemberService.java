@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor //클래스 내부에 final 또는 @NonNull로 표시된 필드만을 매개변수로 하는 생성자를 생성
@@ -18,9 +19,9 @@ public class MemberService {
 
     @Transactional
     public MemberDto createMember(MemberDto memberDto) {
-        if (memberRepository.existsByEmail(memberDto.getEmail())) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
-        }
+//        if (memberRepository.existsByEmail(memberDto.getEmail())) {
+//            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+//        }
 
         if (memberRepository.existsByUniqueId(memberDto.getUniqueId())) {
             throw new IllegalArgumentException("이미 사용 중인 유니크 ID입니다.");
@@ -30,6 +31,13 @@ public class MemberService {
         memberRepository.save(classHubMember); // 저장된 Member 객체를 반환받음
 
         return MemberDto.from(classHubMember); // MemberDto로 변환
+    }
+    @Transactional
+    public ClassHub_Member createMember(ClassHub_Member classHubMember) {
+        if (memberRepository.existsByUniqueId(classHubMember.getUniqueId())) {
+            throw new IllegalArgumentException("이미 사용 중인 유니크 ID입니다.");
+        }
+        return memberRepository.save(classHubMember);
     }
 
     public MemberListResponse getMemberList() {
@@ -45,6 +53,11 @@ public class MemberService {
         ClassHub_Member classHubMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
         return MemberDto.from(classHubMember);
+    }
+
+    @Transactional
+    public Optional<ClassHub_Member> findByUniqueId(String uniqueId) {
+        return memberRepository.findByUniqueId(uniqueId);
     }
     @Transactional
     public void delete(Long memberId) {
