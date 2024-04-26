@@ -286,7 +286,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form th:action="@{/lecture-room/saveLecture}" th:object="${lectureRoomCreateRequest}" method="post">
+            <form th:action="@{/lecture-room/saveLecture}" th:object="${lectureRoomCreateRequest}" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <!-- 강의실 생성 폼 -->
                     <label for="name">강의실 이름:</label>
@@ -298,25 +298,31 @@
                     <label for="onOff" style="margin-right: 40px;">강의실 활성화 상태:</label>
                     <input type="checkbox" id="onOff" th:field="*{onOff}" class="form-check-input">
                     <br>
-                    <label for="studentInfo">기본 학생 정보
-                        <i class="far fa-question-circle custom-tooltip-icon" data-toggle="tooltip" data-placement="right" title="이 강의를 수강하는 학생들의 기본적인 정보(이름, 학번, 학부 등) 중 저장할 항목들을 입력하세요!"></i>
+                    <label for="studentInfoKey">키(기준)가 될 학생 정보
+                        <i class="far fa-question-circle custom-tooltip-icon" data-toggle="tooltip" data-placement="right" title="학생들의 정보를 판별할 키를 선택하세요."></i>
                     </label>
-                    <div id="studentInfo" class="form-group">
+                    <div id="studentInfoKey" class="form-group">
                         <div class="form-check form-check-inline">
-                            <input type="checkbox" id="studentId" class="form-check-input" name="studentInfo" value="학번" checked>
+                            <input type="radio" id="studentId" class="form-check-input" name="studentInfoKey" value="학번" checked>
                             <label class="form-check-label" for="studentId">학번</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="checkbox" id="studentName" class="form-check-input" name="studentInfo" value="이름">
+                            <input type="radio" id="studentName" class="form-check-input" name="studentInfoKey" value="이름">
                             <label class="form-check-label" for="studentName">이름</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="checkbox" id="studentDepartment" class="form-check-input" name="studentInfo" value="학부">
+                            <input type="radio" id="studentDepartment" class="form-check-input" name="studentInfoKey" value="학부">
                             <label class="form-check-label" for="studentDepartment">학부</label>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;" onclick="downloadCSV()">학생 정보 CSV 양식 다운로드</button>
-                    <button class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;">학생 정보 업로드</button>
+                    <label class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;" onclick="downloadCSV()">
+                        학생 정보 CSV 양식 다운로드
+                    </label>
+                    <!-- 파일 업로드 레이블 버튼 -->
+                    <label for="studentFile" class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;">
+                        학생 정보 업로드
+                    </label>
+                    <input type="file" id="studentFile" name="studentFile" class="form-control" style="display: none;">
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;">저장</button>
@@ -343,20 +349,18 @@
     $(document).ready(function(){
         $('.custom-tooltip-icon').tooltip();
 
-        $('#LectureRoomCreateModal').submit(function(event) {
-            const checkedBoxes = $('#studentInfo input[type="checkbox"]:checked');
-            if (checkedBoxes.length === 0) {
+        $('#LectureRoomCreateModal').on('submit', function(event) {
+            const selectedRadio = $('#studentInfoKey input[type="radio"]:checked');
+            if (!selectedRadio.length) {
                 event.preventDefault(); // 폼 제출을 막습니다.
-                alert('최소한 한 가지의 학생 정보를 선택해야 합니다.'); // 사용자에게 경고합니다.
+                alert('학생 정보를 선택해야 합니다.'); // 사용자에게 경고합니다.
             }
         });
     });
 
     function downloadCSV() {
-        const checkboxes = $('#studentInfo input[type="checkbox"]:checked');
-        const selectedInfo = checkboxes.map(function() { return this.value; }).get();
+        const headers = "학번,이름,학부";
         const fileName = $('#name').val() + '_학생_정보';
-        const headers = selectedInfo.join(',');
         const BOM = "\uFEFF";
         const csvContent = `data:text/csv;charset=utf-8,${BOM}${headers}\n`;
         const encodedUri = encodeURI(csvContent);
