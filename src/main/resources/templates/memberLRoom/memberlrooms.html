@@ -25,8 +25,8 @@
     <td th:text="${memberLRoom.classHubMember.getMemberId()}">회원 아이디</td>
     <td th:text="${memberLRoom.classHubMember.getUniqueId()}">회원 학번</td>
     <td th:text="${memberLRoom.classHubMember.getMember_name()}">회원 이름</td>
-    <td th:text="${memberLRoom.role}">역할</td>
-    <td th:text="${memberLRoom.permission}">권한</td>
+    <td th:text="${memberLRoom.role.getRole()}">역할</td>
+    <td th:text="${memberLRoom.permission.getPermission()}">권한</td>
     <td><a th:href="@{/memberlroom/edit/{id}(id=${memberLRoom.id})}">수정</a></td>
     <td><a th:href="@{/memberlroom/delete/{id}(id=${memberLRoom.id})}" onclick="return confirm('Are you sure?')">삭제</a></td>
   </tr>

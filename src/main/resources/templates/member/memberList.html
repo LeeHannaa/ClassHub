@@ -324,17 +324,16 @@
                             <td th:text="${member.getClassHubMember().getUniqueId()}"></td>
                             <td>
                                 <select class="form-control" th:attr="name='role' + ${index.index}">
-                                    <option value="" th:selected="${member.role == null}">Select Role</option>
-                                    <option value="STUDENT" th:selected="${member.role.toString() == 'STUDENT'}">STUDENT</option>
-                                    <option value="TA" th:selected="${member.role.toString() == 'TA'}">TA</option>
-                                    <option value="PROFESSOR" th:selected="${member.role.toString() == 'PROFESSOR'}">PROFESSOR</option>
+                                    <option value="학생" th:selected="${member.role.getRole() == '학생'}">학생</option>
+                                    <option value="조교" th:selected="${member.role.getRole() == '조교'}">조교</option>
+                                    <option value="교수" th:selected="${member.role.getRole() == '교수'}">교수</option>
                                 </select>
                             </td>
                             <td>
                                 <select class="form-control" th:attr="name='permission' + ${index.index}">
-                                    <option value="APPROVED" th:selected="${member.permission.toString() == 'APPROVED'}">APPROVED</option>
-                                    <option value="UNAPPROVED" th:selected="${member.permission.toString() == 'UNAPPROVED'}">UNAPPROVED</option>
-                                    <option value="BLOCKED" th:selected="${member.permission.toString() == 'BLOCKED'}">BLOCKED</option>
+                                    <option value="입장" th:selected="${member.permission.getPermission() == '입장'}">입장</option>
+                                    <option value="미입장" th:selected="${member.permission.getPermission() == '미입장'}">미입장</option>
+                                    <option value="거절" th:selected="${member.permission.getPermission() == '거절'}">거절</option>
                                 </select>
                             </td>
                         </tr>
