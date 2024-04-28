@@ -12,6 +12,6 @@ public class MemberCreateRequest {
     private String member_name;
     private String email;
     private String uniqueId;
-    private String nickname;
+    private String department;
     private int login_count;
 }

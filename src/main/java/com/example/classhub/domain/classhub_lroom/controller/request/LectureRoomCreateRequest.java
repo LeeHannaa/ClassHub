@@ -11,5 +11,5 @@ public class LectureRoomCreateRequest {
     private String roomName;
     private String description;
     private boolean OnOff;
-    private String studentInfo;
+    private String studentInfoKey;
 }

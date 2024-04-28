@@ -5,6 +5,7 @@ import com.example.classhub.domain.classhub_lroom.controller.request.LectureRoom
 import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomListResponse;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
+import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
 import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.service.PostService;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class LectureRoomController {
     private final LectureRoomService lectureRoomService;
     private final TagService tagService;
     private final PostService postService;
+    private final MemberLRoomService memberLRoomService;
 
     @GetMapping("/lecture-room")
     public String findLectureRoomList(Model model, @RequestParam(name = "searchKeyword", required = false, defaultValue = "")String searchKeyword){
@@ -45,8 +48,9 @@ public class LectureRoomController {
     }
 
     @PostMapping("/lecture-room/saveLecture")
-    public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request){
-        lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
+    public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request, @RequestParam("studentFile") MultipartFile studentFile) {
+        LectureRoomDto lectureRoomDto = lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
+        memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
         return "redirect:/lecture-room";
     }
 
