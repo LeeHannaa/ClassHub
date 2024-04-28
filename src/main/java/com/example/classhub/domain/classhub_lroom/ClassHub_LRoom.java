@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE class_hub_lroom SET deleted = true WHERE l_room_id = ?")
+@Where(clause = "deleted = false")
 public class ClassHub_LRoom extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +33,9 @@ public class ClassHub_LRoom extends BaseEntity {
     private String description;
     private boolean onOff;
     private String studentInfoKey;
+
+    // 소프트 딜리트
+    private boolean deleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "lectureRoom")
     private List<ClassHub_Tag> tags = new ArrayList<>();

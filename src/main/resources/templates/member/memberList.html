@@ -10,6 +10,10 @@
     <meta name="author" content="">
 
     <title>SB Admin 2 - Blank</title>
+    <!-- Thymeleaf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/thymeleaf/3.0.12.RELEASE/thymeleaf.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Custom fonts for this template-->
     <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
@@ -310,8 +314,8 @@
                         <tr>
                             <th scope="col">번호</th>
                             <th scope="col">이름</th>
-                            <th scope="col" class="d-none d-sm-table-cell">이메일</th>
                             <th scope="col">학번</th>
+                            <th scope="col" class="d-none d-sm-table-cell">이메일</th>
                             <th scope="col">역할</th>
                             <th scope="col">권한</th>
                         </tr>
@@ -320,22 +324,82 @@
                         <tr th:each="member, index : ${memberLRooms}">
                             <td th:text="${index.index + 1}"></td>
                             <td th:text="${member.getClassHubMember().getMember_name()}"></td>
-                            <td th:text="${member.getClassHubMember().getEmail()}" class="d-none d-sm-table-cell"></td>
                             <td th:text="${member.getClassHubMember().getUniqueId()}"></td>
+                            <td th:text="${member.getClassHubMember().getEmail()}" class="d-none d-sm-table-cell"></td>
                             <td>
-                                <select class="form-control" th:attr="name='role' + ${index.index}">
+                                <input type="hidden" th:name="'id' + ${index.index}" th:value="${member.id}"/>
+                                <select class="form-control role-select" th:attr="name='role' + ${index.index}">
                                     <option value="학생" th:selected="${member.role.getRole() == '학생'}">학생</option>
                                     <option value="조교" th:selected="${member.role.getRole() == '조교'}">조교</option>
                                     <option value="교수" th:selected="${member.role.getRole() == '교수'}">교수</option>
                                 </select>
                             </td>
                             <td>
-                                <select class="form-control" th:attr="name='permission' + ${index.index}">
+                                <input type="hidden" th:name="'id' + ${index.index}" th:value="${member.id}"/>
+                                <select class="form-control permission-select" th:attr="name='permission' + ${index.index}">
                                     <option value="입장" th:selected="${member.permission.getPermission() == '입장'}">입장</option>
                                     <option value="미입장" th:selected="${member.permission.getPermission() == '미입장'}">미입장</option>
                                     <option value="거절" th:selected="${member.permission.getPermission() == '거절'}">거절</option>
                                 </select>
                             </td>
+                            <script th:inline="javascript">
+                                $(document).ready(function() {
+                                    $('.role-select').change(function () {
+                                        var memberId = $(this).closest('td').find('[name^="id"]').val(); // 수정된 부분
+                                        console.log("memberId" + memberId);
+                                        var role = $(this).val();
+                                        updateMemberLRoomRole(memberId, role);
+                                    });
+                                })
+                                function updateMemberLRoomRole(id, role) {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/memberlroom/update/role/" + id,
+                                        contentType: "application/json",
+                                        data: JSON.stringify({
+                                            role: role
+                                        }),
+                                        success: function(response) {
+                                            showSuccessMessage();
+                                            console.log(response);
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error(xhr.responseText);
+                                        }
+                                    });
+                                }
+                                $(document).ready(function() {
+                                    $('.permission-select').change(function () {
+                                        var memberId = $(this).closest('td').find('[name^="id"]').val(); // 수정된 부분
+                                        console.log("memberId" + memberId);
+                                        var permission = $(this).val();
+                                        updateMemberLRoomPermission(memberId, permission);
+                                    });
+                                })
+                                function updateMemberLRoomPermission(id, permission) {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/memberlroom/update/permission/" + id,
+                                        contentType: "application/json",
+                                        data: JSON.stringify({
+                                            permission: permission
+                                        }),
+                                        success: function(response) {
+                                            showSuccessMessage();
+                                            console.log(response);
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error(xhr.responseText);
+                                        }
+                                    });
+                                }
+                                function showSuccessMessage() {
+                                    $('#successMessage').fadeIn();
+                                    setTimeout(function() {
+                                        $('#successMessage').fadeOut();
+                                    }, 2000); // 2초 후에 메시지 사라짐
+                                }
+                            </script>
                         </tr>
                         </tbody>
                         <tbody th:unless="${not #lists.isEmpty(memberLRooms)}">
@@ -344,6 +408,10 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <!-- 수정 성공 메시지 -->
+                <div id="successMessage" class="alert alert-success m-1" role="alert" style="display: none;">
+                    수정이 성공적으로 완료되었습니다.
                 </div>
             </div>
             <!-- /.container-fluid -->
