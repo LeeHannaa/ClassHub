@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,17 +42,17 @@ public class PostController {
 
         List<String> headers = postService.checkHeader(tempFile);
         session.setAttribute("headers", headers);
-        return "redirect:/post/postHeaderCheckForm";
+        return "redirect:/post/postModal";
     }
 
-    @GetMapping("/post/postHeaderCheckForm")
-    public String postHeaderCheckForm(HttpSession session, Model model) {
+    @GetMapping("/post/postModal")
+    public String postModal(HttpSession session, Model model) {
         List<String> headers = (List<String>) session.getAttribute("headers");
         model.addAttribute("headers", headers);
-        return "post/postHeaderCheckForm";
+        return "post/postModal";
     }
 
-    @PostMapping("/post/postHeaderCheckForm")
+    @PostMapping("/post/postModal")
     public String savePost(@ModelAttribute PostCheckRequest postCheckRequest,
                            HttpSession session) throws IOException {
 
