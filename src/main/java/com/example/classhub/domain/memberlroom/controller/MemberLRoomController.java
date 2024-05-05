@@ -79,6 +79,7 @@ public class MemberLRoomController {
 
   @PostMapping("/memberlroom/update/role/{id}")
   public ResponseEntity<String> updateMemberLRoomRole(@PathVariable Long id, @RequestBody ClassHub_MemberLRoom classHubMemberLRoom) {
+    classHubMemberLRoom.setRole(Role.from(classHubMemberLRoom.getRole().getRole()));
     memberLRoomService.updateMemberLRoomRole(id, classHubMemberLRoom);
     return ResponseEntity.ok().body("MemberLRoom Role updated successfully.");
   }

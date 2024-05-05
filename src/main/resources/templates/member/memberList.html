@@ -329,17 +329,17 @@
                             <td>
                                 <input type="hidden" th:name="'id' + ${index.index}" th:value="${member.id}"/>
                                 <select class="form-control role-select" th:attr="name='role' + ${index.index}">
-                                    <option value="학생" th:selected="${member.role.getRole() == '학생'}">학생</option>
-                                    <option value="조교" th:selected="${member.role.getRole() == '조교'}">조교</option>
-                                    <option value="교수" th:selected="${member.role.getRole() == '교수'}">교수</option>
+                                    <option value="STUDENT" th:selected="${member.role.getRole() == '학생'}">학생</option>
+                                    <option value="TA" th:selected="${member.role.getRole() == '조교'}">조교</option>
+                                    <option value="PROFESSOR" th:selected="${member.role.getRole() == '교수'}">교수</option>
                                 </select>
                             </td>
                             <td>
                                 <input type="hidden" th:name="'id' + ${index.index}" th:value="${member.id}"/>
                                 <select class="form-control permission-select" th:attr="name='permission' + ${index.index}">
-                                    <option value="입장" th:selected="${member.permission.getPermission() == '입장'}">입장</option>
-                                    <option value="미입장" th:selected="${member.permission.getPermission() == '미입장'}">미입장</option>
-                                    <option value="거절" th:selected="${member.permission.getPermission() == '거절'}">거절</option>
+                                    <option value="APPROVED" th:selected="${member.permission.getPermission() == '입장'}">입장</option>
+                                    <option value="UNAPPROVED" th:selected="${member.permission.getPermission() == '미입장'}">미입장</option>
+                                    <option value="BLOCKED" th:selected="${member.permission.getPermission() == '거절'}">거절</option>
                                 </select>
                             </td>
                             <script th:inline="javascript">
