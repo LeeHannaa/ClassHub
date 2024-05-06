@@ -10,6 +10,7 @@
     <meta name="author" content="">
 
     <title>ClassHub</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       .statistics-container {
         display: flex;
@@ -225,15 +226,7 @@
         </script>
 
 
-
-            <!-- Nav Item - Charts -->
-<!--        <li class="nav-item active">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--                <i class="fas fa-fw fa-chart-area"></i>-->
-<!--                <span>통계자료</span></a>-->
-<!--        </li>-->
-
-        <!-- Divider -->
+      <!-- Divider -->
         <hr class="sidebar-divider">
         <!-- Heading -->
         <div class="sidebar-heading">
@@ -388,11 +381,33 @@
                                     <canvas id="myAreaChart"></canvas>
                                 </div>
                                 <hr>
-                                [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 결과
+                              <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" style="display: flex; justify-content: space-around;">
+                                <div>
+                                  <strong>평균:</strong><br>
+                                  <span id="mean"></span>
+                                </div>
+                                <div>
+                                  <strong>평균(0점 제외):</strong><br>
+                                  <span id="meanExcludingZeros"></span>
+                                </div>
+                                <div>
+                                  <strong>표준 편차:</strong><br>
+                                  <span id="standardDeviation"></span>
+                                </div>
+                                <div>
+                                  <strong>최고 점수:</strong><br>
+                                  <span id="maxScore"></span>
+                                </div>
+                                <div>
+                                  <strong>최저 점수:</strong><br>
+                                  <span id="minScore"></span>
+                                </div>
+                              </div>
+
+
                             </div>
                         </div>
-                        <p th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" >평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>
-                      <div class="card shadow mb-4">
+                        <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 데이터</h6>
                         </div>
@@ -539,7 +554,15 @@
     // 평균
     function calculateMean(scores) {
         var sum = scores.reduce(function(a, b) { return a + b; }, 0);
-        return (sum / scores.length).toFixed(3);
+        return (sum / scores.length).toFixed(1);
+    }
+
+    // 0점을 제외한 평균 계산
+    function calculateMeanExcludingZeros(scores) {
+      var filteredScores = scores.filter(function(score) { return score > 0; });
+      if (filteredScores.length === 0) return 'N/A'; // 0점을 제외하고 점수가 없는 경우
+      var sum = filteredScores.reduce(function(a, b) { return a + b; }, 0);
+      return (sum / filteredScores.length).toFixed(1);
     }
 
     // 표준 편차
@@ -550,7 +573,7 @@
             return diff * diff;
         });
         var avgSquareDiff = calculateMean(squareDiffs);
-        return Math.sqrt(avgSquareDiff).toFixed(3);
+        return Math.sqrt(avgSquareDiff).toFixed(1);
     }
 
     // 최고 점수
@@ -563,38 +586,36 @@
         return Math.min(...scores);
     }
     // 구간별 학생 수와 범위를 계산하는 함수
-    function calculateSegmentInfo(scores, studentNums) {
-        var segmentCounts = [0, 0, 0, 0, 0];
-        var segmentRanges = [];
-        var segmentSize = (calculateMax(scores) - calculateMin(scores)) / 5;
-        var maxStudents = 0; // 초기값을 0으로 설정
+    function calculateSegmentInfo(scores) {
+      var segmentCounts = new Array(10).fill(0); // 10점 간격으로 0부터 100까지이므로 10개의 구간
+      var segmentRanges = [];
+      var segmentSize = 10; // 점수 구간 크기를 10점으로 설정
+      var maxStudents = 0; // 초기값을 0으로 설정
 
-        for (var i = 0; i < 5; i++) {
-            var rangeStart = calculateMin(scores) + segmentSize * i;
-            var rangeEnd = calculateMin(scores) + segmentSize * (i + 1);
-            var count = 0; // 각 범위의 학생 수를 카운트
+      scores.forEach(function(score) {
+        var index = Math.floor(score / segmentSize); // 점수를 10으로 나누어 해당 구간 인덱스 결정
+        if(index == 10) index = 9; // 100점은 마지막 구간에 포함
+        segmentCounts[index] += 1; // 해당 구간의 학생 수 증가
+      });
 
-            scores.forEach(function(score) {
-                if ((i == 4 && score >= rangeStart && score <= rangeEnd) ||
-                    (score >= rangeStart && score < rangeEnd)) {
-                    count++;
-                }
-            });
+      for (var i = 0; i < segmentCounts.length; i++) {
+        var rangeStart = i * segmentSize;
+        var rangeEnd = (i + 1) * segmentSize;
+        segmentRanges.push(`(${rangeStart} - ${rangeEnd})`);
 
-            segmentCounts[i] = count;
-            segmentRanges.push(`(${rangeStart.toFixed(1)} - ${rangeEnd.toFixed(1)})`);
-
-            // 최대 학생 수 업데이트
-            if (count > maxStudents) {
-                maxStudents = count;
-            }
+        // 최대 학생 수 업데이트
+        if (segmentCounts[i] > maxStudents) {
+          maxStudents = segmentCounts[i];
         }
+      }
 
-        return { segmentCounts: scores, segmentRanges: studentNums, maxStudents: maxStudents  };
+      return { segmentCounts: segmentCounts, segmentRanges: segmentRanges, maxStudents: maxStudents };
     }
 
 
+
     var mean = calculateMean(scores);
+    var meanExcludingZeros = calculateMeanExcludingZeros(scores);
     var standardDeviation = calculateStandardDeviation(scores);
     var maxScore = calculateMax(scores);
     var minScore = calculateMin(scores);
@@ -602,6 +623,7 @@
     var totalStudents = scores.length; // 총 학생 수
 
     document.getElementById('mean').textContent = mean;
+    document.getElementById('meanExcludingZeros').textContent = meanExcludingZeros; // 0점 제외 평균 출력
     document.getElementById('standardDeviation').textContent = standardDeviation;
     document.getElementById('maxScore').textContent = maxScore;
     document.getElementById('minScore').textContent = minScore;
@@ -624,11 +646,8 @@
 <script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-
 <!-- Page level custom scripts -->
 <script src="/bootstrap/js/demo/chart-area-demo.js"></script>
-<script src="/bootstrap/js/demo/chart-pie-demo.js"></script>
-<script src="/bootstrap/js/demo/chart-bar-demo.js"></script>
 <script src="/bootstrap/js/demo/datatables-demo.js"></script>
 
 </body>
