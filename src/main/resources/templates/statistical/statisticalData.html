@@ -385,81 +385,33 @@
                                     <canvas id="myAreaChart"></canvas>
                                 </div>
                                 <hr>
-                                [[${dataStatistics[0].tagName}]] 점수에 대한 학생 분포 결과
-<!--                              <canvas id="normalDistributionChart" ></canvas>-->
-<!--                              <script th:inline="javascript">-->
-<!--                                /*<![CDATA[*/-->
-<!--                                // const scores = [[${dataStatistics.![score]}]] []; // 점수 목록을 JavaScript 배열로 변환-->
-<!--                                // scores를 사용하여 차트 생성 로직-->
+                              <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" style="display: flex; justify-content: space-around;">
+                                <div>
+                                  <strong>평균:</strong><br>
+                                  <span id="mean"></span>
+                                </div>
+                                <div>
+                                  <strong>평균(0점 제외):</strong><br>
+                                  <span id="meanExcludingZeros"></span>
+                                </div>
+                                <div>
+                                  <strong>표준 편차:</strong><br>
+                                  <span id="standardDeviation"></span>
+                                </div>
+                                <div>
+                                  <strong>최고 점수:</strong><br>
+                                  <span id="maxScore"></span>
+                                </div>
+                                <div>
+                                  <strong>최저 점수:</strong><br>
+                                  <span id="minScore"></span>
+                                </div>
+                              </div>
 
-<!--                                // 예시 점수 데이터-->
-<!--                                var scores = [85, 92, 88, 96, 78, 81, 85, 89, 95, 82, 87, 93, 89, 85, 82, 88, 91, 85, 79, 86];-->
-<!--                                // const scores = [[${dataStatistics.![score]}]];-->
-<!--                                console.log('점수 목록:', scores);-->
 
-<!--                                // 평균 계산-->
-<!--                                function calculateMean(arr) {-->
-<!--                                  return arr.reduce((acc, val) => acc + val, 0) / arr.length;-->
-<!--                                }-->
-
-<!--                                // 표준편차 계산-->
-<!--                                function calculateStandardDeviation(arr, mean) {-->
-<!--                                  return Math.sqrt(arr.reduce((acc, val) => acc + (val - mean) ** 2, 0) / arr.length);-->
-<!--                                }-->
-
-<!--                                // 정규분포 데이터 생성-->
-<!--                                function generateNormalDistributionData(mean, standardDeviation, step = 0.5, range = 4) {-->
-<!--                                  const distributionData = [];-->
-<!--                                  for (let i = mean - range * standardDeviation; i <= mean + range * standardDeviation; i += step) {-->
-<!--                                    const probabilityDensity = (1 / (standardDeviation * Math.sqrt(2 * Math.PI)))-->
-<!--                                      * Math.exp(-0.5 * Math.pow((i - mean) / standardDeviation, 2));-->
-<!--                                    distributionData.push({x: i, y: probabilityDensity});-->
-<!--                                  }-->
-<!--                                  return distributionData;-->
-<!--                                }-->
-
-<!--                                const mean = calculateMean(scores);-->
-<!--                                const standardDeviation = calculateStandardDeviation(scores, mean);-->
-<!--                                const normalDistributionData = generateNormalDistributionData(mean, standardDeviation);-->
-
-<!--                                // Chart.js를 이용한 그래프 그리기-->
-<!--                                const ctx = document.getElementById('normalDistributionChart').getContext('2d');-->
-<!--                                const myChart = new Chart(ctx, {-->
-<!--                                  type: 'line',-->
-<!--                                  data: {-->
-<!--                                    datasets: [{-->
-<!--                                      label: '정규분포',-->
-<!--                                      data: normalDistributionData,-->
-<!--                                      fill: false,-->
-<!--                                      borderColor: 'rgb(75, 192, 192)',-->
-<!--                                      tension: 0.1-->
-<!--                                    }]-->
-<!--                                  },-->
-<!--                                  options: {-->
-<!--                                    scales: {-->
-<!--                                      x: {-->
-<!--                                        type: 'linear',-->
-<!--                                        position: 'bottom',-->
-<!--                                        title: {-->
-<!--                                          display: true,-->
-<!--                                          text: '점수'-->
-<!--                                        }-->
-<!--                                      },-->
-<!--                                      y: {-->
-<!--                                        title: {-->
-<!--                                          display: true,-->
-<!--                                          text: '확률 밀도'-->
-<!--                                        }-->
-<!--                                      }-->
-<!--                                    }-->
-<!--                                  }-->
-<!--                                });-->
-<!--                                /*]]>*/-->
-<!--                              </script>-->
                             </div>
                         </div>
-<!--                        <p th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" >평균: <span id="mean"></span> / 표준 편차: <span id="standardDeviation"></span> / 최고 점수: <span id="maxScore"></span> / 최저 점수: <span id="minScore"></span></p>-->
-                      <div class="card shadow mb-4">
+                        <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 데이터</h6>
                         </div>
@@ -606,7 +558,15 @@
     // 평균
     function calculateMean(scores) {
         var sum = scores.reduce(function(a, b) { return a + b; }, 0);
-        return (sum / scores.length).toFixed(3);
+        return (sum / scores.length).toFixed(1);
+    }
+
+    // 0점을 제외한 평균 계산
+    function calculateMeanExcludingZeros(scores) {
+      var filteredScores = scores.filter(function(score) { return score > 0; });
+      if (filteredScores.length === 0) return 'N/A'; // 0점을 제외하고 점수가 없는 경우
+      var sum = filteredScores.reduce(function(a, b) { return a + b; }, 0);
+      return (sum / filteredScores.length).toFixed(1);
     }
 
     // 표준 편차
@@ -617,7 +577,7 @@
             return diff * diff;
         });
         var avgSquareDiff = calculateMean(squareDiffs);
-        return Math.sqrt(avgSquareDiff).toFixed(3);
+        return Math.sqrt(avgSquareDiff).toFixed(1);
     }
 
     // 최고 점수
@@ -659,6 +619,7 @@
 
 
     var mean = calculateMean(scores);
+    var meanExcludingZeros = calculateMeanExcludingZeros(scores);
     var standardDeviation = calculateStandardDeviation(scores);
     var maxScore = calculateMax(scores);
     var minScore = calculateMin(scores);
@@ -666,6 +627,7 @@
     var totalStudents = scores.length; // 총 학생 수
 
     document.getElementById('mean').textContent = mean;
+    document.getElementById('meanExcludingZeros').textContent = meanExcludingZeros; // 0점 제외 평균 출력
     document.getElementById('standardDeviation').textContent = standardDeviation;
     document.getElementById('maxScore').textContent = maxScore;
     document.getElementById('minScore').textContent = minScore;
@@ -688,11 +650,8 @@
 <script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-
 <!-- Page level custom scripts -->
 <script src="/bootstrap/js/demo/chart-area-demo.js"></script>
-<script src="/bootstrap/js/demo/chart-pie-demo.js"></script>
-<script src="/bootstrap/js/demo/chart-bar-demo.js"></script>
 <script src="/bootstrap/js/demo/datatables-demo.js"></script>
 
 </body>

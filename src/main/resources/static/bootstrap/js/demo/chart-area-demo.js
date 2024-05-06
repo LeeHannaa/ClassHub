@@ -26,6 +26,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   }
   return s.join(dec);
 }
+var maxValue = Math.max.apply(null, segmentInfo.segmentCounts);
 
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");
@@ -76,6 +77,8 @@ var myLineChart = new Chart(ctx, {
         ticks: {
           maxTicksLimit: 10,
           padding: 10,
+          max: maxValue,
+          stepSize:1,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
             return number_format(value);
