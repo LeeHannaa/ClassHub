@@ -1,5 +1,7 @@
 package com.example.classhub.domain.post.controller;
 
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
+import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.post.controller.request.PostCheckRequest;
 import com.example.classhub.domain.post.controller.request.PostCreateRequest;
 import com.example.classhub.domain.post.controller.response.PostListResponse;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.util.List;
 @CrossOrigin("*")
 public class PostController {
     private final PostService postService;
+    private final LectureRoomService lectureRoomService;
 
     @GetMapping("/post/postForm")
     public String createPostForm(Model model) {
@@ -41,19 +43,26 @@ public class PostController {
         session.setAttribute("filePath", tempFile.getAbsolutePath());
         session.setAttribute("postForm", request);
 
+        Long lRoomId = request.getLRoomId();
+        ClassHub_LRoom lRoom = ClassHub_LRoom.from(lectureRoomService.findByRoomId(lRoomId));
+        session.setAttribute("lRoom", lRoom);
+
         List<String> headers = postService.checkHeader(tempFile);
         session.setAttribute("headers", headers);
-        return "redirect:/post/postHeaderCheckForm";
+        return "redirect:/post/postModal";
     }
 
-    @GetMapping("/post/postHeaderCheckForm")
-    public String postHeaderCheckForm(HttpSession session, Model model) {
+    @GetMapping("/post/postModal")
+    public String postModal(HttpSession session, Model model) {
         List<String> headers = (List<String>) session.getAttribute("headers");
+        ClassHub_LRoom lRoom = (ClassHub_LRoom) session.getAttribute("lRoom");
         model.addAttribute("headers", headers);
-        return "post/postHeaderCheckForm";
+        model.addAttribute("keyHeaderName", lRoom.getStudentInfoKey());
+        return "post/postModal";
     }
 
-    @PostMapping("/post/postHeaderCheckForm")
+
+    @PostMapping("/post/postModal")
     public String savePost(@ModelAttribute PostCheckRequest postCheckRequest,
                            HttpSession session) throws IOException {
 

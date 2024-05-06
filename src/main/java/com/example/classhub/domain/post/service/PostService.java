@@ -30,10 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.input.BOMInputStream;
@@ -48,33 +45,17 @@ public class PostService {
     private final DataDetailService dataDetailService;
 
     public List<String> checkHeader(File file) {
-        List<CSVRecord> records = new ArrayList<>();
+        List<String> headers;
         try (FileInputStream fis = new FileInputStream(file);
              BOMInputStream bomInputStream = new BOMInputStream(fis, false);
              BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bomInputStream, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
-            for (CSVRecord record : csvParser) {
-                records.add(record);
-            }
+            headers = csvParser.getHeaderNames();
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
-
-        List<String> headers = new ArrayList<>(records.get(0).toMap().keySet());
-        headers.sort(Comparator.comparingInt(this::getKoreanOrder));
-
         return headers;
-    }
-
-    private int getKoreanOrder(String s) {
-        if (s == null || s.isEmpty()) return Integer.MAX_VALUE;
-        char c = s.charAt(0);
-        if (c >= '가' && c <= '힣') {
-            return (c - '가');
-        } else {
-            return c;
-        }
     }
 
     @Transactional
@@ -82,8 +63,7 @@ public class PostService {
         List<String> headers = checkHeader(csvFile);
         StringBuilder tagIdsBuilder = new StringBuilder();
         List<CSVRecord> records = readCsvRecords(csvFile);
-        String keyHeaderName = headers.get(postDto.getKeyId().intValue());
-
+        String keyHeaderName = lRoom.getStudentInfoKey();
         for (Long selectedId : postDto.getIsSelected()) {
             String headerName = headers.get(selectedId.intValue());
             boolean isScoreTag = postDto.getIsScore().contains(selectedId);
