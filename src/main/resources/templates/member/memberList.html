@@ -284,10 +284,6 @@
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="#">
-                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                프로필
-                            </a>
-                            <a class="dropdown-item" href="#">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 공간 나가기
                             </a>
@@ -305,19 +301,130 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
+            <script>
+                $(document).ready(function(){
+                    $('#filterInput').on('keyup', function(){
+                        var searchText = $(this).val().toLowerCase();
+                        $('tbody tr').each(function(){
+                            var name = $(this).find('td:eq(1)').text().toLowerCase();
+                            var studentId = $(this).find('td:eq(2)').text().toLowerCase();
+                            if(name.includes(searchText) || studentId.includes(searchText)){
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        });
+                    });
+                });
+
+                $(document).ready(function(){
+                    $('.dropdown-menu a').on('click', function(){
+                        var text = $(this).text();
+                        $(this).closest('.dropdown').find('button').text(text);
+                    });
+                    // 역할 필터링
+                    $('.role-filter').on('click', function(){
+                        var selectedRole = $(this).data('role');
+                        $('tbody tr').each(function(){
+                            var role = $(this).find('.role-select').val();
+                            if(selectedRole === '' || role === selectedRole){
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        });
+                    });
+
+                    // 권한 필터링
+                    $('.permission-filter').on('click', function(){
+                        var selectedPermission = $(this).data('permission');
+                        $('tbody tr').each(function(){
+                            var permission = $(this).find('.permission-select').val();
+                            if(selectedPermission === '' || permission === selectedPermission){
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        });
+                    });
+                });
+
+                // Sort
+                $(document).ready(function(){
+                    $('#sortable-table th').each(function (column) {
+                        $(this).click(function() {
+                            if($(this).is('.asc')) {
+                                $(this).removeClass('asc');
+                                $(this).addClass('desc');
+                                sortdir=-1;
+
+                            } else {
+                                $(this).addClass('asc');
+                                $(this).removeClass('desc'); sortdir=1;
+                            }
+
+                            $(this).siblings().removeClass('asc');
+                            $(this).siblings().removeClass('desc');
+
+                            var rec = $('#sortable-table').find('tbody>tr').get();
+
+                            rec.sort(function (a, b) {
+                                var val1 = $(a).children('td').eq(column).text().toUpperCase();
+                                var val2 = $(b).children('td').eq(column).text().toUpperCase();
+                                return (val1 < val2)?-sortdir:(val1>val2)?sortdir:0;
+                            });
+
+                            $.each(rec, function(index, row) {
+                                $('#sortable-table tbody').append(row);
+                            });
+                        });
+                    });
+                });
+            </script>
             <!-- 페이지 내용 시작 -->
             <div class="container-fluid">
                 <!-- 페이지 제목 -->
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="filterInput" placeholder="이름, 학번 검색" style="max-width: 400px;">
+                        <div class="input-group-append ml-auto">
+                            <button class="btn btn-primary" type="button" id="addItemButton" style="border-radius: 10px; background: #2e59d9; border-color: #2e59d9"> 학생 추가 </button>
+                        </div>
+                    </div>
+                    <table id="sortable-table" class="table table-striped">
                         <thead class="thead-dark">
                         <tr>
-                            <th scope="col">번호</th>
-                            <th scope="col">이름</th>
-                            <th scope="col">학번</th>
-                            <th scope="col" class="d-none d-sm-table-cell">이메일</th>
-                            <th scope="col">역할</th>
-                            <th scope="col">권한</th>
+                            <th scope="col" style="cursor: pointer;">번호 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col" style="cursor: pointer;">이름 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col" style="cursor: pointer;">학번 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col" class="d-none d-sm-table-cell" style="cursor: pointer;">이메일 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col" style="cursor: pointer;">등록일 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="roleDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        역할
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="roleDropdown">
+                                        <a class="dropdown-item role-filter" href="#" data-role="">역할</a>
+                                        <a class="dropdown-item role-filter" href="#" data-role="STUDENT">학생</a>
+                                        <a class="dropdown-item role-filter" href="#" data-role="TA">조교</a>
+<!--                                        <a class="dropdown-item role-filter" href="#" data-role="PROFESSOR">교수</a>-->
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="permissionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        권한
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="permissionDropdown">
+                                        <a class="dropdown-item permission-filter" href="#" data-permission="">권한</a>
+                                        <a class="dropdown-item permission-filter" href="#" data-permission="APPROVED">입장</a>
+                                        <a class="dropdown-item permission-filter" href="#" data-permission="UNAPPROVED">미입장</a>
+                                        <a class="dropdown-item permission-filter" href="#" data-permission="BLOCKED">거절</a>
+                                    </div>
+                                </div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody th:if="${not #lists.isEmpty(memberLRooms)}">
@@ -326,20 +433,21 @@
                             <td th:text="${member.getClassHubMember().getMember_name()}"></td>
                             <td th:text="${member.getClassHubMember().getUniqueId()}"></td>
                             <td th:text="${member.getClassHubMember().getEmail()}" class="d-none d-sm-table-cell"></td>
+                            <td th:text="${#temporals.format(member.regDate, 'yyyy-MM-dd')}"></td>
                             <td>
                                 <input type="hidden" th:name="'id' + ${index.index}" th:value="${member.id}"/>
                                 <select class="form-control role-select" th:attr="name='role' + ${index.index}">
-                                    <option value="학생" th:selected="${member.role.getRole() == '학생'}">학생</option>
-                                    <option value="조교" th:selected="${member.role.getRole() == '조교'}">조교</option>
-                                    <option value="교수" th:selected="${member.role.getRole() == '교수'}">교수</option>
+                                    <option value="STUDENT" th:selected="${member.role.getRole() == '학생'}">학생</option>
+                                    <option value="TA" th:selected="${member.role.getRole() == '조교'}">조교</option>
+                                    <option value="PROFESSOR" th:selected="${member.role.getRole() == '교수'}">교수</option>
                                 </select>
                             </td>
                             <td>
                                 <input type="hidden" th:name="'id' + ${index.index}" th:value="${member.id}"/>
                                 <select class="form-control permission-select" th:attr="name='permission' + ${index.index}">
-                                    <option value="입장" th:selected="${member.permission.getPermission() == '입장'}">입장</option>
-                                    <option value="미입장" th:selected="${member.permission.getPermission() == '미입장'}">미입장</option>
-                                    <option value="거절" th:selected="${member.permission.getPermission() == '거절'}">거절</option>
+                                    <option value="APPROVED" th:selected="${member.permission.getPermission() == '입장'}">입장</option>
+                                    <option value="UNAPPROVED" th:selected="${member.permission.getPermission() == '미입장'}">미입장</option>
+                                    <option value="BLOCKED" th:selected="${member.permission.getPermission() == '거절'}">거절</option>
                                 </select>
                             </td>
                             <script th:inline="javascript">
