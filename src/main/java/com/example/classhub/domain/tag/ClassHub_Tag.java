@@ -33,16 +33,12 @@ public class ClassHub_Tag extends BaseEntity {
     @JoinColumn(name = "lRoomId")
     private ClassHub_LRoom lectureRoom;
 
-//    public void changeLecture(LectureRoom lectureRoom){ // Tag에서 lectureRoom을 변경해줄 때 해당 lectureRoom에서의 값을 변경
-//        lectureRoom.getTags().add(this);
-//        this.lectureRoom = lectureRoom;
-//    }
-
     public static ClassHub_Tag from(TagDto tagDto, ClassHub_LRoom lectureRoom, String newName) {
         return ClassHub_Tag.builder()
                 .name(newName)
                 .nan(tagDto.isNan())
                 .lectureRoom(lectureRoom)
+                .deleted(false)
                 .build();
     }
 

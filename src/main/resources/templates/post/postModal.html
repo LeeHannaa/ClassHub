@@ -39,7 +39,7 @@
                                 <th>키로 사용</th>
                                 <th>점수 여부</th>
                                 <th>태그 생성 여부</th>
-                                <th>중복 허용</th>
+                                <th>덮어쓰기</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -48,22 +48,28 @@
                                 <td th:text="${header}"></td>
                                 <td>
                                     <label>
-                                        <input type="radio" th:id="'keyRadio' + ${index.index}" th:name="'keyId'" th:value="${index.index}">
+                                        <input type="radio" th:id="'keyRadio' + ${index.index}" th:name="'keyId'" th:value="${index.index}"
+                                               th:checked="${#strings.contains(header, keyHeaderName)} ? 'checked' : null" th:disabled="!${#strings.contains(header, keyHeaderName)}">
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="checkbox" th:id="'scoreCheckbox' + ${index.index}" th:name="'isScore'" th:value="${index.index}">
+                                        <input type="checkbox" th:id="'scoreCheckbox' + ${index.index}" th:name="'isScore'" th:value="${index.index}"
+                                               th:checked="!${#strings.contains(header, '이름') or #strings.contains(header, '학번') or #strings.contains(header, '이메일')}"
+                                               th:disabled="${#strings.contains(header, keyHeaderName)}">
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="checkbox" th:id="'createCheckbox' + ${index.index}" th:name="'isSelected'" th:value="${index.index}">
+                                        <input type="checkbox" th:id="'createCheckbox' + ${index.index}" th:name="'isSelected'" th:value="${index.index}"
+                                               th:checked="!${#strings.contains(header, '이름') or #strings.contains(header, '학번') or #strings.contains(header, '이메일')}"
+                                               th:disabled="${#strings.contains(header, keyHeaderName)}">
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="checkbox" th:id="'duplicateCheckbox' + ${index.index}" th:name="'isCover'" th:value="${index.index}">
+                                        <input type="checkbox" th:id="'duplicateCheckbox' + ${index.index}" th:name="'isCover'" th:value="${index.index}"
+                                               th:disabled="${#strings.contains(header, keyHeaderName)}">
                                     </label>
                                 </td>
                             </tr>

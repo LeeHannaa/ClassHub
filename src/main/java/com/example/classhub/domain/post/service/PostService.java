@@ -61,20 +61,7 @@ public class PostService {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
 
-        List<String> headers = new ArrayList<>(records.get(0).toMap().keySet());
-        headers.sort(Comparator.comparingInt(this::getKoreanOrder));
-
-        return headers;
-    }
-
-    private int getKoreanOrder(String s) {
-        if (s == null || s.isEmpty()) return Integer.MAX_VALUE;
-        char c = s.charAt(0);
-        if (c >= '가' && c <= '힣') {
-            return (c - '가');
-        } else {
-            return c;
-        }
+        return new ArrayList<>(records.get(0).toMap().keySet());
     }
 
     @Transactional
@@ -82,8 +69,7 @@ public class PostService {
         List<String> headers = checkHeader(csvFile);
         StringBuilder tagIdsBuilder = new StringBuilder();
         List<CSVRecord> records = readCsvRecords(csvFile);
-        String keyHeaderName = headers.get(postDto.getKeyId().intValue());
-
+        String keyHeaderName = lRoom.getStudentInfoKey();
         for (Long selectedId : postDto.getIsSelected()) {
             String headerName = headers.get(selectedId.intValue());
             boolean isScoreTag = postDto.getIsScore().contains(selectedId);
