@@ -25,6 +25,7 @@ public class ClassHub_Tag extends BaseEntity {
 
     private String name;
     private boolean nan;
+    private int perfectScore = 100; // 만점 칼럼 : 기본값 100
 
     // 소프트 딜리트
     private boolean deleted = Boolean.FALSE;
@@ -38,6 +39,7 @@ public class ClassHub_Tag extends BaseEntity {
                 .name(newName)
                 .nan(tagDto.isNan())
                 .lectureRoom(lectureRoom)
+                .perfectScore(tagDto.getPerfectScore())
                 .deleted(false)
                 .build();
     }

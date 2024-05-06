@@ -77,6 +77,9 @@ public class DataDetailController {
 
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         model.addAttribute("tags", tagListResponse.getTags());
+
+        Integer perfectScore = tagService.getPerfectScoreByTagId(tagId); // 가정한 메서드 호출
+        model.addAttribute("perfectScore", perfectScore);
         return "./statistical/statisticalData";
     }
 }

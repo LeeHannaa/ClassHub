@@ -101,4 +101,11 @@ public class TagService {
             return TagDto.from(tag);  // 업데이트된 태그 정보 반환
         }
     }
+
+    @Transactional
+    public Integer getPerfectScoreByTagId(Long tagId) {
+        ClassHub_Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
+        return tag.getPerfectScore();
+    }
 }

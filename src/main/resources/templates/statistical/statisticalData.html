@@ -373,10 +373,12 @@
 
                         <!-- Area Chart -->
                         <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" class="card shadow mb-4" th:object="${dataStatistics}">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
-                            </div>
-                            <div class="card-body">
+                          <div class="card-header py-3 d-flex justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
+                            <h6 class="m-0 font-weight-bold text-primary" th:text="${perfectScore}">Perfect Score</h6>
+                          </div>
+
+                          <div class="card-body">
                                 <div class="chart-area">
                                     <canvas id="myAreaChart"></canvas>
                                 </div>
@@ -403,8 +405,6 @@
                                   <span id="minScore"></span>
                                 </div>
                               </div>
-
-
                             </div>
                         </div>
                         <div class="card shadow mb-4">

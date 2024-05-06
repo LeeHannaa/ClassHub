@@ -11,4 +11,5 @@ public class TagRequest {
     private String name;
     private Long lRoomId;
     private boolean nan;
+    private int perfectScore;
 }
