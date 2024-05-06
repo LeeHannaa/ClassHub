@@ -319,8 +319,8 @@
 
                 $(document).ready(function(){
                     $('.dropdown-menu a').on('click', function(){
-                        var text = $(this).text(); // 클릭된 드롭다운 항목의 텍스트 가져오기
-                        $(this).closest('.dropdown').find('button').text(text); // 버튼의 텍스트를 선택된 항목의 텍스트로 변경
+                        var text = $(this).text();
+                        $(this).closest('.dropdown').find('button').text(text);
                     });
                     // 역할 필터링
                     $('.role-filter').on('click', function(){
@@ -348,27 +348,64 @@
                         });
                     });
                 });
+
+                // Sort
+                $(document).ready(function(){
+                    $('#sortable-table th').each(function (column) {
+                        $(this).click(function() {
+                            if($(this).is('.asc')) {
+                                $(this).removeClass('asc');
+                                $(this).addClass('desc');
+                                sortdir=-1;
+
+                            } else {
+                                $(this).addClass('asc');
+                                $(this).removeClass('desc'); sortdir=1;
+                            }
+
+                            $(this).siblings().removeClass('asc');
+                            $(this).siblings().removeClass('desc');
+
+                            var rec = $('#sortable-table').find('tbody>tr').get();
+
+                            rec.sort(function (a, b) {
+                                var val1 = $(a).children('td').eq(column).text().toUpperCase();
+                                var val2 = $(b).children('td').eq(column).text().toUpperCase();
+                                return (val1 < val2)?-sortdir:(val1>val2)?sortdir:0;
+                            });
+
+                            $.each(rec, function(index, row) {
+                                $('#sortable-table tbody').append(row);
+                            });
+                        });
+                    });
+                });
             </script>
             <!-- 페이지 내용 시작 -->
             <div class="container-fluid">
                 <!-- 페이지 제목 -->
                 <div class="table-responsive">
-                    <input type="text" class="form-control mb-2" id="filterInput" placeholder="이름, 학번 검색" style="max-width: 400px;">
-                    <table class="table table-striped">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="filterInput" placeholder="이름, 학번 검색" style="max-width: 400px;">
+                        <div class="input-group-append ml-auto">
+                            <button class="btn btn-primary" type="button" id="addItemButton" style="border-radius: 10px; background: #2e59d9; border-color: #2e59d9"> 학생 추가 </button>
+                        </div>
+                    </div>
+                    <table id="sortable-table" class="table table-striped">
                         <thead class="thead-dark">
                         <tr>
-                            <th scope="col">번호</th>
-                            <th scope="col">이름</th>
-                            <th scope="col">학번</th>
-                            <th scope="col" class="d-none d-sm-table-cell">이메일</th>
-                            <th scope="col">등록일</th>
+                            <th scope="col" style="cursor: pointer;">번호 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col" style="cursor: pointer;">이름 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col" style="cursor: pointer;">학번 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col" class="d-none d-sm-table-cell" style="cursor: pointer;">이메일 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
+                            <th scope="col" style="cursor: pointer;">등록일 <i class="fa fa-sort ml-2" style="font-size: smaller;"></i> </th>
                             <th scope="col">
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="roleDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         역할
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="roleDropdown">
-                                        <a class="dropdown-item role-filter" href="#" data-role="">전체</a>
+                                        <a class="dropdown-item role-filter" href="#" data-role="">역할</a>
                                         <a class="dropdown-item role-filter" href="#" data-role="STUDENT">학생</a>
                                         <a class="dropdown-item role-filter" href="#" data-role="TA">조교</a>
 <!--                                        <a class="dropdown-item role-filter" href="#" data-role="PROFESSOR">교수</a>-->
@@ -381,7 +418,7 @@
                                         권한
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="permissionDropdown">
-                                        <a class="dropdown-item permission-filter" href="#" data-permission="">전체</a>
+                                        <a class="dropdown-item permission-filter" href="#" data-permission="">권한</a>
                                         <a class="dropdown-item permission-filter" href="#" data-permission="APPROVED">입장</a>
                                         <a class="dropdown-item permission-filter" href="#" data-permission="UNAPPROVED">미입장</a>
                                         <a class="dropdown-item permission-filter" href="#" data-permission="BLOCKED">거절</a>
