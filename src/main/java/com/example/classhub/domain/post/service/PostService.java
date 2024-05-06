@@ -30,10 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.input.BOMInputStream;
@@ -48,20 +45,17 @@ public class PostService {
     private final DataDetailService dataDetailService;
 
     public List<String> checkHeader(File file) {
-        List<CSVRecord> records = new ArrayList<>();
+        List<String> headers;
         try (FileInputStream fis = new FileInputStream(file);
              BOMInputStream bomInputStream = new BOMInputStream(fis, false);
              BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bomInputStream, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
-            for (CSVRecord record : csvParser) {
-                records.add(record);
-            }
+            headers = csvParser.getHeaderNames();
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
-
-        return new ArrayList<>(records.get(0).toMap().keySet());
+        return headers;
     }
 
     @Transactional
