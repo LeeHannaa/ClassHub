@@ -7,9 +7,11 @@ import com.example.classhub.domain.datadetail.controller.response.DataDetailList
 import com.example.classhub.domain.datadetail.controller.response.DataStatisticListResponse;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.service.DataDetailService;
+import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -77,6 +79,16 @@ public class DataDetailController {
 
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         model.addAttribute("tags", tagListResponse.getTags());
+
+        Integer perfectScore = tagService.getPerfectScoreByTagId(tagId); // 가정한 메서드 호출
+        model.addAttribute("perfectScore", perfectScore);
         return "./statistical/statisticalData";
     }
+
+  @PutMapping("/data-detail/statistics/{tagId}")
+  public ResponseEntity<?> updateTagPerfectScore(@PathVariable Long tagId,
+                                                 @RequestBody TagPerfectScoreUpdateRequest request) {
+    tagService.updatePerfectScore(tagId, request);
+    return ResponseEntity.ok().build(); // 성공적으로 업데이트된 경우, 200 OK 응답
+  }
 }
