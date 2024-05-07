@@ -375,7 +375,11 @@
                         <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" class="card shadow mb-4" th:object="${dataStatistics}">
                           <div class="card-header py-3 d-flex justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
-                            <h6 class="m-0 font-weight-bold text-primary" th:text="'총점 '+${perfectScore}"></h6>
+                            <div class="m-0 font-weight-bold text-primary">
+                              총점 : <span th:data-tag-id="${dataStatistics[0].tagId}" id="perfectScore" th:text="${perfectScore}" class="editable" contenteditable="true"></span>
+                            </div>
+
+
                           </div>
 
                           <div class="card-body">
@@ -429,9 +433,6 @@
                                 </tr>
                               </tbody>
                               <tfoot>
-<!--                                <tr>-->
-<!--                                  <td colspan="2">총 인원: <span th:text="${#lists.size(dataStatistics)}"></span></td>-->
-<!--                                </tr>-->
                               </tfoot>
                             </table>
                           </div>
@@ -588,13 +589,14 @@
 
     // 최고 점수
     function calculateMax(scores) {
-        return Math.max(...scores);
+      return parseFloat(Math.max(...scores).toFixed(1));
     }
 
     // 최저 점수
     function calculateMin(scores) {
-        return Math.min(...scores);
+      return parseFloat(Math.min(...scores).toFixed(1));
     }
+
     // 구간별 학생 수와 범위를 계산하는 함수
     function calculateSegmentInfo(scores) {
       var segmentCounts = new Array(11).fill(0); // 10점 간격으로 0부터 100까지이므로 10개의 구간
@@ -620,6 +622,35 @@
 
       return { segmentCounts: segmentCounts, segmentRanges: segmentRanges, maxStudents: maxStudents };
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const perfectScoreElement = document.getElementById('perfectScore');
+      perfectScoreElement.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // 엔터 키 기본 동작 방지
+          const tagId = this.getAttribute('data-tag-id'); // 데이터 속성에서 tagId 추출
+          const newScore = this.innerText; // 새로운 점수 값 읽기
+          updatePerfectScore(tagId, newScore); // AJAX 함수 호출
+        }
+      });
+    });
+
+    function updatePerfectScore(tagId, newScore) {
+      const xhr = new XMLHttpRequest();
+      const url = `/data-detail/statistics/${tagId}`; // URL 동적 생성
+      xhr.open('PUT', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          alert('점수가 성공적으로 업데이트되었습니다.');
+          window.location.reload(); // 페이지 새로고침
+        } else if (xhr.readyState === 4) {
+          alert('점수 업데이트에 실패했습니다.');
+        }
+      };
+      xhr.send(JSON.stringify({ perfectScore: newScore }));
+    }
+
 
 
 
