@@ -7,6 +7,7 @@ import com.example.classhub.domain.tag.dto.TagDto;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,10 +48,18 @@ public class TagController {
     @PostMapping("/tag/update/{tagId}")
     public ResponseEntity<String> updateTag(@PathVariable Long tagId, @RequestBody Map<String, String> requestBody) {
         String newTagName = requestBody.get("tagName");
-        // TagDto의 생성자를 이용하여 객체 생성 및 초기화
-        TagDto tagDto = new TagDto(tagId, newTagName);
-        tagService.update(tagId, tagDto); // 태그 업데이트 로직 수행
-        return ResponseEntity.ok(tagDto.getName());
+        String beforeTagName = tagService.findByTagId(tagId).getName();
+        //TODO: 동일한 tagName이 존재하는지 확인하는 쿼리 & 함수 구현
+        boolean isTagNameExists = true;
+//                tagService.isTagNameExists(newTagName);
+        if (isTagNameExists) {
+            return ResponseEntity.badRequest().body(beforeTagName);
+        } else {
+            // TagDto의 생성자를 이용하여 객체 생성 및 초기화
+            TagDto tagDto = new TagDto(tagId, newTagName);
+            tagService.update(tagId, tagDto); // 태그 업데이트 로직 수행
+            return ResponseEntity.ok(tagDto.getName());
+        }
     }
 
     @PostMapping("/tag/delete/{tagId}")

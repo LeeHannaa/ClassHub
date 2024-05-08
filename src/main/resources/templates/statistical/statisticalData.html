@@ -206,20 +206,28 @@
                         xhr.setRequestHeader('Content-Type', 'application/json');
                         xhr.onload = function () {
                             if (xhr.status === 200) {
-                                console.log('Tag updated successfully');
+                                // 태그가 성공적으로 업데이트되었을 때
+                                var responseData = JSON.parse(xhr.responseText);
+                                tagItem.textContent = responseData.tagName;
+                                tagItem.style.display = 'inline';
+                                dropdownItem.style.display = '';
+                            } else if (xhr.status === 400) {
+                                // 동일한 이름의 태그가 이미 존재할 때
+                                tagItem.textContent = xhr.responseText;
+                                tagItem.style.display = 'inline';
+                                dropdownItem.style.display = '';
+                                alert("동일한 이름의 태그가 이미 존재합니다.");
                             } else {
+                                // 다른 에러가 발생했을 때
                                 console.error('Failed to update tag. Status:', xhr.status);
                             }
                         };
+                        xhr.send(JSON.stringify({ tagName: newTagName }));
+                        console.log('New Tag Name:', newTagName);
+
+                        // 입력 필드 제거
+                        inputElement.parentNode.removeChild(inputElement);
                     }
-                    xhr.send(JSON.stringify({ tagName: newTagName }));
-                    console.log('New Tag Name:', newTagName);
-
-                    tagItem.textContent = newTagName;
-                    tagItem.style.display = 'inline';
-                    dropdownItem.style.display = '';
-
-                    inputElement.parentNode.removeChild(inputElement);
                 });
             }
         </script>
