@@ -5,8 +5,10 @@ import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.datadetail.controller.request.DataDetailCreateRequest;
 import com.example.classhub.domain.datadetail.controller.response.DataDetailListResponse;
 import com.example.classhub.domain.datadetail.controller.response.DataStatisticListResponse;
+import com.example.classhub.domain.datadetail.controller.response.DataStatisticResponse;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.service.DataDetailService;
+import com.example.classhub.domain.member.service.MemberService;
 import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
@@ -23,8 +25,9 @@ public class DataDetailController {
     private final DataDetailService dataDetailService;
     private final LectureRoomService lectureRoomService;
     private final TagService tagService;
+  private final MemberService memberService;
 
-    @GetMapping("/data-detail/dataDetailForm")
+  @GetMapping("/data-detail/dataDetailForm")
     public String createDataDetailForm(Model model){
         model.addAttribute("dataDetail", new DataDetailCreateRequest());
         return "dataDetailForm";
@@ -80,9 +83,16 @@ public class DataDetailController {
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         model.addAttribute("tags", tagListResponse.getTags());
 
-        Integer perfectScore = tagService.getPerfectScoreByTagId(tagId); // 가정한 메서드 호출
+        Integer perfectScore = tagService.getPerfectScoreByTagId(tagId);
         model.addAttribute("perfectScore", perfectScore);
-        return "./statistical/statisticalData";
+
+      for (DataStatisticResponse dataStatistic : dataStatisticListResponse.getDataStatistic()) {
+        String studentId = dataStatistic.getStudentNum(); // 타입 변환
+        String studentName = memberService.findNameByUniqueId(studentId); // 가정한 메서드 호출
+        dataStatistic.setName(studentName); // 이름 설정
+      }
+      model.addAttribute("dataStatisticList", dataStatisticListResponse.getDataStatistic());
+      return "./statistical/statisticalData";
     }
 
   @PutMapping("/data-detail/statistics/{tagId}")

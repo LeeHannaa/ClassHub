@@ -376,7 +376,7 @@
                           <div class="card-header py-3 d-flex justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
                             <div class="m-0 font-weight-bold text-primary">
-                              총점 : <span th:data-tag-id="${dataStatistics[0].tagId}" id="perfectScore" th:text="${perfectScore}" class="editable" contenteditable="true"></span>
+                              만점 : <span th:data-tag-id="${dataStatistics[0].tagId}" id="perfectScore" th:text="${perfectScore}" class="editable" contenteditable="true"></span>
                             </div>
 
 
@@ -421,14 +421,14 @@
                               <thead>
                                 <tr>
                                   <th>학번</th>
-                                  <!-- <th>이름</th> -->
+<!--                                  <th>이름</th>-->
                                   <th>점수</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr th:each="data : ${dataStatistics}">
                                   <td th:text="${data.studentNum}"></td>
-                                  <!-- <td th:text="${data.studentName}"></td> -->
+<!--                                   <td th:text="${dataStatisticList}"></td>-->
                                   <td th:text="${data.score}"></td>
                                 </tr>
                               </tbody>
@@ -642,7 +642,7 @@
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-          alert('점수가 성공적으로 업데이트되었습니다.');
+          console.log('점수가 성공적으로 업데이트되었습니다.');
           window.location.reload(); // 페이지 새로고침
         } else if (xhr.readyState === 4) {
           alert('점수 업데이트에 실패했습니다.');

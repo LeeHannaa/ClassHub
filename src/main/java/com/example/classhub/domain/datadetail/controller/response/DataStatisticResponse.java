@@ -4,10 +4,12 @@ import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class DataStatisticResponse {
     private Long id;
@@ -17,6 +19,7 @@ public class DataStatisticResponse {
     private Long tagId;
     private String tagName;
     private Long lRoomId;
+    private String name;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 
