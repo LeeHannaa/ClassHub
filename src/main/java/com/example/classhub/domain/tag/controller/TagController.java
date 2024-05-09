@@ -48,10 +48,10 @@ public class TagController {
     @PostMapping("/tag/update/{tagId}")
     public ResponseEntity<String> updateTag(@PathVariable Long tagId, @RequestBody Map<String, String> requestBody) {
         String newTagName = requestBody.get("tagName");
+        Long lRoomIdByTag = tagService.findLRoomIdByTagId(tagId);
         String beforeTagName = tagService.findByTagId(tagId).getName();
-        //TODO: 동일한 tagName이 존재하는지 확인하는 쿼리 & 함수 구현
-        boolean isTagNameExists = true;
-//                tagService.isTagNameExists(newTagName);
+        boolean isTagNameExists = tagService.isTagNameExists(newTagName, lRoomIdByTag);
+
         if (isTagNameExists) {
             return ResponseEntity.badRequest().body(beforeTagName);
         } else {

@@ -83,22 +83,25 @@
                         </div>
                     </div>
                     <div id="tagList">
-                        <div class="collapse-item d-flex align-items-center justify-content-between" id="tagContainer" th:each="tag : ${tags}">
-                            <div class = "tagNameDiv">
-                                <a class="item" th:id="'tagItem_' + ${tag.tagId}" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:text="${tag.name}" style="text-decoration: none; color: inherit;"></a>
+                        <div id="tagContainer" th:each="tag : ${tags}">
+                            <div class="collapse-item d-flex align-items-center justify-content-between">
+                                <div class = "tagNameDiv">
+                                    <a class="item" th:id="'tagItem_' + ${tag.tagId}" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:text="${tag.name}" style="text-decoration: none; color: inherit;"></a>
+                                </div>
+                                <div class="dropdown" th:id="'dropdownItem_' + ${tag.tagId}">
+                                    <button class="btn btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <!-- 세 개의 점 아이콘 -->
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <!-- 수정 옵션 -->
+                                        <button class="dropdown-item edit-tag" data-tagid="${tag.tagId}" data-tagname="${tag.name}" th:onclick="'clickTagUpdate(\'' + ${tag.tagId} + '\')'">수정</button>
+                                        <!-- 삭제 옵션 -->
+                                        <button class="dropdown-item delete-tag" data-tagid="${tag.tagId}" data-toggle="modal" data-target="#TagDeleteModal" th:onclick="'setDeleteTagId(\'' + ${tag.tagId} + '\')'">삭제</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="dropdown" th:id="'dropdownItem_' + ${tag.tagId}">
-                                <button class="btn btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <!-- 세 개의 점 아이콘 -->
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <!-- 수정 옵션 -->
-                                    <button class="dropdown-item edit-tag" data-tagid="${tag.tagId}" data-tagname="${tag.name}" th:onclick="'clickTagUpdate(\'' + ${tag.tagId} + '\')'">수정</button>
-                                    <!-- 삭제 옵션 -->
-                                    <button class="dropdown-item delete-tag" data-tagid="${tag.tagId}" data-toggle="modal" data-target="#TagDeleteModal" th:onclick="'setDeleteTagId(\'' + ${tag.tagId} + '\')'">삭제</button>
-                            </div>
-                            </div>
+                            <p class="duplicationTag ml-3" th:id="'duplicationTag_' + ${tag.tagId}" style="color: red; display:none;">중복되는 태그 이름입니다.</p>
                         </div>
                     </div>
                 </div>
@@ -175,7 +178,7 @@
             function clickTagUpdate(tagId) {
                 // 해당 태그 아이디의 <a> 태그를 찾습니다.
                 var tagItem = document.getElementById('tagItem_' + tagId);
-
+                var duplicationTag = document.getElementById('duplicationTag_' + tagId);
                 // 해당 태그 아이디의 <div> 태그를 찾습니다.
                 var dropdownItem = document.getElementById('dropdownItem_' + tagId);
 
@@ -187,7 +190,6 @@
                 inputElement.setAttribute('type', 'text');
                 inputElement.setAttribute('value', tagName);
                 inputElement.setAttribute('id', 'tagInput_' + tagId);
-
                 // 이전 태그를 숨깁니다.
                 tagItem.style.display = 'none';
                 // 해당 dropdownItem을 숨깁니다.
@@ -206,17 +208,20 @@
                         xhr.setRequestHeader('Content-Type', 'application/json');
                         xhr.onload = function () {
                             if (xhr.status === 200) {
-                                // 태그가 성공적으로 업데이트되었을 때
-                                var responseData = JSON.parse(xhr.responseText);
-                                tagItem.textContent = responseData.tagName;
-                                tagItem.style.display = 'inline';
-                                dropdownItem.style.display = '';
+                                // 태그가 성공적으로 업데이트되었을 때 리로드
+                                location.reload();
+
                             } else if (xhr.status === 400) {
                                 // 동일한 이름의 태그가 이미 존재할 때
                                 tagItem.textContent = xhr.responseText;
                                 tagItem.style.display = 'inline';
                                 dropdownItem.style.display = '';
-                                alert("동일한 이름의 태그가 이미 존재합니다.");
+                                //중복 태그 경고
+                                duplicationTag.style.display = 'inline';
+                                setTimeout(function() {
+                                    duplicationTag.style.display = 'none';
+                                }, 2000);
+                                // alert("동일한 이름의 태그가 이미 존재합니다. 다른 이름으로 태그를 변경해주세요.");
                             } else {
                                 // 다른 에러가 발생했을 때
                                 console.error('Failed to update tag. Status:', xhr.status);

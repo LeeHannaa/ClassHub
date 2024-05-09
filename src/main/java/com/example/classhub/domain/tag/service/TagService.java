@@ -65,6 +65,21 @@ public class TagService {
                 .orElseThrow(()-> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
         return TagDto.from(tag);
     }
+
+    @Transactional
+    public Long findLRoomIdByTagId(Long tagId){
+        ClassHub_Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(()-> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
+        return TagDto.from(tag).getLRoomId();
+    }
+
+    @Transactional
+    public boolean isTagNameExists(String tagName, Long lRoomId) {
+        // 태그 이름으로 데이터베이스에서 태그를 찾음
+        ClassHub_Tag tag = tagRepository.findByNameAndLectureRoom_LRoomId(tagName, lRoomId);
+        return tag != null;
+    }
+
     @Transactional
     public TagDto update(Long tagId, TagDto tagDto){
         ClassHub_Tag tag = tagRepository.findById(tagId)
@@ -77,10 +92,10 @@ public class TagService {
     @Transactional
     public void tagDelete(Long tagId){tagRepository.deleteById(tagId);}
 
-    public TagDto findByName(String name) {
-        ClassHub_Tag tag = tagRepository.findByName(name);
-        return TagDto.from(tag);
-    }
+//    public TagDto findByName(String name) {
+//        ClassHub_Tag tag = tagRepository.findByName(name);
+//        return TagDto.from(tag);
+//    }
 
     @Transactional
     public TagDto createOrUpdateTag(TagDto tagDto, boolean isCover, Long lRoomId) {
