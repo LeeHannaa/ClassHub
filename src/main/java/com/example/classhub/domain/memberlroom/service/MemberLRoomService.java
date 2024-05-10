@@ -92,6 +92,17 @@ public class MemberLRoomService {
     return s;
   }
 
+  public void createMemberByOne(Long lRoomId, ClassHub_MemberLRoom classHubMemberLRoom, ClassHub_Member classHubMember) {
+    //ToDo:
+    // 1. 해당 강의실에 classHubMember와 같은 학번 가진 학생 있는지 파악
+      // 1-1. 있다면 추가 불가능 사인 보내주기
+      // 1-2. 없다면 ClassHub_Member에서 해당 학생 id 찾아오기
+    // 2. ClassHub_Member에서 해당 학생 id가 없다면 classHubMember와 관련해서 추가해주기
+    // 3. ClassHub_Member에서 해당 학생 id가 있다면 그 id만 가져오기
+    // 4. 가져온 id를 바탕으로 ClassHub_MemberLRoom추가하기
+    
+  }
+
   @Transactional
   public void createMemberLRoom(Long lRoomId, MultipartFile studentFile) {
     ClassHub_LRoom lRoom = lectureRoomService.findExistingLectureRoom(lRoomId);

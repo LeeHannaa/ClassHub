@@ -2,6 +2,7 @@ package com.example.classhub.domain.memberlroom.controller;
 
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
+import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
@@ -37,6 +38,12 @@ public class MemberLRoomController {
   public String createMemberLRoom(@ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom) {
     memberLRoomService.createMemberLRoom(classHubMemberLRoom);
     return "redirect:/memberlroom";
+  }
+
+  @PostMapping("/memberlroom/create/one/{lectureRoomId}")
+  public String createMemberByOne(@PathVariable Long lectureRoomId, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom, @ModelAttribute ClassHub_Member classHubMember) {
+    memberLRoomService.createMemberByOne(lectureRoomId, classHubMemberLRoom, classHubMember);
+    return "redirect:/memberList";
   }
 
   // Read All
