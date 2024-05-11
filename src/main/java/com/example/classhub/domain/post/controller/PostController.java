@@ -4,6 +4,7 @@ import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.post.controller.request.PostCheckRequest;
 import com.example.classhub.domain.post.controller.request.PostCreateRequest;
+import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
 import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.service.PostService;
@@ -105,9 +106,10 @@ public class PostController {
     }
 
     @PostMapping("/post/updateForm/{postId}")
-    public String update(@ModelAttribute("postId") Long postId, @ModelAttribute("post") PostCreateRequest request) {
+    public String update(@PathVariable Long postId, @ModelAttribute("post") PostUpdateRequest request) {
         postService.update(postId, PostDto.from(request));
-        return "redirect:/post";
+        Long lectureRoomId = postService.findByPostId(postId).getLRoomId();
+        return "redirect:/lecture-room/detail/" + lectureRoomId;
     }
 
     @GetMapping("/post/delete/{postId}")

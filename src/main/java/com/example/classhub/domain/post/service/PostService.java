@@ -172,7 +172,7 @@ public class PostService {
   @Transactional
     public PostDto findByPostId(Long postId) {
         ClassHub_Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
-        return PostDto.from(post);
+        return PostDto.from(post, tagService);
     }
     @Transactional
     public void update(Long postId, PostDto from) {
@@ -184,11 +184,11 @@ public class PostService {
     public void delete(Long postId) {
         postRepository.deleteById(postId);
     }
-
+    @Transactional
     public List<PostDto> getPostListByLectureRoomId(Long lRoomId) {
         List<ClassHub_Post> posts = postRepository.findBylRoom_lRoomId(lRoomId);
         return posts.stream()
-                .map(PostDto::from)
+                .map(post -> PostDto.from(post, tagService))
                 .collect(Collectors.toList());
     }
 }
