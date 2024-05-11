@@ -172,7 +172,7 @@ public class PostService {
   @Transactional
     public PostDto findByPostId(Long postId) {
         ClassHub_Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
-        return PostDto.from(post);
+        return PostDto.from(post, tagService);
     }
     @Transactional
     public void update(Long postId, PostDto from) {

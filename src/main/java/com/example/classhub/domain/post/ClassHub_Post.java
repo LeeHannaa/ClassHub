@@ -52,9 +52,8 @@ public class ClassHub_Post extends BaseEntity {
                 .build();
     }
 
-    public void update(PostDto from) {
-        this.postTitle = from.getPostTitle();
-        this.postContent = from.getPostContent();
-        this.tagId = from.getTagId();
+    public void update(PostDto postDto) {
+        this.postTitle = postDto.getPostTitle();
+        this.postContent = postDto.getPostContent();
     }
 }

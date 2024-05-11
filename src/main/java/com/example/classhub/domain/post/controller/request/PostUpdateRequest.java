@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class PostUpdateRequest {
     private String postTitle;
     private String postContent;
-    private String tagId;
 }

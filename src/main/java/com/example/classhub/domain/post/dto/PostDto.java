@@ -57,7 +57,6 @@ public class PostDto {
         return PostDto.builder()
                 .postTitle(postUpdateRequest.getPostTitle())
                 .postContent(postUpdateRequest.getPostContent())
-                .tagId(postUpdateRequest.getTagId())
                 .build();
     }
 
