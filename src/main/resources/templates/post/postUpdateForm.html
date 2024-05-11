@@ -12,7 +12,7 @@
   <h1>게시물 수정 페이지</h1>
   <hr>
 
-  <a th:href="@{/post/postList}" class="btn btn-primary">게시물 목록으로 돌아가기</a>
+  <a th:href="@{/lecture-room/detail/{lRoomId}(lRoomId=${post.getLRoomId()})}" class="btn btn-primary">게시물 목록으로 돌아가기</a>
 
   <hr>
 
