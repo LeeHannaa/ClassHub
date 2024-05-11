@@ -184,11 +184,11 @@ public class PostService {
     public void delete(Long postId) {
         postRepository.deleteById(postId);
     }
-
+    @Transactional
     public List<PostDto> getPostListByLectureRoomId(Long lRoomId) {
         List<ClassHub_Post> posts = postRepository.findBylRoom_lRoomId(lRoomId);
         return posts.stream()
-                .map(PostDto::from)
+                .map(post -> PostDto.from(post, tagService))
                 .collect(Collectors.toList());
     }
 }

@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,5 +101,23 @@ public class TagService {
             }
             return TagDto.from(tag);  // 업데이트된 태그 정보 반환
         }
+    }
+
+    @Transactional
+    public String getTagNamesByIds(String tagIds) {
+        if (tagIds == null || tagIds.isEmpty()) {
+            return "";
+        }
+
+        String[] tagIdArr = tagIds.split(",");
+        List<Long> tagIdList = Arrays.stream(tagIdArr)
+                .map(String::trim)
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        List<ClassHub_Tag> tags = tagRepository.findByTagIdIn(tagIdList);
+        return tags.stream()
+                .map(ClassHub_Tag::getName)
+                .collect(Collectors.joining(","));
     }
 }
