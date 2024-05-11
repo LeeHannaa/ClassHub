@@ -21,6 +21,6 @@ public interface TagRepository extends JpaRepository<ClassHub_Tag, Long> {
 
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM ClassHub_Tag t WHERE t.name = :name AND t.lectureRoom.lRoomId = :lRoomId")
     boolean existsByNameAndLectureRoom_LRoomId(@Param("name") String name, @Param("lRoomId") Long lRoomId);
-
+  
     List<ClassHub_Tag> findByTagIdIn(List<Long> tagIdList);
 }

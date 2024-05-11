@@ -4,10 +4,7 @@ import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.tag.dto.TagDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -25,6 +22,8 @@ public class ClassHub_Tag extends BaseEntity {
 
     private String name;
     private boolean nan;
+    @Setter
+    private int perfectScore = 100; // 만점 칼럼 : 기본값 100
 
     // 소프트 딜리트
     private boolean deleted = Boolean.FALSE;
@@ -38,6 +37,7 @@ public class ClassHub_Tag extends BaseEntity {
                 .name(newName)
                 .nan(tagDto.isNan())
                 .lectureRoom(lectureRoom)
+                .perfectScore(tagDto.getPerfectScore())
                 .deleted(false)
                 .build();
     }
@@ -52,5 +52,6 @@ public class ClassHub_Tag extends BaseEntity {
     public void update(TagDto tagDto) {
         this.name = tagDto.getName();
     }
+
 }
 

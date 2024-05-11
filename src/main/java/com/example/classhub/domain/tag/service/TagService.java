@@ -4,10 +4,12 @@ package com.example.classhub.domain.tag.service;
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
 import com.example.classhub.domain.tag.ClassHub_Tag;
+import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.controller.response.TagResponse;
 import com.example.classhub.domain.tag.dto.TagDto;
 import com.example.classhub.domain.tag.repository.TagRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -120,4 +122,20 @@ public class TagService {
                 .map(ClassHub_Tag::getName)
                 .collect(Collectors.joining(","));
     }
+    public Integer getPerfectScoreByTagId(Long tagId) {
+        ClassHub_Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
+        return tag.getPerfectScore();
+    }
+
+  @Transactional
+  public void updatePerfectScore(Long tagId, TagPerfectScoreUpdateRequest request) {
+    // 태그를 ID로 찾아옵니다. 찾지 못할 경우 예외를 발생시킵니다.
+    ClassHub_Tag tag = tagRepository.findById(tagId)
+      .orElseThrow(() -> new EntityNotFoundException("Tag not found with id: " + tagId));
+
+    // 만점(perfectScore)를 업데이트합니다.
+    tag.setPerfectScore(request.getPerfectScore());
+
+  }
 }

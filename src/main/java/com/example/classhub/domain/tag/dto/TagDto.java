@@ -17,12 +17,14 @@ public class TagDto {
     private String name;
     private Long lRoomId;
     private boolean nan;
+    private int perfectScore;
 
     public static TagDto from(TagRequest request){
         return TagDto.builder()
                 .name(request.getName())
                 .lRoomId(request.getLRoomId())
                 .nan(request.isNan())
+                .perfectScore(request.getPerfectScore())
                 .build();
     }
     public TagDto(Long id, String name) {
