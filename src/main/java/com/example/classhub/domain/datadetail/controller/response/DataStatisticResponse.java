@@ -2,6 +2,8 @@ package com.example.classhub.domain.datadetail.controller.response;
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
+import com.example.classhub.domain.member.ClassHub_Member;
+import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

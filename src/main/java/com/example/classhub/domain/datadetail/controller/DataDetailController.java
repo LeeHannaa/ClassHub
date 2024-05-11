@@ -25,7 +25,7 @@ public class DataDetailController {
     private final DataDetailService dataDetailService;
     private final LectureRoomService lectureRoomService;
     private final TagService tagService;
-  private final MemberService memberService;
+    private final MemberService memberService;
 
   @GetMapping("/data-detail/dataDetailForm")
     public String createDataDetailForm(Model model){
@@ -86,12 +86,6 @@ public class DataDetailController {
         Integer perfectScore = tagService.getPerfectScoreByTagId(tagId);
         model.addAttribute("perfectScore", perfectScore);
 
-      for (DataStatisticResponse dataStatistic : dataStatisticListResponse.getDataStatistic()) {
-        String studentId = dataStatistic.getStudentNum(); // 타입 변환
-        String studentName = memberService.findNameByUniqueId(studentId); // 가정한 메서드 호출
-        dataStatistic.setName(studentName); // 이름 설정
-      }
-      model.addAttribute("dataStatisticList", dataStatisticListResponse.getDataStatistic());
       return "./statistical/statisticalData";
     }
 

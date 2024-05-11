@@ -63,7 +63,6 @@ public class DataDetailService {
         return DataDetailDto.from(dataDetail);
     }
 
-
     //statistics
     @Transactional
     public DataStatisticListResponse getDataStatisticsList(Long tagId) {

@@ -421,15 +421,19 @@
                               <thead>
                                 <tr>
                                   <th>학번</th>
-<!--                                  <th>이름</th>-->
+                                  <th>이름</th>
                                   <th>점수</th>
+                                  <th>생성일</th>
+                                  <th>수정일</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr th:each="data : ${dataStatistics}">
                                   <td th:text="${data.studentNum}"></td>
-<!--                                   <td th:text="${dataStatisticList}"></td>-->
+                                   <td th:text="${data.stname}"></td>
                                   <td th:text="${data.score}"></td>
+                                  <td th:text="${#temporals.format(data.regDate, 'yyyy/MM/dd')}"></td>
+                                  <td th:text="${#temporals.format(data.modDate, 'yyyy/MM/dd')}"></td>
                                 </tr>
                               </tbody>
                               <tfoot>
