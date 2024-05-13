@@ -79,24 +79,12 @@ public class PostController {
         return "redirect:/lecture-room/detail/" + lRoomId;
     }
 
-
-    @GetMapping("/post")
-    public String findPostList(Model model,
-                               @RequestParam(value = "page", defaultValue = "0") int page,
-                               @RequestParam(value = "size", defaultValue = "5") int size) {
-        PostListResponse postListResponse = postService.getPostList(page, size);
-        model.addAttribute("posts", postListResponse.getPosts());
-        model.addAttribute("totalPages", postListResponse.getTotalPages());
-        model.addAttribute("currentPage", postListResponse.getCurrentPage());
-        return "post/postList"; // Thymeleaf 파일 경로 수정
-    }
     @GetMapping("/post/{lRoomId}")
     public String findPostListByLectureRoomId(@PathVariable Long lRoomId, Model model) {
         List<PostDto> postList = postService.getPostListByLectureRoomId(lRoomId);
         model.addAttribute("posts", postList);
         return "post/postList"; // Thymeleaf 파일 경로 수정
     }
-
 
     @GetMapping("/post/updateForm/{postId}")
     public String updateForm(@ModelAttribute("postId") Long postId, Model model) {

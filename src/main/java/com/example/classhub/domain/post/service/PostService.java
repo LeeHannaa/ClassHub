@@ -157,19 +157,6 @@ public class PostService {
     }
 
   @Transactional
-  public PostListResponse getPostList(int page, int size){
-    Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
-    Page<ClassHub_Post> posts = postRepository.findAll(pageable);
-
-    List<PostResponse> postResponses = posts.getContent().stream()
-      .map(PostResponse::new)
-      .collect(Collectors.toList());
-
-    return new PostListResponse(postResponses, posts.getTotalPages(), posts.getNumber());
-  }
-
-
-  @Transactional
     public PostDto findByPostId(Long postId) {
         ClassHub_Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
         return PostDto.from(post, tagService);
@@ -190,5 +177,16 @@ public class PostService {
         return posts.stream()
                 .map(post -> PostDto.from(post, tagService))
                 .collect(Collectors.toList());
+    }
+    @Transactional
+    public PostListResponse getPostListByLectureRoomId(Long lRoomId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
+        Page<ClassHub_Post> postPage = postRepository.findBylRoom_lRoomId(lRoomId, pageable);
+
+        List<PostDto> postDtos = postPage.getContent().stream()
+                .map(post -> PostDto.from(post, tagService))
+                .collect(Collectors.toList());
+
+        return new PostListResponse(postDtos, postPage.getTotalPages(), postPage.getNumber());
     }
 }

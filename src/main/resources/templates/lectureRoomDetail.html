@@ -337,27 +337,27 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div class="row">-->
-<!--                        <div class="col">-->
-<!--                            <nav aria-label="Page navigation example">-->
-<!--                                <ul class="pagination">-->
-<!--                                    <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="page-item">-->
-<!--                                        <a class="page-link" th:href="@{/post(page=${currentPage - 1})}" aria-label="Previous">-->
-<!--                                            <span aria-hidden="true">&laquo;</span>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">-->
-<!--                                        <a class="page-link" th:href="@{/post(page=${pageNum})}" th:text="${pageNum + 1}">1</a>-->
-<!--                                    </li>-->
-<!--                                    <li th:classappend="${currentPage + 1 == totalPages} ? 'disabled' : ''" class="page-item">-->
-<!--                                        <a class="page-link" th:href="@{/post(page=${currentPage + 1})}" aria-label="Next">-->
-<!--                                            <span aria-hidden="true">&raquo;</span>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                </ul>-->
-<!--                            </nav>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="row">
+                        <div class="col">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="page-item">
+                                        <a class="page-link" th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${currentPage - 1})}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">
+                                        <a class="page-link" th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${pageNum})}" th:text="${pageNum + 1}">1</a>
+                                    </li>
+                                    <li th:classappend="${currentPage + 1 == totalPages} ? 'disabled' : ''" class="page-item">
+                                        <a class="page-link" th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${currentPage + 1})}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                     </div>
                         <a id="createPostButton" th:href="@{/post/postForm(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-success fixed-bottom-right">게시물 등록</a>
                     </div>
