@@ -11,6 +11,7 @@
 
   <title>ClassHub</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Custom fonts for this template-->
   <!--    <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />-->
@@ -51,6 +52,33 @@
 
     .tooltip.bs-tooltip-left .arrow::before {
       border-left-color: #5a5a5a; /* 화살표 색상 왼쪽 배치 툴팁에 대한 조정 */
+    }
+
+    .accordion-button {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%; /* 버튼의 전체 너비를 사용 */
+    }
+
+    .accordion-button > span {
+      flex-shrink: 0;
+    }
+    #statistics {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stat-item {
+      text-align: center;
+      margin: 0 auto;
+    }
+    .stat-value {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    .stat-label {
+      font-size: 0.9em;
     }
   </style>
 </head>
@@ -181,8 +209,6 @@
               <a class="dropdown-item text-center small text-gray-500" href="#">모든 알림 보기</a>
             </div>
           </li>
-
-
           <!-- Nav Item - User Information -->
           <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -200,19 +226,219 @@
               </a>
             </div>
           </li>
-
         </ul>
-
       </nav>
       <!-- End of Topbar -->
 
       <!-- Begin Page Content -->
       <div class="container-fluid">
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">강의실 리스트</h1>
+        <h1 class="h3 mb-4 text-gray-800">학생 View</h1>
+        <div style="width:60%;margin:15px auto;">
+          <canvas id="scoreChart"></canvas>
+        </div>
+        <div class="accordion" id="accordionPanelsStayOpenExample" style="width: 60%; margin: 15px auto;">
+          <!-- 중간고사 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header d-flex justify-content-between">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                중간고사
+                <span style="margin: 0 1rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                  </svg>
+                  <span style="color: red;">7%</span>
+                </span>
+                <small class="text-muted" style="flex-shrink: 0;"> (최근 수정일: 2024-05-10)</small>
+              </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+              </div>
+            </div>
+          </div>
+          <!-- 퀴즈1 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header d-flex justify-content-between">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                퀴즈1
+                <span style="margin: 0 1rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                  </svg>
+                  <span style="color: red;">8%</span>
+                </span>
+                <small class="text-muted" style="flex-shrink: 0;"> (최근 수정일: 2024-05-10)</small>
+              </button>
+            </h2>
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+              </div>
+            </div>
+          </div>
+          <!-- 퀴즈2 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header d-flex justify-content-between">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                퀴즈2
+                <span id="scoreDifference" style="margin: 0 1rem;"></span>
+                <small class="text-muted" style="flex-shrink: 0;"> (최근 수정일: 2024-05-10)</small>
+              </button>
+            </h2>
+            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <canvas id="myChart" width="400" height="100"></canvas>
+                <div id="statistics"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script th:inline="javascript">
+          /*<![CDATA[*/
+          var ctx = document.getElementById('scoreChart').getContext('2d');
+          var scoreChart = new Chart(ctx, {
+            type: 'bar', // 차트의 종류를 막대 그래프로 설정
+            data: {
+              labels: ['중간고사', '퀴즈1', '퀴즈2'], // X축 레이블
+              datasets: [{
+                label: '분반 평균 점수',
+                data: [75, 80, 50], // 분반 평균 점수 데이터
+                backgroundColor: 'rgba(54, 162, 235, 0.2)', // 파란색
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+              }, {
+                label: '나의 점수',
+                data: [82, 88, 70], // 나의 점수 데이터
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // 녹색
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true, // Y축을 0부터 시작
+                  max: 100 // Y축 최대 값을 100으로 설정
+                }
+              }
+            }
+          });
+          /*]]>*/
+        </script>
+        <script th:inline="javascript">
+          /*<![CDATA[*/
+          var scores = [    5, 10, 15, 20, 25, 30, 35, 40, 45, 50,
+                            55, 60, 65, 70, 75, 80, 85, 90, 92, 94,
+                            96, 98, 70, 72, 74, 76, 78, 82, 84, 86  ];
+          var perfectScore = 100; // 최고 점수
+          var myScore = 78; // 본인의 점수
+          var myScorePercentage = (myScore / perfectScore) * 100; // 본인의 점수를 백분율로 변환
+
+          // 점수를 백분율로 변환하는 함수
+          var convertScoresToPercentages = (scores, perfectScore) => scores.map(score => (score / perfectScore) * 100);
+
+          // 점수 분포 계산
+          var scoreDistribution = Array(10).fill(0); // 10개 구간으로 수정
+          convertScoresToPercentages(scores, perfectScore).forEach(scorePercentage => {
+            scoreDistribution[Math.floor((scorePercentage-1) / 10)]++; // 백분율을 기준으로 점수 분포 계산
+          });
+
+          // 점수 분포 데이터셋 생성
+          var distributionDataset = {
+            label: '점수 분포',
+            data: scoreDistribution,
+            backgroundColor: scoreDistribution.map((_, index) =>
+              Math.floor((myScorePercentage-1) / 10) === index ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)'
+            ),
+            borderColor: scoreDistribution.map((_, index) =>
+              Math.floor((myScorePercentage-1) / 10) === index ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)'
+            ),
+            borderWidth: 1,
+            type: 'bar'
+          };
+
+          // 혼합 차트 생성
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var mixedChart = new Chart(ctx, {
+            data: {
+              labels: Array.from({length: 10}, (_, i) => `${i*10+1}~${i*10+10}`), // X 축 레이블 수정
+              datasets: [distributionDataset]
+            },
+            options: {
+              scales: {
+                x: {
+                  display: true,
+                  title: {
+                    display: true,
+                    text: '점수 범위 (%)'
+                  }
+                },
+                y: {
+                  beginAtZero: true,
+                  suggestedMax: Math.max(...scoreDistribution) + 1, // Y축 최대값 조정
+                  title: {
+                    display: true,
+                    text: '인원 수'
+                  }
+                }
+              }
+            }
+          });
+
+          // 통계 정보 계산 및 표시 함수 내부에 상위 퍼센티지 계산 로직 추가
+          var calculateStatistics = () => {
+            var percentages = convertScoresToPercentages(scores, perfectScore);
+            var maxPercentage = Math.max(...percentages);
+            var minPercentage = Math.min(...percentages);
+            var nonZeroPercentages = percentages.filter(score => score > 0);
+            var nonZeroAverage = nonZeroPercentages.reduce((acc, score) => acc + score, 0) / nonZeroPercentages.length;
+            var overallAverage = percentages.reduce((acc, score) => acc + score, 0) / scores.length;
+            var variance = nonZeroPercentages.reduce((acc, score) => acc + Math.pow(score - nonZeroAverage, 2), 0) / nonZeroPercentages.length;
+            var stdDeviation = Math.sqrt(variance);
+
+            // 본인 점수가 상위 몇 퍼센트인지 계산
+            var scoresHigherThanMine = percentages.filter(score => score > myScorePercentage).length;
+            var percentileRank = ((percentages.length - scoresHigherThanMine) / percentages.length) * 100;
+
+            // 본인 점수와 전체 평균 점수의 차이 계산
+            var scoreDifference = myScorePercentage - overallAverage;
+
+            // 점수 차이를 표시할 요소 선택
+            var scoreDifferenceElement = document.getElementById('scoreDifference');
+
+            // 점수 차이에 따라 다른 텍스트 및 스타일 적용
+            if (scoreDifference < 0) {
+              scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-down-fill" viewBox="0 0 16 16">\n' +
+                '                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>\n' +
+                '                  </svg><span style="color: red;">' + Math.abs(scoreDifference).toFixed(2) + '%</span>';
+              // 여기서 <svg ...></svg>는 음수일 때 표시할 아이콘의 SVG 코드입니다.
+            } else {
+              scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-caret-down-fill" viewBox="0 0 16 16">\n' +
+                '                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>\n' +
+                '                  </svg><span style="color: blue;">' + scoreDifference.toFixed(2) + '%</span>';
+              // 여기서 <svg ...></svg>는 양수일 때 표시할 아이콘의 SVG 코드입니다.
+            }
+
+            document.getElementById('statistics').innerHTML = `
+              <div class="stat-item"><span class="stat-value">${maxPercentage.toFixed(2)}%</span><br><span class="stat-label">최대값</span></div>
+              <div class="stat-item"><span class="stat-value">${minPercentage.toFixed(2)}%</span><br><span class="stat-label">최소값</span></div>
+              <div class="stat-item"><span class="stat-value">${nonZeroAverage.toFixed(2)}%</span><br><span class="stat-label">평균(0점 제외)</span></div>
+              <div class="stat-item"><span class="stat-value">${overallAverage.toFixed(2)}%</span><br><span class="stat-label">전체 평균</span></div>
+              <div class="stat-item"><span class="stat-value">${stdDeviation.toFixed(2)}</span><br><span class="stat-label">표준편차</span></div>
+              <div class="stat-item"><span class="stat-value">${percentileRank.toFixed(2)}%</span><br><span class="stat-label">상위</span></div>
+            `;
+          };
+
+          calculateStatistics();
+          /*]]>*/
+        </script>
+
+
       </div>
       <!-- /.container-fluid -->
-
     </div>
     <!-- End of Main Content -->
 
@@ -280,7 +506,7 @@
 <!-- Custom scripts for all pages-->
 <script src="/bootstrap/js/sb-admin-2.min.js"></script>
 <!-- 부트스트랩 JavaScript 파일 링크 -->
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
