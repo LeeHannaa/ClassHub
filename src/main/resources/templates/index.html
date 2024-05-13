@@ -290,26 +290,16 @@
                     <label for="description">강의실 설명:</label>
                     <textarea id="description" th:field="*{description}" class="form-control"></textarea>
                     <br>
-                    <label for="onOff" style="margin-right: 40px;">강의실 활성화 상태:</label>
-                    <input type="checkbox" id="onOff" th:field="*{onOff}" class="form-check-input">
-                    <br>
-                    <label for="studentInfoKey">키(기준)가 될 학생 정보
-                        <i class="far fa-question-circle custom-tooltip-icon" data-toggle="tooltip" data-placement="right" title="학생들의 정보를 판별할 키를 선택하세요."></i>
+                    <label for="onOff" style="margin-right: 40px;">강의실 비공개 여부:
+                        <i class="far fa-question-circle custom-tooltip-icon" data-toggle="tooltip" data-placement="right" title="선택을 비활성화 하면 학생들에게 강의실이 공개됩니다."></i>
                     </label>
-                    <div id="studentInfoKey" class="form-group">
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="studentId" class="form-check-input" name="studentInfoKey" value="학번" checked>
-                            <label class="form-check-label" for="studentId">학번</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="studentName" class="form-check-input" name="studentInfoKey" value="이름">
-                            <label class="form-check-label" for="studentName">이름</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="studentDepartment" class="form-check-input" name="studentInfoKey" value="학부">
-                            <label class="form-check-label" for="studentDepartment">학부</label>
-                        </div>
-                    </div>
+                    <input type="checkbox" id="onOff" th:field="*{onOff}" class="form-check-input" th:checked="true">
+                    <br>
+                    <label for="studentInfoKey">csv에서 키가 될 헤더 이름:
+                        <i class="far fa-question-circle custom-tooltip-icon" data-toggle="tooltip" data-placement="right" title="csv를 업로드 할 때 키로 사용할 헤더의 이름을 입력하세요"></i>
+                    </label>
+                    <input type="text" id="studentInfoKey" th:field="*{studentInfoKey}" class="form-control" placeholder="ex) 학번">
+                    <br>
                     <label class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;" onclick="downloadCSV()">
                         학생 정보 CSV 양식 다운로드
                     </label>
@@ -345,11 +335,16 @@
         $('.custom-tooltip-icon').tooltip();
 
         $('#LectureRoomCreateModal').on('submit', function(event) {
-            const selectedRadio = $('#studentInfoKey input[type="radio"]:checked');
-            if (!selectedRadio.length) {
+            // const selectedRadio = $('#studentInfoKey input[type="radio"]:checked');
+            var studentInfoKey = $('#studentInfoKey').val();
+            if (!studentInfoKey.trim()) {
                 event.preventDefault(); // 폼 제출을 막습니다.
-                alert('학생 정보를 선택해야 합니다.'); // 사용자에게 경고합니다.
+                alert('학생 정보 키를 입력해야 합니다.'); // 사용자에게 경고합니다.
             }
+            // if (!selectedRadio.length) {
+            //     event.preventDefault(); // 폼 제출을 막습니다.
+            //     alert('학생 정보를 선택해야 합니다.'); // 사용자에게 경고합니다.
+            // }
         });
     });
 
