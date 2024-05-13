@@ -318,7 +318,7 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                                         <a th:href="@{/post/updateForm/{postId}(postId=${post.id})}" class="dropdown-item">수정</a>
-                                        <a th:href="@{/post/delete/{postId}(postId=${post.id})}" class="dropdown-item">삭제</a>
+                                        <a data-toggle="modal" data-target="#PostDeleteModal" class="dropdown-item" th:onclick="'setDeletePostId(\'' + ${post.id} + '\')'">삭제</a>
                                     </div>
                                 </div>
                             </div>
@@ -412,6 +412,52 @@
     </div>
 </div>
 
+<!-- Post Delete Modal-->
+<div class="modal fade" id="PostDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">공지 삭제</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>해당 공지를 정말 삭제하시겠습니까?</h4>
+                <p>공지 삭제 시 연결된 태그도 함께 삭제됩니다.</p>
+                <p>삭제하시면 더 이상 해당 공지 정보를 확인하실 수 없습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDelete" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;" onclick="deleteSelectedPost()">삭제</button>
+                <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    var deletePostId;
+    function setDeletePostId(postId) {
+        deletePostId = postId;
+    }// 태그 삭제 함수
+    function deletePost(postId) {
+        $.ajax({
+            type: "POST",
+            url: "/post/delete/" + postId,
+            success: function(response) {
+                console.log("공지가 성공적으로 삭제되었습니다.");
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error("공지 삭제 중 에러가 발생했습니다:", error);
+            }
+        });
+    }
+
+    function deleteSelectedPost() {
+        console.log("post 아이디: ", deletePostId);
+        deletePost(deletePostId); // deleteTag 함수 호출
+    }
+</script>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>

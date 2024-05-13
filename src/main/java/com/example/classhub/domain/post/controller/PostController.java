@@ -110,9 +110,9 @@ public class PostController {
         return "redirect:/lecture-room/detail/" + lectureRoomId;
     }
 
-    @GetMapping("/post/delete/{postId}")
-    public String delete(@ModelAttribute("postId") Long postId) {
+    @PostMapping("/post/delete/{postId}")
+    public ResponseEntity<String> delete(@ModelAttribute("postId") Long postId) {
         postService.delete(postId);
-        return "redirect:/post";
+        return ResponseEntity.ok(postId+"삭제");
     }
 }
