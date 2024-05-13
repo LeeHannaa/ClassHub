@@ -59,6 +59,7 @@ public class MemberService {
     public Optional<ClassHub_Member> findByUniqueId(String uniqueId) {
         return memberRepository.findByUniqueId(uniqueId);
     }
+    
     @Transactional
     public void delete(Long memberId) {
         memberRepository.deleteById(memberId);

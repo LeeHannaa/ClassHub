@@ -11,7 +11,7 @@
 
     <title>SB Admin 2 - Blank</title>
     <!-- Thymeleaf -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/thymeleaf/3.0.12.RELEASE/thymeleaf.min.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/thymeleaf/3.0.12.RELEASE/thymeleaf.min.js"></script>-->
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -431,7 +431,7 @@
                         <tbody th:if="${not #lists.isEmpty(memberLRooms)}">
                         <tr th:each="member, index : ${memberLRooms}">
                             <td th:text="${index.index + 1}" style="width: 9%;"></td>
-                            <td th:text="${member.getClassHubMember().getMember_name()}" style="width: 12%;"></td>
+                            <td th:text="${member.getClassHubMember().getMember_name()}" style="width: 10%;"></td>
                             <td th:text="${member.getClassHubMember().getUniqueId()}" style="width: 13%;"></td>
                             <td th:text="${member.getClassHubMember().getEmail()}" class="d-none d-sm-table-cell" style="width: 17%;"></td>
                             <td th:text="${#temporals.format(member.regDate, 'yyyy-MM-dd')}" style="width: 12%;"></td>
@@ -451,35 +451,33 @@
                                     <option value="BLOCKED" th:selected="${member.permission.getPermission() == '거절'}">거절</option>
                                 </select>
                             </td>
-                            <th style="width: 8%;"></th>
+                            <th style="width: 10%;"></th>
                             <!-- 추가될 행 템플릿 -->
-                        <tr id="newRowTemplate" style="display: none;">
-                            <td style="width: 9%;"></td>
-                            <td style="width: 12%;"><input type="text" class="form-control" name="newName" placeholder="이름"></td>
-                            <td style="width: 13%;"><input type="text" class="form-control" name="newStudentID" placeholder="학번"></td>
-                            <td class="d-none d-sm-table-cell" style="width: 17%;"><input type="text" class="form-control" name="newEmail" placeholder="이메일"></td>
-                            <td style="width: 12%;"><span id="currentDate"></span></td>
-                            <td style="width: 14.5%;">
-                                <select class="form-control role-select" name="newRole">
-                                    <option value="STUDENT">학생</option>
-                                    <option value="TA">조교</option>
-                                    <option value="PROFESSOR">교수</option>
-                                </select>
-                            </td>
-                            <td style="width: 14.5%;">
-                                <select class="form-control permission-select" name="newPermission">
-                                    <option value="APPROVED">입장</option>
-                                    <option value="UNAPPROVED">미입장</option>
-                                    <option value="BLOCKED">거절</option>
-                                </select>
-                            </td>
-                            <td style="width: 8%;" class="text-right">
-                                <div class="btn-group">
-                                    <button class="btn btn-primary mr-1" type="button" id="addStudent" style="border-radius: 8px; background: #2e59d9; border-color: #2e59d9; font-size: smaller;"> <i class="fa fa-plus" style="font-size: smaller;"></i> </button>
-                                    <button class="btn btn-primary" type="button" id="cancelStudent" style=" border-radius: 8px; background: #b7b9cc; border-color: #b7b9cc; font-size: smaller;"> <i class="fa fa-trash" style="font-size: smaller;"></i> </button>
-                                </div>
-                            </td>
-                        </tr>
+                                <tr id="newRowTemplate" style="display: none;">
+                                    <td style="width: 9%;"></td>
+                                    <td style="width: 10%;"><input type="text" name="newName" placeholder="이름"></td>
+                                    <td style="width: 13%;"><input type="text" name="newStudentID" placeholder="학번"></td>
+                                    <td class="d-none d-sm-table-cell" style="width: 17%;"><input type="text" name="newEmail" placeholder="이메일"></td>
+                                    <td style="width: 12%;"><span id="currentDate"></span></td>
+                                    <td style="width: 14.5%;">
+                                        <select name="newRole" class="form-control role-select">
+                                            <option value="STUDENT">학생</option>
+                                            <option value="TA">조교</option>
+                                            <option value="PROFESSOR">교수</option>
+                                        </select>
+                                    </td>
+                                    <td style="width: 14.5%;">
+                                        <select name="newPermission" class="form-control permission-select">
+                                            <option value="APPROVED">입장</option>
+                                            <option value="UNAPPROVED">미입장</option>
+                                            <option value="BLOCKED">거절</option>
+                                        </select>
+                                    </td>
+                                    <td style="width: 10%;" class="text-right btn-group">
+                                        <button type="button" class="btn btn-primary mr-1" id="addStudent" style="border-radius: 8px; background: #2e59d9; border-color: #2e59d9; font-size: smaller;"> <i class="fa fa-plus" style="font-size: smaller;"></i> </button>
+                                        <button class="btn btn-primary" type="button" id="cancelStudent" style=" border-radius: 8px; background: #b7b9cc; border-color: #b7b9cc; font-size: smaller;"> <i class="fa fa-trash" style="font-size: smaller;"></i> </button>
+                                    </td>
+                                </tr>
                         <!-- jQuery를 사용하여 스크립트 작성 -->
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                         <script>
@@ -495,6 +493,47 @@
                                 });
                                 $('table').on('click', '#cancelStudent', function(){
                                     $(this).closest('tr').remove();
+                                });
+                                // '추가' 버튼 클릭 이벤트 핸들링
+                                $('table').on('click', '#addStudent', function(){
+                                    // 새로운 학생 데이터 수집
+                                    var newName = $(this).closest('tr').find('input[name="newName"]').val();
+                                    var newStudentID = $(this).closest('tr').find('input[name="newStudentID"]').val();
+                                    var newEmail = $(this).closest('tr').find('input[name="newEmail"]').val();
+                                    var newRole = $(this).closest('tr').find('select[name="newRole"]').val();
+                                    var newPermission = $(this).closest('tr').find('select[name="newPermission"]').val();
+                                    // console.log(newName,newStudentID,newEmail);
+                                    // 현재 URL 가져오기
+                                    var currentURL = window.location.href;
+
+                                    // 현재 URL에서 마지막 '/' 다음에 오는 숫자를 lectureRoomId로 추출
+                                    var lectureRoomId = currentURL.match(/\/(\d+)$/)[1];
+                                    // AJAX를 사용하여 데이터를 서버로 전송
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/memberlroom/create/one/" + lectureRoomId, // lectureRoomId 변수는 어디서 가져올지 명확하지 않아 가정했습니다.
+                                        contentType: "application/json",
+                                        dataType: "json",
+                                        data: JSON.stringify({
+                                            memberName: newName,
+                                            uniqueId: newStudentID,
+                                            email: newEmail,
+                                            role: newRole,
+                                            permission: newPermission
+                                        }),
+                                        success: function(response) {
+                                            // 성공적으로 추가되었을 때의 동작
+                                            // 예를 들어, 성공 메시지 출력 또는 페이지 리로드 등을 수행할 수 있습니다.
+                                            console.error(data);
+                                            alert('학생이 성공적으로 추가되었습니다.');
+                                            // 페이지 리로드 예시: window.location.reload();
+                                        },
+                                        error: function(xhr, status, error) {
+                                            // 오류 발생시 처리
+                                            console.error(data, error);
+                                            alert('학생 추가에 실패했습니다. 오류: ' + error);
+                                        }
+                                    });
                                 });
                             });
                             // 현재 날짜를 가져오는 함수

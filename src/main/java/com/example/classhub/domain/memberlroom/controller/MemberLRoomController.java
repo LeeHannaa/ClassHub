@@ -1,14 +1,17 @@
 package com.example.classhub.domain.memberlroom.controller;
 
+import com.example.classhub.domain.classhub_lroom.controller.request.LectureRoomCreateRequest;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
+import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomMemberCreateRequest;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +43,6 @@ public class MemberLRoomController {
     return "redirect:/memberlroom";
   }
 
-  @PostMapping("/memberlroom/create/one/{lectureRoomId}")
-  public String createMemberByOne(@PathVariable Long lectureRoomId, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom, @ModelAttribute ClassHub_Member classHubMember) {
-    memberLRoomService.createMemberByOne(lectureRoomId, classHubMemberLRoom, classHubMember);
-    return "redirect:/memberList";
-  }
-
   // Read All
   @GetMapping("/memberlroom")
   public String listMemberLRooms(Model model) {
@@ -61,7 +58,24 @@ public class MemberLRoomController {
     model.addAttribute("memberLRooms", memberLRoomService.findMembersByLRoomId(lectureRoomId));
     TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
     model.addAttribute("tags", tagListResponse.getTags());
+//    model.addAttribute("classHubMemberLRoom", new ClassHub_MemberLRoom());
     return "member/memberList";
+  }
+
+  @PostMapping("/memberlroom/create/one/{lectureRoomId}")
+  public ResponseEntity<String> createMemberByOne(@PathVariable Long lectureRoomId, @RequestBody MemberLRoomMemberCreateRequest memberLRoomMemberCreateRequest) {
+//    System.out.println("확인하기" + memberLRoomMemberCreateRequest);
+//    String uniqueId = memberLRoomMemberCreateRequest.getUniqueId(); // 예를 들어, uniqueId가 파라미터로 전달되는 경우
+//    System.out.println("Received uniqueId: " + uniqueId);
+    ClassHub_MemberLRoom classHub_memberLRoom = new ClassHub_MemberLRoom();
+    ClassHub_Member classHub_member = new ClassHub_Member();
+    classHub_member.setMember_name(memberLRoomMemberCreateRequest.getMember_name());
+    classHub_member.setUniqueId(memberLRoomMemberCreateRequest.getUniqueId());
+    classHub_member.setEmail(memberLRoomMemberCreateRequest.getEmail());
+    classHub_memberLRoom.setRole(memberLRoomMemberCreateRequest.getRole());
+    classHub_memberLRoom.setPermission(memberLRoomMemberCreateRequest.getPermission());
+    memberLRoomService.createMemberByOne(lectureRoomId, classHub_memberLRoom, classHub_member);
+    return ResponseEntity.ok("Member added successfully");
   }
 
   // Read One
@@ -90,6 +104,7 @@ public class MemberLRoomController {
     memberLRoomService.updateMemberLRoomRole(id, classHubMemberLRoom);
     return ResponseEntity.ok().body("MemberLRoom Role updated successfully.");
   }
+
   @PostMapping("/memberlroom/update/permission/{id}")
   public ResponseEntity<String> updateMemberLRoomPermission(@PathVariable Long id, @RequestBody ClassHub_MemberLRoom classHubMemberLRoom) {
     memberLRoomService.updateMemberLRoomPermission(id, classHubMemberLRoom);

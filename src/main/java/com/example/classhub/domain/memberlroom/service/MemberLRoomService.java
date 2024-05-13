@@ -9,6 +9,7 @@ import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.repository.MemberLRoomRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,15 +93,40 @@ public class MemberLRoomService {
     return s;
   }
 
+  @Transactional
   public void createMemberByOne(Long lRoomId, ClassHub_MemberLRoom classHubMemberLRoom, ClassHub_Member classHubMember) {
     //ToDo:
-    // 1. 해당 강의실에 classHubMember와 같은 학번 가진 학생 있는지 파악
-      // 1-1. 있다면 추가 불가능 사인 보내주기
-      // 1-2. 없다면 ClassHub_Member에서 해당 학생 id 찾아오기
-    // 2. ClassHub_Member에서 해당 학생 id가 없다면 classHubMember와 관련해서 추가해주기
-    // 3. ClassHub_Member에서 해당 학생 id가 있다면 그 id만 가져오기
-    // 4. 가져온 id를 바탕으로 ClassHub_MemberLRoom추가하기
-    
+    System.out.println("확인" + classHubMember);
+    ClassHub_Member defalutMember = memberService.findByUniqueId(classHubMember.getUniqueId())
+            .orElse(null);
+    if(defalutMember != null){
+      // 1-1. 있다면 학생 id 가져오기
+      Long memberId = defalutMember.getMemberId();
+      String uniqueId = defalutMember.getUniqueId();
+      // 4. 가져온 id를 바탕으로 ClassHub_MemberLRoom에 해당 id를 가진 학생이 있는지 파악하기
+      ClassHub_MemberLRoom memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(lRoomId, uniqueId);
+      // 4-1. 동일한 학생 id를 가진 학생이 있다면 에러 리턴
+      if(memberLRoom != null){
+        System.out.println("동일한 학생 id를 가진 학생이 있다면 에러");
+      }
+      // 4-2. 없다면 ClassHub_MemberLRoom 정보 추가
+      else{
+        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+defalutMember);
+        classHubMemberLRoom.setClassHubMember(defalutMember);
+        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+classHubMemberLRoom);
+        classHubMemberLRoom.setLectureRoom(lectureRoomService.findByRoomIdByOne(lRoomId));
+        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+classHubMemberLRoom);
+        memberLRoomRepository.save(classHubMemberLRoom);
+        System.out.println("확인2");
+      }
+
+    }
+    else {
+      // 1-2. 없다면 ClassHub_Member에 학생 정보 추가와 동시에 ClassHub_MemberLRoom 정보 추가
+      System.out.println("없다면 ClassHub_Member에 학생 정보 추가와 동시에 ClassHub_MemberLRoom 정보 추가");
+      memberService.createMember(classHubMember);
+      System.out.println("멤버 정보 추가");
+    }
   }
 
   @Transactional
