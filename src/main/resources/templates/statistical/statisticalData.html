@@ -415,34 +415,41 @@
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 데이터</h6>
                         </div>
-                        <div class="card-body">
-                          <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                              <thead>
+                          <div class="card-body">
+                            <div class="table-responsive">
+                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
                                 <tr>
                                   <th>학번</th>
-                                  <th>이름</th>
+<!--                                  <th>이름</th>-->
                                   <th>점수</th>
                                   <th>생성일</th>
                                   <th>수정일</th>
+                                  <th>작업</th>
                                 </tr>
-                              </thead>
-                              <tbody>
-                                <tr th:each="data : ${dataStatistics}">
+                                </thead>
+                                <tbody>
+                                <tr th:each="data, iterStat : ${dataStatistics}">
                                   <td th:text="${data.studentNum}"></td>
-                                   <td th:text="${data.stname}"></td>
-                                  <td th:text="${data.score}"></td>
+<!--                                  <td th:text="${data.stname}"></td>-->
+                                  <td>
+                                    <span th:id="'score-' + ${iterStat.index}" th:text="${data.score}"></span>
+                                    <input type="number" th:id="'input-score-' + ${iterStat.index}" th:value="${data.score}" style="display: none;"/>
+                                  </td>
                                   <td th:text="${#temporals.format(data.regDate, 'yyyy/MM/dd')}"></td>
                                   <td th:text="${#temporals.format(data.modDate, 'yyyy/MM/dd')}"></td>
+                                  <td>
+                                    <button th:id="'edit-button-' + ${iterStat.index}" type="button" class="btn btn-primary" onclick="editScore(this.id)">수정</button>
+                                    <button th:id="'save-button-' + ${iterStat.index}" type="button" class="btn btn-success" th:attr="data-tag-id=${data.id}" style="display: none;" onclick="saveScore(this.id, this.getAttribute('data-tag-id'))">저장</button>
+                                  </td>
                                 </tr>
-                              </tbody>
-                              <tfoot>
-                              </tfoot>
-                            </table>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                              </table>
+                            </div>
                           </div>
                         </div>
-                      </div>
-
                     </div>
                 </div>
               </div>
@@ -641,7 +648,8 @@
 
     function updatePerfectScore(tagId, newScore) {
       const xhr = new XMLHttpRequest();
-      const url = `/data-detail/statistics/${tagId}`; // URL 동적 생성
+      // URL을 새로운 엔드포인트로 변경
+      const url = `/data-detail/statistics/${tagId}/perfect-score`; // URL 동적 생성
       xhr.open('PUT', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onreadystatechange = function () {
@@ -653,6 +661,51 @@
         }
       };
       xhr.send(JSON.stringify({ perfectScore: newScore }));
+    }
+
+    function editScore(buttonId) {
+      var index = buttonId.split('-')[2];
+      var scoreSpan = document.getElementById('score-' + index);
+      var inputScore = document.getElementById('input-score-' + index);
+      var editButton = document.getElementById('edit-button-' + index);
+      var saveButton = document.getElementById('save-button-' + index);
+
+      scoreSpan.style.display = 'none';
+      inputScore.style.display = '';
+
+      editButton.style.display = 'none';
+      saveButton.style.display = '';
+    }
+
+    function saveScore(buttonId, tagId) {
+      var index = buttonId.split('-')[2];
+      var inputScore = document.getElementById('input-score-' + index).value;
+
+      // AJAX 요청을 통해 서버에 데이터 저장
+      var xhr = new XMLHttpRequest();
+      xhr.open('PUT', `/data-detail/statistics/${tagId}/score`, true);
+      // 'Content-Type'을 'application/json'으로 설정
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function() {
+        if (xhr.status == 200) {
+          // 성공적으로 저장된 후 UI 업데이트
+          var scoreSpan = document.getElementById('score-' + index);
+          var editButton = document.getElementById('edit-button-' + index);
+          var saveButton = document.getElementById('save-button-' + index);
+
+          scoreSpan.innerText = inputScore;
+          scoreSpan.style.display = '';
+          document.getElementById('input-score-' + index).style.display = 'none';
+
+          editButton.style.display = '';
+          saveButton.style.display = 'none';
+        } else {
+          console.error('서버 저장 실패:', xhr.responseText);
+        }
+      };
+      // 데이터를 JSON 형식으로 변환하여 전송
+      var data = JSON.stringify({score: inputScore});
+      xhr.send(data);
     }
 
 

@@ -39,4 +39,8 @@ public class ClassHub_DataDetail extends BaseEntity {
         this.score = dataDetailDto.getScore();
         this.comment = dataDetailDto.getComment();
     }
+
+    public void updateScore(DataDetailDto dataDetailDto) {
+        this.score = dataDetailDto.getScore();
+    }
 }

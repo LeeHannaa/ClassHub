@@ -3,6 +3,7 @@ package com.example.classhub.domain.datadetail.controller;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.datadetail.controller.request.DataDetailCreateRequest;
+import com.example.classhub.domain.datadetail.controller.request.DataDetailUpdateScoreRequest;
 import com.example.classhub.domain.datadetail.controller.response.DataDetailListResponse;
 import com.example.classhub.domain.datadetail.controller.response.DataStatisticListResponse;
 import com.example.classhub.domain.datadetail.controller.response.DataStatisticResponse;
@@ -27,7 +28,7 @@ public class DataDetailController {
     private final TagService tagService;
     private final MemberService memberService;
 
-  @GetMapping("/data-detail/dataDetailForm")
+    @GetMapping("/data-detail/dataDetailForm")
     public String createDataDetailForm(Model model){
         model.addAttribute("dataDetail", new DataDetailCreateRequest());
         return "dataDetailForm";
@@ -89,10 +90,16 @@ public class DataDetailController {
       return "./statistical/statisticalData";
     }
 
-  @PutMapping("/data-detail/statistics/{tagId}")
-  public ResponseEntity<?> updateTagPerfectScore(@PathVariable Long tagId,
-                                                 @RequestBody TagPerfectScoreUpdateRequest request) {
-    tagService.updatePerfectScore(tagId, request);
-    return ResponseEntity.ok().build(); // 성공적으로 업데이트된 경우, 200 OK 응답
-  }
+    @PutMapping("/data-detail/statistics/{tagId}/score")
+    public ResponseEntity<String> updateScoreByTagId(@PathVariable Long tagId, @RequestBody DataDetailUpdateScoreRequest request) {
+      dataDetailService.updateScore(tagId, DataDetailDto.from(request));
+      return ResponseEntity.ok("redirect:/data-detail/statistics/" + tagId);
+    }
+
+
+    @PutMapping("/data-detail/statistics/{tagId}/perfect-score")
+    public ResponseEntity<?> updateTagPerfectScore(@PathVariable Long tagId, @RequestBody TagPerfectScoreUpdateRequest request) {
+      tagService.updatePerfectScore(tagId, request);
+      return ResponseEntity.ok().build();
+    }
 }
