@@ -6,6 +6,7 @@ import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.service.MemberService;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
+import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.repository.MemberLRoomRepository;
@@ -94,10 +95,10 @@ public class MemberLRoomService {
   }
 
   @Transactional
-  public void createMemberByOne(Long lRoomId, ClassHub_MemberLRoom classHubMemberLRoom, ClassHub_Member classHubMember) {
+  public MemberLRoomDto createMemberByOne(Long lRoomId, ClassHub_MemberLRoom classHubMemberLRoom, ClassHub_Member classHubMember) {
     //ToDo:
     System.out.println("확인" + classHubMember);
-    ClassHub_Member defalutMember = memberService.findByUniqueId(classHubMember.getUniqueId())
+    ClassHub_Member defalutMember = memberService.findByUniqueId(classHubMember.getUniqueId()) //현재 classhub에 있는 학생인지
             .orElse(null);
     if(defalutMember != null){
       // 1-1. 있다면 학생 id 가져오기
@@ -127,6 +128,8 @@ public class MemberLRoomService {
       memberService.createMember(classHubMember);
       System.out.println("멤버 정보 추가");
     }
+
+    return MemberLRoomDto.from(classHubMemberLRoom);
   }
 
   @Transactional

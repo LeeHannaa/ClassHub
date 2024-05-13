@@ -74,7 +74,11 @@ public class MemberLRoomController {
     classHub_member.setEmail(memberLRoomMemberCreateRequest.getEmail());
     classHub_memberLRoom.setRole(memberLRoomMemberCreateRequest.getRole());
     classHub_memberLRoom.setPermission(memberLRoomMemberCreateRequest.getPermission());
-    memberLRoomService.createMemberByOne(lectureRoomId, classHub_memberLRoom, classHub_member);
+    try{
+      memberLRoomService.createMemberByOne(lectureRoomId, classHub_memberLRoom, classHub_member);
+    } catch (IllegalArgumentException e){
+      return ResponseEntity.ok("기존에 존재하는 아이디입니다.");
+    }
     return ResponseEntity.ok("Member added successfully");
   }
 
