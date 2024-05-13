@@ -102,4 +102,16 @@ public class DataDetailController {
       tagService.updatePerfectScore(tagId, request);
       return ResponseEntity.ok().build();
     }
+
+    @GetMapping("student/{lRoomId}")
+     public String findStudentList(@PathVariable Long lRoomId, Model model){
+
+          LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lRoomId);
+          model.addAttribute("lectureRoom", lectureRoomDto);
+
+          TagListResponse tagListResponse = tagService.getTagListByLectureId(lRoomId);
+          model.addAttribute("tags", tagListResponse.getTags());
+
+          return "./student/studentView";
+      }
 }
