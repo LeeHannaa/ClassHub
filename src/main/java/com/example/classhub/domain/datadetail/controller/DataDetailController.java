@@ -9,7 +9,11 @@ import com.example.classhub.domain.datadetail.controller.response.DataStatisticL
 import com.example.classhub.domain.datadetail.controller.response.DataStatisticResponse;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.service.DataDetailService;
+import com.example.classhub.domain.member.ClassHub_Member;
+import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.service.MemberService;
+import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
+import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
 import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
@@ -19,6 +23,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequiredArgsConstructor
 @CrossOrigin("*")
@@ -27,6 +33,7 @@ public class DataDetailController {
     private final LectureRoomService lectureRoomService;
     private final TagService tagService;
     private final MemberService memberService;
+    private final MemberLRoomService memberLRoomService;
 
     @GetMapping("/data-detail/dataDetailForm")
     public String createDataDetailForm(Model model){
@@ -103,15 +110,20 @@ public class DataDetailController {
       return ResponseEntity.ok().build();
     }
 
-    @GetMapping("student/{lRoomId}")
-     public String findStudentList(@PathVariable Long lRoomId, Model model){
-
-          LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lRoomId);
-          model.addAttribute("lectureRoom", lectureRoomDto);
-
-          TagListResponse tagListResponse = tagService.getTagListByLectureId(lRoomId);
-          model.addAttribute("tags", tagListResponse.getTags());
-
+    @GetMapping("student/{uniqueId}/{LRoomId}")
+    public String findStudentList(@PathVariable Long LRoomId,@PathVariable String uniqueId, Model model){
+      // uniqueId로 member_id 찾기
+      MemberDto member = memberService.findByUniqueIdDto(uniqueId);
+      if (member != null) {
+        // member_id와 LroomId가 모두 일치하는지 확인
+        MemberLRoomDto memberLroom = memberLRoomService.findByMemberIdAndLroomId(member.getMemberId(), LRoomId);
+        if (memberLroom != null) {
+          // Lroom에 연결된 태그 목록 찾기
+          TagListResponse tagListResponse = tagService.getTagListByLectureId(LRoomId);
+          model.addAttribute("tags", tagListResponse);
           return "./student/studentView";
+        }
       }
+      return "errorPage";
+    }
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>404-ERROR</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    .error-container {
+      width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .error-container h1 {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+
+    .error-container p {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .error-container a {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      background-color: #007bff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .error-container a:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+<div class="error-container">
+  <h1>오류 발생!</h1>
+  <p>요청하신 페이지를 처리하는 중에 오류가 발생했습니다.</p>
+  <a th:href="@{/lecture-room}">홈으로 돌아가기</a>
+</div>
+</body>
+</html>

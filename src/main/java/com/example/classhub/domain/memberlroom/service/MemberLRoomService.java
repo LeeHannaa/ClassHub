@@ -3,9 +3,9 @@ package com.example.classhub.domain.memberlroom.service;
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.member.ClassHub_Member;
-import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.service.MemberService;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
+import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.repository.MemberLRoomRepository;
@@ -137,6 +137,25 @@ public class MemberLRoomService {
     } catch (Exception e) {
       e.printStackTrace();
       throw new RuntimeException("Failed to process student file", e);
+    }
+  }
+
+  public MemberLRoomDto findByMemberIdAndLroomId(Long memberId, Long lRoomId) {
+    Optional<ClassHub_MemberLRoom> memberLRoomOpt = memberLRoomRepository.findByClassHubMember_MemberIdAndLectureRoom_lRoomId(memberId, lRoomId);
+    if (memberLRoomOpt.isPresent()) {
+      ClassHub_MemberLRoom memberLRoom = memberLRoomOpt.get();
+      // 예시에서는 MemberLRoomDto 생성자와 필요한 데이터를 가정합니다.
+      // 실제로는 MemberLRoomDto 클래스의 정의와 생성자에 따라 다를 수 있습니다.
+      MemberLRoomDto memberLRoomDto = new MemberLRoomDto(
+        memberLRoom.getId(),
+        memberLRoom.getRole(),
+        memberLRoom.getPermission()
+      );
+      return memberLRoomDto;
+    } else {
+      // 데이터가 없는 경우 적절한 처리를 합니다. 여기서는 null을 반환합니다.
+      // 실제로는 예외를 발생시키거나, Optional.empty() 등을 활용할 수 있습니다.
+      return null;
     }
   }
 }

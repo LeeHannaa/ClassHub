@@ -298,6 +298,9 @@
 
         <script th:inline="javascript">
           /*<![CDATA[*/
+          var tags = [[${tags}]]; // 서버 측에서 전달된 tags 객체를 자바스크립트 변수에 할당
+          console.log('Tags:', tags);
+
           var ctx = document.getElementById('scoreChart').getContext('2d');
           var scoreChart = new Chart(ctx, {
             type: 'bar', // 차트의 종류를 막대 그래프로 설정
@@ -360,12 +363,20 @@
             type: 'bar'
           };
 
+          var myScoreLabel = {
+            label: '나의 점수',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            type: 'bubble'
+
+          }
+
           // 혼합 차트 생성
           var ctx = document.getElementById('myChart').getContext('2d');
           var mixedChart = new Chart(ctx, {
             data: {
               labels: Array.from({length: 10}, (_, i) => `${i*10+1}~${i*10+10}`), // X 축 레이블 수정
-              datasets: [distributionDataset]
+              datasets: [distributionDataset,myScoreLabel]
             },
             options: {
               scales: {
@@ -411,14 +422,14 @@
 
             // 점수 차이에 따라 다른 텍스트 및 스타일 적용
             if (scoreDifference < 0) {
-              scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-down-fill" viewBox="0 0 16 16">\n' +
-                '                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>\n' +
-                '                  </svg><span style="color: red;">' + Math.abs(scoreDifference).toFixed(2) + '%</span>';
-              // 여기서 <svg ...></svg>는 음수일 때 표시할 아이콘의 SVG 코드입니다.
-            } else {
               scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-caret-down-fill" viewBox="0 0 16 16">\n' +
                 '                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>\n' +
-                '                  </svg><span style="color: blue;">' + scoreDifference.toFixed(2) + '%</span>';
+                '                  </svg><span style="color: blue;">' + Math.abs(scoreDifference).toFixed(2) + '%</span>';
+              // 여기서 <svg ...></svg>는 음수일 때 표시할 아이콘의 SVG 코드입니다.
+            } else {
+              scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">\n' +
+                '                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>\n' +
+                '                  </svg><span style="color: red;">' + scoreDifference.toFixed(2) + '%</span>';
               // 여기서 <svg ...></svg>는 양수일 때 표시할 아이콘의 SVG 코드입니다.
             }
 

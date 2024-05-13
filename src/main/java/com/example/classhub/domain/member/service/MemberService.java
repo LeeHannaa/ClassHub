@@ -61,6 +61,13 @@ public class MemberService {
     }
 
     @Transactional
+    public MemberDto findByUniqueIdDto(String uniqueId) {
+        ClassHub_Member classHubMember = memberRepository.findByUniqueId(uniqueId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        return MemberDto.from(classHubMember);
+    }
+
+    @Transactional
     public String findNameByUniqueId(String uniqueId) {
       return memberRepository.findByUniqueId(uniqueId)
         .map(ClassHub_Member::getMember_name)
