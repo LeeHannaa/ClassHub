@@ -50,7 +50,8 @@ public class LectureRoomController {
     @PostMapping("/lecture-room/saveLecture")
     public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request, @RequestParam("studentFile") MultipartFile studentFile) {
         LectureRoomDto lectureRoomDto = lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
-        memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
+        if(studentFile != null && !studentFile.isEmpty())
+            memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
         return "redirect:/lecture-room";
     }
 
