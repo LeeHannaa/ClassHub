@@ -63,6 +63,13 @@ public class DataDetailService {
         return DataDetailDto.from(dataDetail);
     }
 
+    @Transactional
+    public DataDetailDto updateScore(Long dataDetailId, DataDetailDto dataDetailDto) {
+        ClassHub_DataDetail dataDetail = dataDetailRepository.findById(dataDetailId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 데이터 상세가 존재하지 않습니다."));
+        dataDetail.updateScore(dataDetailDto);
+        return DataDetailDto.from(dataDetail);
+    }
 
     //statistics
     @Transactional
