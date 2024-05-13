@@ -238,46 +238,6 @@
           <canvas id="scoreChart"></canvas>
         </div>
         <div class="accordion" id="accordionPanelsStayOpenExample" style="width: 60%; margin: 15px auto;">
-          <!-- 중간고사 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header d-flex justify-content-between">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                중간고사
-                <span style="margin: 0 1rem;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                  </svg>
-                  <span style="color: red;">7%</span>
-                </span>
-                <small class="text-muted" style="flex-shrink: 0;"> (최근 수정일: 2024-05-10)</small>
-              </button>
-            </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-              </div>
-            </div>
-          </div>
-          <!-- 퀴즈1 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header d-flex justify-content-between">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                퀴즈1
-                <span style="margin: 0 1rem;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                  </svg>
-                  <span style="color: red;">8%</span>
-                </span>
-                <small class="text-muted" style="flex-shrink: 0;"> (최근 수정일: 2024-05-10)</small>
-              </button>
-            </h2>
-            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-              </div>
-            </div>
-          </div>
           <!-- 퀴즈2 -->
           <div class="accordion-item">
             <h2 class="accordion-header d-flex justify-content-between">
@@ -295,6 +255,31 @@
             </div>
           </div>
         </div>
+        <div class="accordion" style="width: 60%; margin: 15px auto;">
+          <div th:each="tag, iterStat : ${tags.tags}" class="accordion-item">
+            <h2 class="accordion-header d-flex justify-content-between" th:id="'heading' + ${iterStat.index}">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}">
+                <span th:text="${tag.name}"></span>
+                <!-- 여기에 추가적인 정보를 표시할 수 있습니다. 예: 점수 차이, 최근 수정일 등 -->
+                <span style="margin: 0 1rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                  </svg>
+                  <span style="color: red;" th:text="'20%'"></span>
+                </span>
+                <small class="text-muted" style="flex-shrink: 0;" th:text="'(최근 수정일: 2024-05-10)'" ></small>
+              </button>
+            </h2>
+            <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.index}">
+              <div class="accordion-body">
+                <!-- 아코디언 바디에 표시할 내용 -->
+                <strong th:text="${tag.tagId}"></strong>
+                <strong th:text="${tag.perfectScore}"></strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
         <script th:inline="javascript">
           /*<![CDATA[*/

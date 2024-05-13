@@ -6,10 +6,8 @@ import com.example.classhub.domain.datadetail.controller.request.DataDetailCreat
 import com.example.classhub.domain.datadetail.controller.request.DataDetailUpdateScoreRequest;
 import com.example.classhub.domain.datadetail.controller.response.DataDetailListResponse;
 import com.example.classhub.domain.datadetail.controller.response.DataStatisticListResponse;
-import com.example.classhub.domain.datadetail.controller.response.DataStatisticResponse;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.service.DataDetailService;
-import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.service.MemberService;
 import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
