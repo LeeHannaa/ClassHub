@@ -335,16 +335,11 @@
         $('.custom-tooltip-icon').tooltip();
 
         $('#LectureRoomCreateModal').on('submit', function(event) {
-            // const selectedRadio = $('#studentInfoKey input[type="radio"]:checked');
             var studentInfoKey = $('#studentInfoKey').val();
             if (!studentInfoKey.trim()) {
                 event.preventDefault(); // 폼 제출을 막습니다.
                 alert('학생 정보 키를 입력해야 합니다.'); // 사용자에게 경고합니다.
             }
-            // if (!selectedRadio.length) {
-            //     event.preventDefault(); // 폼 제출을 막습니다.
-            //     alert('학생 정보를 선택해야 합니다.'); // 사용자에게 경고합니다.
-            // }
         });
     });
 
