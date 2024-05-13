@@ -325,8 +325,15 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <p class="card-text" th:text="${post.postContent}"></p>
-                                <p class="card-text"><small class="text-muted" th:text="${post.getLRoomId()}"></small></p>
-                                <p class="card-text"><small class="text-muted" th:text="${post.getTagNames()}"></small></p>
+                                <p class="card-text">
+                                    <small class="text-muted">연결된 태그 이름: <span th:text="${post.getTagNames()}"></span></small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">생성일: <span th:text="${post.getRegDate()}"></span></small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">수정일: <span th:text="${post.getModDate()}"></span></small>
+                                </p>
                             </div>
                         </div>
                     </div>

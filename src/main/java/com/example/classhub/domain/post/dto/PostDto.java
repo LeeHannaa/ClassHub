@@ -7,6 +7,9 @@ import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 @AllArgsConstructor
@@ -24,6 +27,8 @@ public class PostDto {
     private List<Long> isScore;
     private List<Long> isCover;
     private String tagNames;
+    private String regDate;
+    private String modDate;
 
     public static PostDto from(PostCreateRequest postCreateRequest) {
         return PostDto.builder()
@@ -80,6 +85,8 @@ public class PostDto {
                 .tagId(post.getTagId())
                 .tagNames(tagNames)
                 .lRoomId(post.getLRoom().getLRoomId())
+                .regDate(post.getRegDate().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
+                .modDate(post.getModDate().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
                 .build();
     }
 }
