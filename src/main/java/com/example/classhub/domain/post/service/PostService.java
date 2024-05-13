@@ -14,6 +14,7 @@ import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.repository.PostRepository;
 import com.example.classhub.domain.tag.dto.TagDto;
 import com.example.classhub.domain.tag.service.TagService;
+import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
@@ -127,24 +128,20 @@ public class PostService {
 
 
     @Transactional
-    public void createPost(PostDto postDto, File file) throws IOException {
+    public void createPost(PostDto postDto, @Nullable File file) throws IOException {
         ClassHub_LRoom lRoom = lectureRoomRepository.findById(postDto.getLRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
 
-        if (file.length() == 0) {
+        if (file == null || file.length() == 0) {
             ClassHub_Post post = ClassHub_Post.from(postDto, lRoom);
-            System.out.println("Post: " + post);
             postRepository.save(post);
         } else {
             String tagIds = saveTag(lRoom, file, postDto);
-
-            System.out.println("TagIds: " + tagIds);
             ClassHub_Post post = ClassHub_Post.from(postDto, lRoom, tagIds);
             postRepository.save(post);
 
             String fileDataName = file.getName();
             String fileDataType = Files.probeContentType(file.toPath());
-
             FileDataDto fileDataDto = FileDataDto.builder()
                     .fileDataName(fileDataName)
                     .fileDataType(fileDataType)
@@ -153,23 +150,12 @@ public class PostService {
             fileDataService.saveFileData(fileDataDto);
         }
 
-        file.delete();
+        if (file != null) {
+            file.delete();
+        }
     }
 
-  @Transactional
-  public PostListResponse getPostList(int page, int size){
-    Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
-    Page<ClassHub_Post> posts = postRepository.findAll(pageable);
-
-    List<PostResponse> postResponses = posts.getContent().stream()
-      .map(PostResponse::new)
-      .collect(Collectors.toList());
-
-    return new PostListResponse(postResponses, posts.getTotalPages(), posts.getNumber());
-  }
-
-
-  @Transactional
+    @Transactional
     public PostDto findByPostId(Long postId) {
         ClassHub_Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
         return PostDto.from(post, tagService);
@@ -190,5 +176,16 @@ public class PostService {
         return posts.stream()
                 .map(post -> PostDto.from(post, tagService))
                 .collect(Collectors.toList());
+    }
+    @Transactional
+    public PostListResponse getPostListByLectureRoomId(Long lRoomId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
+        Page<ClassHub_Post> postPage = postRepository.findBylRoom_lRoomId(lRoomId, pageable);
+
+        List<PostDto> postDtos = postPage.getContent().stream()
+                .map(post -> PostDto.from(post, tagService))
+                .collect(Collectors.toList());
+
+        return new PostListResponse(postDtos, postPage.getTotalPages(), postPage.getNumber());
     }
 }

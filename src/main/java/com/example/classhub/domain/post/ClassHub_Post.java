@@ -38,7 +38,7 @@ public class ClassHub_Post extends BaseEntity {
         return ClassHub_Post.builder()
                 .postTitle(postDto.getPostTitle())
                 .postContent(postDto.getPostContent())
-                .tagId("1")
+                .tagId(null)
                 .lRoom(lRoom)
                 .build();
     }

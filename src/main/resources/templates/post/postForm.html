@@ -78,8 +78,13 @@
             cache: false,
             contentType: false,
             processData: false,
-            success: function(response) {
-                loadHeadersIntoModal(response);
+            statusCode: {
+                200: function(response) {
+                    loadHeadersIntoModal(response);
+                },
+                204: function() {
+                    window.location.href = '/lecture-room/detail/' + $('#lRoomId').val();
+                }
             },
             error: function() {
                 alert("파일 업로드에 실패했습니다.");
@@ -93,6 +98,7 @@
             submitPostFormAndLoadModal();
         });
     });
+
 </script>
 </body>
 </html>

@@ -10,6 +10,7 @@ import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.service.PostService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,25 +34,32 @@ public class PostController {
     }
 
     @PostMapping("/post/postForm")
-    public String postForm(@ModelAttribute("postForm") PostCreateRequest request,
-                           @RequestParam("file") MultipartFile file,
-                           HttpSession session) throws IOException {
-
-        String tempDir = System.getProperty("java.io.tmpdir");
-        File tempFile = new File(tempDir, file.getOriginalFilename());
-        file.transferTo(tempFile);
-
-        session.setAttribute("filePath", tempFile.getAbsolutePath());
-        session.setAttribute("postForm", request);
+    public ResponseEntity<?> postForm(@ModelAttribute("postForm") PostCreateRequest request,
+                                      @RequestParam(value = "file", required = false) MultipartFile file,
+                                      HttpSession session) throws IOException {
 
         Long lRoomId = request.getLRoomId();
         ClassHub_LRoom lRoom = ClassHub_LRoom.from(lectureRoomService.findByRoomId(lRoomId));
+        session.setAttribute("postForm", request);
         session.setAttribute("lRoom", lRoom);
 
-        List<String> headers = postService.checkHeader(tempFile);
-        session.setAttribute("headers", headers);
-        return "redirect:/post/postModal";
+        if (file != null && !file.isEmpty()) {
+            String tempDir = System.getProperty("java.io.tmpdir");
+            File tempFile = new File(tempDir, file.getOriginalFilename());
+            file.transferTo(tempFile);
+
+            session.setAttribute("filePath", tempFile.getAbsolutePath());
+            List<String> headers = postService.checkHeader(tempFile);
+            session.setAttribute("headers", headers);
+            return ResponseEntity.ok().build(); // 파일이 있으면 OK 상태를 반환
+        } else {
+            // 파일 없이 게시물 저장 로직
+            PostDto postDto = PostDto.from(request, null);
+            postService.createPost(postDto, null);
+            return ResponseEntity.noContent().build(); // 파일이 없으면 No Content 상태를 반환
+        }
     }
+
 
     @GetMapping("/post/postModal")
     public String postModal(HttpSession session, Model model) {
@@ -79,24 +87,12 @@ public class PostController {
         return "redirect:/lecture-room/detail/" + lRoomId;
     }
 
-
-    @GetMapping("/post")
-    public String findPostList(Model model,
-                               @RequestParam(value = "page", defaultValue = "0") int page,
-                               @RequestParam(value = "size", defaultValue = "5") int size) {
-        PostListResponse postListResponse = postService.getPostList(page, size);
-        model.addAttribute("posts", postListResponse.getPosts());
-        model.addAttribute("totalPages", postListResponse.getTotalPages());
-        model.addAttribute("currentPage", postListResponse.getCurrentPage());
-        return "post/postList"; // Thymeleaf 파일 경로 수정
-    }
     @GetMapping("/post/{lRoomId}")
     public String findPostListByLectureRoomId(@PathVariable Long lRoomId, Model model) {
         List<PostDto> postList = postService.getPostListByLectureRoomId(lRoomId);
         model.addAttribute("posts", postList);
         return "post/postList"; // Thymeleaf 파일 경로 수정
     }
-
 
     @GetMapping("/post/updateForm/{postId}")
     public String updateForm(@ModelAttribute("postId") Long postId, Model model) {
