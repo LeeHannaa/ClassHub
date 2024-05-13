@@ -5,6 +5,7 @@ import com.example.classhub.domain.post.controller.request.PostCheckRequest;
 import com.example.classhub.domain.post.controller.request.PostCreateRequest;
 import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
 import com.example.classhub.domain.tag.service.TagService;
+import jakarta.annotation.Nullable;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -46,7 +47,14 @@ public class PostDto {
                 .build();
     }
 
-    public static PostDto from(PostCreateRequest postCreateRequest, PostCheckRequest postCheckRequest){
+    public static PostDto from(PostCreateRequest postCreateRequest, @Nullable PostCheckRequest postCheckRequest){
+        if (postCheckRequest == null){
+            return PostDto.builder()
+                    .postTitle(postCreateRequest.getPostTitle())
+                    .postContent(postCreateRequest.getPostContent())
+                    .lRoomId(postCreateRequest.getLRoomId())
+                    .build();
+        }
         return PostDto.builder()
                 .postTitle(postCreateRequest.getPostTitle())
                 .postContent(postCreateRequest.getPostContent())
@@ -57,6 +65,7 @@ public class PostDto {
                 .isCover(postCheckRequest.getIsCover())
                 .build();
     }
+
 
     public static PostDto from(PostUpdateRequest postUpdateRequest) {
         return PostDto.builder()
