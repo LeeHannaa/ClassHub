@@ -12,8 +12,10 @@ import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.service.MemberService;
 import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
+import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
+import com.example.classhub.domain.tag.controller.response.TagResponse;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -119,6 +123,16 @@ public class DataDetailController {
           // Lroom에 연결된 태그 목록 찾기
           TagListResponse tagListResponse = tagService.getTagListByLectureId(LRoomId);
           model.addAttribute("tags", tagListResponse);
+
+          // datadetail에서 해당 태그와 일치하는 데이터 목록을 가져오기
+          List<DataDetailDto> matchedDataDetails = new ArrayList<>();
+          for (TagResponse tag : tagListResponse.getTags()) {
+            List<DataDetailDto> dataDetails = dataDetailService.findByTagTagId(tag.getTagId());
+            matchedDataDetails.addAll(dataDetails);
+          }
+          // 가져온 datadetail 데이터 목록을 모델에 추가
+          model.addAttribute("dataDetails", matchedDataDetails);
+
           return "./student/studentView";
         }
       }
