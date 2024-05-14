@@ -65,8 +65,8 @@ public class PostController {
     @GetMapping("/post/postModal")
     public String postModal(HttpSession session, Model model) {
         List<String> headers = (List<String>) session.getAttribute("headers");
-        boolean keyHeaderExists = headers.stream().anyMatch(header -> header.contains("keyHeaderName"));
         ClassHub_LRoom lRoom = (ClassHub_LRoom) session.getAttribute("lRoom");
+        boolean keyHeaderExists = headers.stream().anyMatch(header -> header.contains(lRoom.getStudentInfoKey()));
         model.addAttribute("headers", headers);
         model.addAttribute("keyHeaderExists", keyHeaderExists);
         model.addAttribute("keyHeaderName", lRoom.getStudentInfoKey());
