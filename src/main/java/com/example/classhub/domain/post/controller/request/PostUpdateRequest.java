@@ -1,5 +1,6 @@
 package com.example.classhub.domain.post.controller.request;
 
+import com.example.classhub.domain.post.dto.PostDto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

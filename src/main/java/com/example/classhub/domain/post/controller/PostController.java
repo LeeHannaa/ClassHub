@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -104,15 +105,15 @@ public class PostController {
     }
 
     @PostMapping("/post/updateForm/{postId}")
-    public String update(@PathVariable Long postId, @ModelAttribute("post") PostUpdateRequest request) {
+    public ResponseEntity<String> update(@PathVariable Long postId, @RequestBody PostUpdateRequest request) {
+        System.out.println("PostUpdateRequest" + request);
         postService.update(postId, PostDto.from(request));
-        Long lectureRoomId = postService.findByPostId(postId).getLRoomId();
-        return "redirect:/lecture-room/detail/" + lectureRoomId;
+        return ResponseEntity.ok(postId+"수정 성공");
     }
 
-    @GetMapping("/post/delete/{postId}")
-    public String delete(@ModelAttribute("postId") Long postId) {
+    @PostMapping("/post/delete/{postId}")
+    public ResponseEntity<String> delete(@ModelAttribute("postId") Long postId) {
         postService.delete(postId);
-        return "redirect:/post";
+        return ResponseEntity.ok(postId+"삭제");
     }
 }

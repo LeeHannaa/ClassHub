@@ -168,6 +168,13 @@ public class PostService {
     }
     @Transactional
     public void delete(Long postId) {
+        PostDto postDto = findByPostId(postId);
+        System.out.println("findByPostId" + postDto);
+        String[] tagIdsArray = postDto.getTagId().split(",");
+        for (String tagIdStr : tagIdsArray) {
+            Long tagId = Long.parseLong(tagIdStr.trim());
+            tagService.tagDelete(tagId);
+        }
         postRepository.deleteById(postId);
     }
     @Transactional
