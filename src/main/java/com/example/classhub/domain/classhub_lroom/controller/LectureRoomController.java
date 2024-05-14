@@ -6,7 +6,7 @@ import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoo
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
-import com.example.classhub.domain.post.dto.PostDto;
+import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.service.PostService;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
@@ -50,21 +50,29 @@ public class LectureRoomController {
     @PostMapping("/lecture-room/saveLecture")
     public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request, @RequestParam("studentFile") MultipartFile studentFile) {
         LectureRoomDto lectureRoomDto = lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
-        memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
+        if(studentFile != null && !studentFile.isEmpty())
+            memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
         return "redirect:/lecture-room";
     }
 
-
     @GetMapping("/lecture-room/detail/{lectureRoomId}")
-    public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model) {
+    public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model,
+                                        @RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "size", defaultValue = "5") int size) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
-        List<PostDto> postList = postService.getPostListByLectureRoomId(lectureRoomId);
-        model.addAttribute("posts", postList);
+
+        PostListResponse postListResponse = postService.getPostListByLectureRoomId(lectureRoomId, page, size);
+
+        model.addAttribute("posts", postListResponse.getPosts()); // 수정된 부분
+        model.addAttribute("totalPages", postListResponse.getTotalPages());
+        model.addAttribute("currentPage", postListResponse.getCurrentPage());
         model.addAttribute("lectureRoom", lectureRoomDto);
         model.addAttribute("tags", tagListResponse.getTags());
+
         return "lectureRoomDetail";
     }
+
     @GetMapping("/lecture-room/detail/info/{lectureRoomId}")
     public String findLectureRoomDetailInfo(@PathVariable Long lectureRoomId, Model model) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
@@ -73,6 +81,7 @@ public class LectureRoomController {
         model.addAttribute("tags", tagListResponse.getTags());
         return "lectureRoom/lectureRoomInfo";
     }
+
     @PostMapping("/lecture-room/update/{lectureRoomId}")
     public String update(@PathVariable Long lectureRoomId, @ModelAttribute("lectureRoom") LectureRoomUpdateRequest request, RedirectAttributes attributes){
         lectureRoomService.update(lectureRoomId, LectureRoomDto.from(request));

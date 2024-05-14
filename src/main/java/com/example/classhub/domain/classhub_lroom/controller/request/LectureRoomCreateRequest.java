@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class LectureRoomCreateRequest {
     private String roomName;
     private String description;
-    private boolean OnOff;
+    private boolean OnOff = true;
     private String studentInfoKey;
 }
