@@ -5,6 +5,7 @@ import com.example.classhub.domain.member.controller.response.MemberListResponse
 import com.example.classhub.domain.member.controller.response.MemberResponse;
 import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.repository.MemberRepository;
+import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomMemberCreateRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

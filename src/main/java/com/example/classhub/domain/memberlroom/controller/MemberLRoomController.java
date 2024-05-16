@@ -1,11 +1,14 @@
 package com.example.classhub.domain.memberlroom.controller;
 
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.controller.request.LectureRoomCreateRequest;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.member.ClassHub_Member;
+import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomMemberCreateRequest;
+import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
@@ -64,22 +67,11 @@ public class MemberLRoomController {
 
   @PostMapping("/memberlroom/create/one/{lectureRoomId}")
   public ResponseEntity<String> createMemberByOne(@PathVariable Long lectureRoomId, @RequestBody MemberLRoomMemberCreateRequest memberLRoomMemberCreateRequest) {
-//    System.out.println("확인하기" + memberLRoomMemberCreateRequest);
-//    String uniqueId = memberLRoomMemberCreateRequest.getUniqueId(); // 예를 들어, uniqueId가 파라미터로 전달되는 경우
-//    System.out.println("Received uniqueId: " + uniqueId);
-    ClassHub_MemberLRoom classHub_memberLRoom = new ClassHub_MemberLRoom();
-    ClassHub_Member classHub_member = new ClassHub_Member();
-    classHub_member.setMember_name(memberLRoomMemberCreateRequest.getMember_name());
-    classHub_member.setUniqueId(memberLRoomMemberCreateRequest.getUniqueId());
-    classHub_member.setEmail(memberLRoomMemberCreateRequest.getEmail());
-    classHub_memberLRoom.setRole(memberLRoomMemberCreateRequest.getRole());
-    classHub_memberLRoom.setPermission(memberLRoomMemberCreateRequest.getPermission());
-    try{
-      memberLRoomService.createMemberByOne(lectureRoomId, classHub_memberLRoom, classHub_member);
-    } catch (IllegalArgumentException e){
-      return ResponseEntity.ok("기존에 존재하는 아이디입니다.");
-    }
-    return ResponseEntity.ok("Member added successfully");
+    LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+    MemberDto memberDto = MemberDto.from(memberLRoomMemberCreateRequest);
+    // 강의실 정보 + 입력받은 새 멤버의 정보를 이용해서 멤버강의실에서 처리하겠다.
+    Boolean createSuccess = memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
+    return createSuccess ? ResponseEntity.ok().body("Success") : ResponseEntity.ok().body("Failure");
   }
 
   // Read One

@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MemberLRoomMemberCreateRequest {
-    private String member_name;
-    private String email;
+    private String name;
     private String uniqueId;
+    private String email;
     private Role role;
     private Permission permission;
 }
