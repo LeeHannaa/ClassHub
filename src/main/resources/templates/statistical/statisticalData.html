@@ -421,9 +421,9 @@
                         </div>
                     </div>
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;" th:object="${dataStatistics}">
                             <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 데이터</h6>
-                            <label class="btn btn-primary btn-sm" style="background: #425de3; border-color: #425de3;" onclick="downloadCSV()">
+                            <label class="btn btn-primary btn-sm" style="background: #425de3; border-color: #425de3;"  th:onclick="|location.href='@{/total/csv/download/}' + ${dataStatistics[0].tagId}|">
                                 학생 명단 및 데이터 CSV 다운로드
                             </label>
                         </div>
@@ -589,36 +589,36 @@
         deleteTag(deleteTagId); // deleteTag 함수 호출
     }
 </script>
-<script>
-    function downloadCSV() {
-        const csv = [];
-        const rows = document.querySelectorAll("table#dataTable tr");
+<!--<script>-->
+<!--    function downloadCSV() {-->
+<!--        const csv = [];-->
+<!--        const rows = document.querySelectorAll("table#dataTable tr");-->
 
-        for (let i = 0; i < rows.length; i++) {
-            const row = [], cols = rows[i].querySelectorAll("td, th");
+<!--        for (let i = 0; i < rows.length; i++) {-->
+<!--            const row = [], cols = rows[i].querySelectorAll("td, th");-->
 
-            for (let j = 0; j < cols.length - 1; j++) {
-                // 데이터 내에 쉼표가 있을 경우를 대비하여 쌍따옴표 처리
-                row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
-            }
-            csv.push(row.join(","));
-        }
-        const csvString = "\uFEFF" + csv.join("\n");
+<!--            for (let j = 0; j < cols.length - 1; j++) {-->
+<!--                // 데이터 내에 쉼표가 있을 경우를 대비하여 쌍따옴표 처리-->
+<!--                row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');-->
+<!--            }-->
+<!--            csv.push(row.join(","));-->
+<!--        }-->
+<!--        const csvString = "\uFEFF" + csv.join("\n");-->
 
-        const csvFile = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+<!--        const csvFile = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });-->
 
-        // 다운로드 링크 생성
-        const link = document.createElement("a");
-        link.download = "student_data.csv"; // 파일 이름 지정
-        link.href = window.URL.createObjectURL(csvFile);
-        link.style.display = "none";
+<!--        // 다운로드 링크 생성-->
+<!--        const link = document.createElement("a");-->
+<!--        link.download = "student_data.csv"; // 파일 이름 지정-->
+<!--        link.href = window.URL.createObjectURL(csvFile);-->
+<!--        link.style.display = "none";-->
 
-        // 링크를 body에 추가하고 클릭한 후 제거
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-</script>
+<!--        // 링크를 body에 추가하고 클릭한 후 제거-->
+<!--        document.body.appendChild(link);-->
+<!--        link.click();-->
+<!--        document.body.removeChild(link);-->
+<!--    }-->
+<!--</script>-->
 
 
 <script th:inline="javascript">

@@ -19,9 +19,11 @@ import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.controller.response.TagResponse;
 import com.example.classhub.domain.tag.service.TagService;
 import jakarta.transaction.Transactional;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -140,4 +142,19 @@ public class DataDetailService {
                 .filter(dataDetail -> uniqueIds.contains(dataDetail.getStudentNum()))
                 .collect(Collectors.toList());
     }
+
+    public String setContent(DataStatisticListResponse dataStatisticListResponses){
+        String data = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        data += "학번, 이름, 점수, 생성일, 수정일 \n";
+        for(int i=0; i<dataStatisticListResponses.getDataStatistic().size(); i++){
+            data += dataStatisticListResponses.getDataStatistic().get(i).getStudentNum() + ",";
+            data += dataStatisticListResponses.getDataStatistic().get(i).getName() + ",";
+            data += dataStatisticListResponses.getDataStatistic().get(i).getScore() + ",";
+            data += dataStatisticListResponses.getDataStatistic().get(i).getRegDate() + ",";
+            data += dataStatisticListResponses.getDataStatistic().get(i).getModDate() + "\n";
+        }
+        return data;
+    }
+
 }
