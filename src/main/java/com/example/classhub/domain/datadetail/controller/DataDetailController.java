@@ -77,7 +77,7 @@ public class DataDetailController {
         DataStatisticListResponse dataStatisticListResponse = dataDetailService.getDataStatisticsList(tagId);
         model.addAttribute("dataStatistics", dataStatisticListResponse.getDataStatistic());
 
-        Long lectureRoomId = dataStatisticListResponse.getDataStatistic().get(0).getLRoomId();
+        Long lectureRoomId = tagService.findLRoomIdByTagId(tagId);
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
         model.addAttribute("lectureRoom", lectureRoomDto);
 
