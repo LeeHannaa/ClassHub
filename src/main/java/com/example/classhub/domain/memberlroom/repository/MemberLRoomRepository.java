@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface MemberLRoomRepository extends JpaRepository<ClassHub_MemberLRoom, Long> {
     List<ClassHub_MemberLRoom> findByLectureRoom_lRoomId(Long lRoomId);
+    ClassHub_MemberLRoom findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(Long lRoomId, String uniqueId);
 }

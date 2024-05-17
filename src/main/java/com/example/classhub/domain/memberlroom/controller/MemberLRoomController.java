@@ -1,13 +1,20 @@
 package com.example.classhub.domain.memberlroom.controller;
 
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
+import com.example.classhub.domain.classhub_lroom.controller.request.LectureRoomCreateRequest;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
+import com.example.classhub.domain.member.ClassHub_Member;
+import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
+import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomMemberCreateRequest;
+import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +61,17 @@ public class MemberLRoomController {
     model.addAttribute("memberLRooms", memberLRoomService.findMembersByLRoomId(lectureRoomId));
     TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
     model.addAttribute("tags", tagListResponse.getTags());
+//    model.addAttribute("classHubMemberLRoom", new ClassHub_MemberLRoom());
     return "member/memberList";
+  }
+
+  @PostMapping("/memberlroom/create/one/{lectureRoomId}")
+  public ResponseEntity<String> createMemberByOne(@PathVariable Long lectureRoomId, @RequestBody MemberLRoomMemberCreateRequest memberLRoomMemberCreateRequest) {
+    LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+    MemberDto memberDto = MemberDto.from(memberLRoomMemberCreateRequest);
+    // 강의실 정보 + 입력받은 새 멤버의 정보를 이용해서 멤버강의실에서 처리하겠다.
+    Boolean createSuccess = memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
+    return createSuccess ? ResponseEntity.ok().body("Success") : ResponseEntity.ok().body("Failure");
   }
 
   // Read One
@@ -83,6 +100,7 @@ public class MemberLRoomController {
     memberLRoomService.updateMemberLRoomRole(id, classHubMemberLRoom);
     return ResponseEntity.ok().body("MemberLRoom Role updated successfully.");
   }
+
   @PostMapping("/memberlroom/update/permission/{id}")
   public ResponseEntity<String> updateMemberLRoomPermission(@PathVariable Long id, @RequestBody ClassHub_MemberLRoom classHubMemberLRoom) {
     memberLRoomService.updateMemberLRoomPermission(id, classHubMemberLRoom);

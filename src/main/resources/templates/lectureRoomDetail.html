@@ -282,9 +282,9 @@
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#lectureRoomOutModal">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                공간 나가기
+                                강의실 나가기
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -410,7 +410,28 @@
             <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                <a class="btn btn-primary" href="index.html">로그아웃</a>
+                <a class="btn btn-primary" href="/lecture-room">로그아웃</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 강의실 나가기 Modal-->
+<div class="modal fade" id="lectureRoomOutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">강의실을 나가겠습니까?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">해당 강의실을 나가게 될 경우 강의실 내 정보와 공지를 확인할 수 없습니다.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                <a class="btn btn-primary" href="/lecture-room">나가기</a>
             </div>
         </div>
     </div>
@@ -444,7 +465,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                 <button id="openModalButton" class="btn btn-info" data-toggle="modal" data-target="#PostHeaderModal">게시물 생성</button>
-
             </div>
         </div>
     </div>

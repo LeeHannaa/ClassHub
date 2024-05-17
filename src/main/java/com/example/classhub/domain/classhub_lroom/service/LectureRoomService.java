@@ -61,6 +61,12 @@ public class LectureRoomService {
         return LectureRoomDto.from(lectureRoom);
     }
     @Transactional
+    public ClassHub_LRoom findByRoomIdOne(Long lectureRoomId) {
+        ClassHub_LRoom lectureRoom = lectureRoomRepository.findById(lectureRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
+        return lectureRoom;
+    }
+    @Transactional
     public ClassHub_LRoom findExistingLectureRoom(Long lectureRoomId) {
         return lectureRoomRepository.findById(lectureRoomId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의실이 존재하지 않습니다."));
