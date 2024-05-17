@@ -2,6 +2,7 @@ package com.example.classhub.domain.member.controller;
 
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
+import com.example.classhub.domain.member.controller.request.LoginRequest;
 import com.example.classhub.domain.member.controller.request.MemberCreateRequest;
 import com.example.classhub.domain.member.controller.response.MemberListResponse;
 import com.example.classhub.domain.member.dto.MemberDto;
@@ -33,13 +34,14 @@ public class MemberController {
     return "/member";
   }
 
-  @GetMapping("/memberForm") // member form 보여주기
+  @GetMapping("/login") // member form 보여주기
   public String createMemberForm(Model model){
-    model.addAttribute("member", new MemberCreateRequest());
-    return "/member/memberForm";
+    model.addAttribute("member", new LoginRequest());
+    return "/member/login";
   }
 
   @PostMapping("/saveMember") // member 저장하기
+  // TODO : hisnet login 연결
   public String createMember(@ModelAttribute("member") MemberCreateRequest request, RedirectAttributes redirectAttrs){
     try {
       memberService.createMember(MemberDto.from(request));
