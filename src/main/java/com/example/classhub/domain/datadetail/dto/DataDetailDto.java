@@ -3,6 +3,7 @@ package com.example.classhub.domain.datadetail.dto;
 import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
 import com.example.classhub.domain.datadetail.controller.request.DataDetailCreateRequest;
 import com.example.classhub.domain.datadetail.controller.request.DataDetailUpdateRequest;
+import com.example.classhub.domain.datadetail.controller.request.DataDetailUpdateScoreRequest;
 import lombok.*;
 
 @AllArgsConstructor
@@ -30,6 +31,12 @@ public class DataDetailDto {
                 .studentNum(request.getStudentNum())
                 .score(request.getScore())
                 .comment(request.getComment())
+                .build();
+    }
+
+    public static DataDetailDto from(DataDetailUpdateScoreRequest request) {
+        return DataDetailDto.builder()
+                .score(request.getScore())
                 .build();
     }
 

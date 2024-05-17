@@ -11,10 +11,13 @@ public class TagResponse {
     private Long tagId;
     private String name;
     private Long lectureRoomId;
+    private int perfectScore;
+
 
     public TagResponse(ClassHub_Tag tag){
         this.tagId = tag.getTagId();
         this.name = tag.getName();
         this.lectureRoomId = tag.getLectureRoom().getLRoomId();
+        this.perfectScore = tag.getPerfectScore();
     }
 }

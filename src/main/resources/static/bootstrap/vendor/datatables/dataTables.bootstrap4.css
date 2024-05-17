@@ -36,7 +36,7 @@ div.dataTables_wrapper div.dataTables_filter {
 div.dataTables_wrapper div.dataTables_filter label {
   font-weight: normal;
   white-space: nowrap;
-  text-align: left;
+  text-align: center;
 }
 div.dataTables_wrapper div.dataTables_filter input {
   margin-left: 0.5em;

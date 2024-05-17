@@ -1,27 +1,32 @@
 package com.example.classhub.domain.post.controller;
 
+import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
+import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.post.controller.request.PostCheckRequest;
 import com.example.classhub.domain.post.controller.request.PostCreateRequest;
+import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
 import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.service.PostService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class PostController {
     private final PostService postService;
+    private final LectureRoomService lectureRoomService;
 
     @GetMapping("/post/postForm")
     public String createPostForm(Model model) {
@@ -30,30 +35,46 @@ public class PostController {
     }
 
     @PostMapping("/post/postForm")
-    public String postForm(@ModelAttribute("postForm") PostCreateRequest request,
-                           @RequestParam("file") MultipartFile file,
-                           HttpSession session) throws IOException {
+    public ResponseEntity<?> postForm(@ModelAttribute("postForm") PostCreateRequest request,
+                                      @RequestParam(value = "file", required = false) MultipartFile file,
+                                      HttpSession session) throws IOException {
 
-        String tempDir = System.getProperty("java.io.tmpdir");
-        File tempFile = new File(tempDir, file.getOriginalFilename());
-        file.transferTo(tempFile);
-
-        session.setAttribute("filePath", tempFile.getAbsolutePath());
+        Long lRoomId = request.getLRoomId();
+        ClassHub_LRoom lRoom = ClassHub_LRoom.from(lectureRoomService.findByRoomId(lRoomId));
         session.setAttribute("postForm", request);
+        session.setAttribute("lRoom", lRoom);
 
-        List<String> headers = postService.checkHeader(tempFile);
-        session.setAttribute("headers", headers);
-        return "redirect:/post/postHeaderCheckForm";
+        if (file != null && !file.isEmpty()) {
+            String tempDir = System.getProperty("java.io.tmpdir");
+            File tempFile = new File(tempDir, file.getOriginalFilename());
+            file.transferTo(tempFile);
+
+            session.setAttribute("filePath", tempFile.getAbsolutePath());
+            List<String> headers = postService.checkHeader(tempFile);
+            session.setAttribute("headers", headers);
+            return ResponseEntity.ok().build(); // 파일이 있으면 OK 상태를 반환
+        } else {
+            // 파일 없이 게시물 저장 로직
+            PostDto postDto = PostDto.from(request, null);
+            postService.createPost(postDto, null);
+            return ResponseEntity.noContent().build(); // 파일이 없으면 No Content 상태를 반환
+        }
     }
 
-    @GetMapping("/post/postHeaderCheckForm")
-    public String postHeaderCheckForm(HttpSession session, Model model) {
+
+    @GetMapping("/post/postModal")
+    public String postModal(HttpSession session, Model model) {
         List<String> headers = (List<String>) session.getAttribute("headers");
+        ClassHub_LRoom lRoom = (ClassHub_LRoom) session.getAttribute("lRoom");
+        boolean keyHeaderExists = headers.stream().anyMatch(header -> header.contains(lRoom.getStudentInfoKey()));
         model.addAttribute("headers", headers);
-        return "post/postHeaderCheckForm";
+        model.addAttribute("keyHeaderExists", keyHeaderExists);
+        model.addAttribute("keyHeaderName", lRoom.getStudentInfoKey());
+        return "post/postModal";
     }
 
-    @PostMapping("/post/postHeaderCheckForm")
+
+    @PostMapping("/post/postModal")
     public String savePost(@ModelAttribute PostCheckRequest postCheckRequest,
                            HttpSession session) throws IOException {
 
@@ -69,24 +90,12 @@ public class PostController {
         return "redirect:/lecture-room/detail/" + lRoomId;
     }
 
-
-    @GetMapping("/post")
-    public String findPostList(Model model,
-                               @RequestParam(value = "page", defaultValue = "0") int page,
-                               @RequestParam(value = "size", defaultValue = "5") int size) {
-        PostListResponse postListResponse = postService.getPostList(page, size);
-        model.addAttribute("posts", postListResponse.getPosts());
-        model.addAttribute("totalPages", postListResponse.getTotalPages());
-        model.addAttribute("currentPage", postListResponse.getCurrentPage());
-        return "post/postList"; // Thymeleaf 파일 경로 수정
-    }
     @GetMapping("/post/{lRoomId}")
     public String findPostListByLectureRoomId(@PathVariable Long lRoomId, Model model) {
         List<PostDto> postList = postService.getPostListByLectureRoomId(lRoomId);
         model.addAttribute("posts", postList);
         return "post/postList"; // Thymeleaf 파일 경로 수정
     }
-
 
     @GetMapping("/post/updateForm/{postId}")
     public String updateForm(@ModelAttribute("postId") Long postId, Model model) {
@@ -96,14 +105,15 @@ public class PostController {
     }
 
     @PostMapping("/post/updateForm/{postId}")
-    public String update(@ModelAttribute("postId") Long postId, @ModelAttribute("post") PostCreateRequest request) {
+    public ResponseEntity<String> update(@PathVariable Long postId, @RequestBody PostUpdateRequest request) {
+        System.out.println("PostUpdateRequest" + request);
         postService.update(postId, PostDto.from(request));
-        return "redirect:/post";
+        return ResponseEntity.ok(postId+"수정 성공");
     }
 
-    @GetMapping("/post/delete/{postId}")
-    public String delete(@ModelAttribute("postId") Long postId) {
+    @PostMapping("/post/delete/{postId}")
+    public ResponseEntity<String> delete(@ModelAttribute("postId") Long postId) {
         postService.delete(postId);
-        return "redirect:/post";
+        return ResponseEntity.ok(postId+"삭제");
     }
 }

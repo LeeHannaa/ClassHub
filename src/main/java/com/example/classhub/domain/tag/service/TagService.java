@@ -4,14 +4,17 @@ package com.example.classhub.domain.tag.service;
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
 import com.example.classhub.domain.tag.ClassHub_Tag;
+import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.controller.response.TagResponse;
 import com.example.classhub.domain.tag.dto.TagDto;
 import com.example.classhub.domain.tag.repository.TagRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,23 +106,51 @@ public class TagService {
         ClassHub_Tag tag = tagRepository.findByNameAndLectureRoom_LRoomId(tagName, lRoomId);
 
         if (tag == null) {
-            if (isCover) {
-                System.out.println("isCover true / tag not found, creating new tag.");
-                return createTag(tagDto, lRoomId);
-            } else {
-                throw new IllegalArgumentException("태그를 찾을 수 없습니다. 새 태그를 생성하려면 isCover를 false로 설정해야 합니다.");
-            }
+            return createTag(tagDto, lRoomId);
         } else {
             if (isCover) {
-                tag.update(tagDto);
+                tag.update(tagDto);  // isCover가 true이면 태그 정보 업데이트
                 tagRepository.save(tag);
                 System.out.println("isCover true / updating existing tag: " + tag);
             } else {
                 System.out.println("isCover false / tag already exists: " + tag);
-                return TagDto.from(tag);
+                return createTag(tagDto, lRoomId);
             }
+            return TagDto.from(tag);  // 업데이트된 태그 정보 반환
         }
-        return TagDto.from(tag);
     }
 
+    @Transactional
+    public String getTagNamesByIds(String tagIds) {
+        if (tagIds == null || tagIds.isEmpty()) {
+            return "";
+        }
+
+        String[] tagIdArr = tagIds.split(",");
+        List<Long> tagIdList = Arrays.stream(tagIdArr)
+                .map(String::trim)
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        List<ClassHub_Tag> tags = tagRepository.findByTagIdIn(tagIdList);
+        return tags.stream()
+                .map(ClassHub_Tag::getName)
+                .collect(Collectors.joining(","));
+    }
+    public Integer getPerfectScoreByTagId(Long tagId) {
+        ClassHub_Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
+        return tag.getPerfectScore();
+    }
+
+  @Transactional
+  public void updatePerfectScore(Long tagId, TagPerfectScoreUpdateRequest request) {
+    // 태그를 ID로 찾아옵니다. 찾지 못할 경우 예외를 발생시킵니다.
+    ClassHub_Tag tag = tagRepository.findById(tagId)
+      .orElseThrow(() -> new EntityNotFoundException("Tag not found with id: " + tagId));
+
+    // 만점(perfectScore)를 업데이트합니다.
+    tag.setPerfectScore(request.getPerfectScore());
+
+  }
 }

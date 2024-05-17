@@ -4,10 +4,7 @@ import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.tag.dto.TagDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -25,6 +22,8 @@ public class ClassHub_Tag extends BaseEntity {
 
     private String name;
     private boolean nan;
+    @Setter
+    private int perfectScore = 100; // 만점 칼럼 : 기본값 100
 
     // 소프트 딜리트
     private boolean deleted = Boolean.FALSE;
@@ -33,16 +32,13 @@ public class ClassHub_Tag extends BaseEntity {
     @JoinColumn(name = "lRoomId")
     private ClassHub_LRoom lectureRoom;
 
-//    public void changeLecture(LectureRoom lectureRoom){ // Tag에서 lectureRoom을 변경해줄 때 해당 lectureRoom에서의 값을 변경
-//        lectureRoom.getTags().add(this);
-//        this.lectureRoom = lectureRoom;
-//    }
-
     public static ClassHub_Tag from(TagDto tagDto, ClassHub_LRoom lectureRoom, String newName) {
         return ClassHub_Tag.builder()
                 .name(newName)
                 .nan(tagDto.isNan())
                 .lectureRoom(lectureRoom)
+                .perfectScore(tagDto.getPerfectScore())
+                .deleted(false)
                 .build();
     }
 
@@ -56,5 +52,6 @@ public class ClassHub_Tag extends BaseEntity {
     public void update(TagDto tagDto) {
         this.name = tagDto.getName();
     }
+
 }
 

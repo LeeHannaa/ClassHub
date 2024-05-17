@@ -3,13 +3,18 @@ package com.example.classhub.domain.datadetail.controller;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.datadetail.controller.request.DataDetailCreateRequest;
+import com.example.classhub.domain.datadetail.controller.request.DataDetailUpdateScoreRequest;
 import com.example.classhub.domain.datadetail.controller.response.DataDetailListResponse;
 import com.example.classhub.domain.datadetail.controller.response.DataStatisticListResponse;
+import com.example.classhub.domain.datadetail.controller.response.DataStatisticResponse;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.datadetail.service.DataDetailService;
+import com.example.classhub.domain.member.service.MemberService;
+import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +26,7 @@ public class DataDetailController {
     private final DataDetailService dataDetailService;
     private final LectureRoomService lectureRoomService;
     private final TagService tagService;
+    private final MemberService memberService;
 
     @GetMapping("/data-detail/dataDetailForm")
     public String createDataDetailForm(Model model){
@@ -77,6 +83,23 @@ public class DataDetailController {
 
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         model.addAttribute("tags", tagListResponse.getTags());
-        return "./statistical/statisticalData";
+
+        Integer perfectScore = tagService.getPerfectScoreByTagId(tagId);
+        model.addAttribute("perfectScore", perfectScore);
+
+      return "./statistical/statisticalData";
+    }
+
+    @PutMapping("/data-detail/statistics/{tagId}/score")
+    public ResponseEntity<String> updateScoreByTagId(@PathVariable Long tagId, @RequestBody DataDetailUpdateScoreRequest request) {
+      dataDetailService.updateScore(tagId, DataDetailDto.from(request));
+      return ResponseEntity.ok("redirect:/data-detail/statistics/" + tagId);
+    }
+
+
+    @PutMapping("/data-detail/statistics/{tagId}/perfect-score")
+    public ResponseEntity<?> updateTagPerfectScore(@PathVariable Long tagId, @RequestBody TagPerfectScoreUpdateRequest request) {
+      tagService.updatePerfectScore(tagId, request);
+      return ResponseEntity.ok().build();
     }
 }

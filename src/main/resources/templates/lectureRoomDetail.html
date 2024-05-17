@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>ClassHub</title>
 
     <!-- Custom fonts for this template-->
     <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link th:href="@{/bootstrap/css/sb-admin-2.min.css}" rel="stylesheet" />
@@ -29,10 +24,15 @@
             z-index: 9999;
         }
 
-        .card{
+        .card {
             width: 100%;
-            max-width: 600px;
             margin: auto;
+        }
+        .fixed-paginator {
+            position: fixed;
+            bottom: 20px;
+            left: 55%;
+            z-index: 9999;
         }
     </style>
 </head>
@@ -275,7 +275,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">이한나학부생</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">장소연 교수</span>
                             <img class="img-profile rounded-circle"
                                  src="/bootstrap/img/undraw_profile.svg">
                         </a>
@@ -301,7 +301,7 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="container">
+                <div class="container" style="width: 70%;">
                 <!-- Page Heading -->
                 <div th:object="${lectureRoom}">
                     <h1 class="h3 mb-4 text-gray-800" th:text="${lectureRoom.roomName}"></h1>
@@ -317,42 +317,55 @@
                                         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                        <a th:href="@{/post/updateForm/{postId}(postId=${post.id})}" class="dropdown-item">수정</a>
-                                        <a th:href="@{/post/delete/{postId}(postId=${post.id})}" class="dropdown-item">삭제</a>
+                                        <a data-toggle="modal" data-target="#PostUpdateModal" class="dropdown-item" th:postTitle="${post.postTitle}" th:postContent="${post.postContent}" th:postId="${post.id}" th:tag="${post.getTagNames()}" th:onclick="setUpdatePostId(this.getAttribute('postId'),this.getAttribute('postTitle'),this.getAttribute('postContent'),this.getAttribute('tag'))">수정</a>
+                                        <a data-toggle="modal" data-target="#PostDeleteModal" class="dropdown-item" th:onclick="'setDeletePostId(\'' + ${post.id} + '\')'">삭제</a>
                                     </div>
                                 </div>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
                                 <p class="card-text" th:text="${post.postContent}"></p>
-                                <p class="card-text"><small class="text-muted" th:text="${post.getLRoomId()}"></small></p>
+                                <p class="card-text">
+                                    <small class="text-muted">연결된 태그 이름:
+                                        <span th:text="${post.getTagNames() != null and post.getTagNames() != '' ? post.getTagNames() : '없음'}"></span>
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">생성일: <span th:text="${post.getRegDate()}"></span></small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">수정일: <span th:text="${post.getModDate()}"></span></small>
+                                </p>
                             </div>
                         </div>
                     </div>
-<!--                    <div class="row">-->
-<!--                        <div class="col">-->
-<!--                            <nav aria-label="Page navigation example">-->
-<!--                                <ul class="pagination">-->
-<!--                                    <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="page-item">-->
-<!--                                        <a class="page-link" th:href="@{/post(page=${currentPage - 1})}" aria-label="Previous">-->
-<!--                                            <span aria-hidden="true">&laquo;</span>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">-->
-<!--                                        <a class="page-link" th:href="@{/post(page=${pageNum})}" th:text="${pageNum + 1}">1</a>-->
-<!--                                    </li>-->
-<!--                                    <li th:classappend="${currentPage + 1 == totalPages} ? 'disabled' : ''" class="page-item">-->
-<!--                                        <a class="page-link" th:href="@{/post(page=${currentPage + 1})}" aria-label="Next">-->
-<!--                                            <span aria-hidden="true">&raquo;</span>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                </ul>-->
-<!--                            </nav>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="row">
+                        <div class="col">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="page-item">
+                                        <a class="page-link" th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${currentPage - 1})}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li th:if="${totalPages > 0}" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">
+                                        <a class="page-link" th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${pageNum})}" th:text="${pageNum + 1}">1</a>
+                                    </li>
+                                    <li th:if="${totalPages == 0}" class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li th:classappend="${currentPage + 1 == totalPages} ? 'disabled' : ''" class="page-item">
+                                        <a class="page-link" th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${currentPage + 1})}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
-                        <a id="createPostButton" th:href="@{/post/postForm(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-success fixed-bottom-right">게시물 등록</a>
-                    </div>
+                </div>
+                    <button id="createPostButton" th:data-lroom-id="${lectureRoomId}" class="btn btn-success fixed-bottom-right">게시물 등록</button>
+                </div>
 
                 </div>
             </div>
@@ -403,6 +416,7 @@
     </div>
 </div>
 
+
 <!-- 강의실 나가기 Modal-->
 <div class="modal fade" id="lectureRoomOutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -423,16 +437,218 @@
     </div>
 </div>
 
-<!-- Bootstrap core JavaScript-->
+<!-- Create Post Modal -->
+<div class="modal fade" id="CreatePostModal" tabindex="-1" aria-labelledby="CreateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CreateModalLabel">게시물 생성</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createPostForm" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="modalPostTitle">게시물 제목:</label>
+                        <input type="text" id="modalPostTitle" name="postTitle" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="modalPostContent">게시물 내용:</label>
+                        <textarea id="modalPostContent" name="postContent" class="form-control" rows="5"></textarea>
+                    </div>
+                    <label for="modalFile">파일 업로드:</label>
+                    <input type="file" id="modalFile" name="file">
+                    <input type="hidden" id="modalLRoomId" name="lRoomId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                <button id="openModalButton" class="btn btn-info" data-toggle="modal" data-target="#PostHeaderModal">게시물 생성</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="PostHeaderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+<!-- Post Update Modal-->
+<div class="modal fade" id="PostUpdateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">공지 수정</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="postTitle">게시물 제목:</label>
+                    <input type="text" id="postTitle" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="postContent">게시물 내용:</label>
+                    <textarea id="postContent" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="postContent">연결된 태그</label>
+                    <small id="postTag" class="text-muted"></small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmUpdate" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;" onclick="updateSelectedPost()">수정</button>
+                <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    var updatePostId;
+    function setUpdatePostId(postId, postTitle, postContent, tag) {
+        console.log("tag", tag);
+        $('#postTitle').val(postTitle);
+        $('#postContent').val(postContent);
+        if(tag) {
+            $('#postTag').text(tag);
+        } else {
+            $('#postTag').text('없음');
+        }
+        updatePostId = postId;
+    }
+    function updatePost(postId) {
+        var postData = {
+            postTitle: $("#postTitle").val(),
+            postContent: $("#postContent").val()
+            // 필요한 경우 다른 필드 추가
+        };
+        $.ajax({
+            type: "POST",
+            url: "/post/updateForm/" + postId,
+            contentType: "application/json",
+            data: JSON.stringify(postData),
+            success: function(response) {
+                console.log("공지가 성공적으로 수정되었습니다.");
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error("공지 수정 중 에러가 발생했습니다:", error);
+            }
+        });
+    }
+
+    function updateSelectedPost() {
+        console.log("post 아이디: ", updatePostId);
+        updatePost(updatePostId); // deleteTag 함수 호출
+    }
+</script>
+
+<!-- Post Delete Modal-->
+<div class="modal fade" id="PostDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">공지 삭제</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>해당 공지를 정말 삭제하시겠습니까?</h4>
+                <p>공지 삭제 시 연결된 태그도 함께 삭제됩니다.</p>
+                <p>삭제하시면 더 이상 해당 공지 정보를 확인하실 수 없습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDelete" class="btn btn-primary" style="background: #2e59d9; border-color: #2e59d9;" onclick="deleteSelectedPost()">삭제</button>
+                <button class="btn btn-primary" data-dismiss="modal" style="background: #adb5bd; border-color: #adb5bd;">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    var deletePostId;
+    function setDeletePostId(postId) {
+        deletePostId = postId;
+    }// 태그 삭제 함수
+    function deletePost(postId) {
+        $.ajax({
+            type: "POST",
+            url: "/post/delete/" + postId,
+            success: function(response) {
+                console.log("공지가 성공적으로 삭제되었습니다.");
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error("공지 삭제 중 에러가 발생했습니다:", error);
+            }
+        });
+    }
+
+    function deleteSelectedPost() {
+        console.log("post 아이디: ", deletePostId);
+        deletePost(deletePostId); // deleteTag 함수 호출
+    }
+</script>
+<script>
+    function loadHeadersIntoModal() {
+        $.ajax({
+            url: '/post/postModal',
+            type: 'GET',
+            cache: false,
+            success: function(response) {
+                $('#PostHeaderModal .modal-content').html(response);
+                $('#PostHeaderModal').modal('show');
+            },
+            error: function() {
+                alert("Error loading the modal content");
+            }
+        });
+    }
+    function submitPostFormAndLoadModal() {
+        var formData = new FormData($('#createPostForm')[0]);
+        var lRoomId = $('#createPostButton').data('lroom-id');
+        $.ajax({
+            url: '/post/postForm',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            statusCode: {
+                200: function(response) {
+                    loadHeadersIntoModal(response);
+                },
+                204: function() {
+                    window.location.href = '/lecture-room/detail/' + lRoomId;
+                }
+            },
+            error: function() {
+                alert("파일 업로드에 실패했습니다.");
+            }
+        });
+    }
+</script>
 <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
-<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
 <script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
+<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/bootstrap/js/sb-admin-2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#openModalButton').click(function(event) {
+            event.preventDefault();
+            submitPostFormAndLoadModal();
+        });
 
+        $('#createPostButton').click(function() {
+            let lRoomId = $(this).data('lroom-id');
+            $('#modalLRoomId').val(lRoomId);
+            $('#CreatePostModal').modal('show');
+        });
+    });
+</script>
 </body>
-
 </html>

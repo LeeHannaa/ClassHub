@@ -4,11 +4,13 @@ import com.example.classhub.domain.post.ClassHub_Post;
 import com.example.classhub.domain.post.controller.request.PostCheckRequest;
 import com.example.classhub.domain.post.controller.request.PostCreateRequest;
 import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.classhub.domain.tag.service.TagService;
+import jakarta.annotation.Nullable;
+import lombok.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,6 +27,9 @@ public class PostDto {
     private List<Long> isSelected;
     private List<Long> isScore;
     private List<Long> isCover;
+    private String tagNames;
+    private String regDate;
+    private String modDate;
 
     public static PostDto from(PostCreateRequest postCreateRequest) {
         return PostDto.builder()
@@ -42,7 +47,14 @@ public class PostDto {
                 .build();
     }
 
-    public static PostDto from(PostCreateRequest postCreateRequest, PostCheckRequest postCheckRequest){
+    public static PostDto from(PostCreateRequest postCreateRequest, @Nullable PostCheckRequest postCheckRequest){
+        if (postCheckRequest == null){
+            return PostDto.builder()
+                    .postTitle(postCreateRequest.getPostTitle())
+                    .postContent(postCreateRequest.getPostContent())
+                    .lRoomId(postCreateRequest.getLRoomId())
+                    .build();
+        }
         return PostDto.builder()
                 .postTitle(postCreateRequest.getPostTitle())
                 .postContent(postCreateRequest.getPostContent())
@@ -54,11 +66,11 @@ public class PostDto {
                 .build();
     }
 
+
     public static PostDto from(PostUpdateRequest postUpdateRequest) {
         return PostDto.builder()
                 .postTitle(postUpdateRequest.getPostTitle())
                 .postContent(postUpdateRequest.getPostContent())
-                .tagId(postUpdateRequest.getTagId())
                 .build();
     }
 
@@ -69,6 +81,21 @@ public class PostDto {
                 .postContent(post.getPostContent())
                 .tagId(post.getTagId())
                 .lRoomId(post.getLRoom().getLRoomId())
+                .build();
+    }
+
+    public static PostDto from(ClassHub_Post post, TagService tagService){
+        String tagNames = tagService.getTagNamesByIds(post.getTagId());
+        System.out.println("tagNames: " + tagNames);
+        return PostDto.builder()
+                .id(post.getPostId())
+                .postTitle(post.getPostTitle())
+                .postContent(post.getPostContent())
+                .tagId(post.getTagId())
+                .tagNames(tagNames)
+                .lRoomId(post.getLRoom().getLRoomId())
+                .regDate(post.getRegDate().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
+                .modDate(post.getModDate().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
                 .build();
     }
 }

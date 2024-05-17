@@ -8,12 +8,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE class_hub_post SET deleted = true WHERE post_id = ?")
+@Where(clause = "deleted = false")
 public class ClassHub_Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +33,9 @@ public class ClassHub_Post extends BaseEntity {
     @Column(nullable = true)
     private String tagId;
 
+    // 소프트 딜리트
+    private boolean deleted = Boolean.FALSE;
+
     @ManyToOne(targetEntity = ClassHub_LRoom.class)
     @JoinColumn(name = "lRoomId" )
     private ClassHub_LRoom lRoom;
@@ -38,7 +45,7 @@ public class ClassHub_Post extends BaseEntity {
         return ClassHub_Post.builder()
                 .postTitle(postDto.getPostTitle())
                 .postContent(postDto.getPostContent())
-                .tagId("1")
+                .tagId(null)
                 .lRoom(lRoom)
                 .build();
     }
@@ -52,9 +59,8 @@ public class ClassHub_Post extends BaseEntity {
                 .build();
     }
 
-    public void update(PostDto from) {
-        this.postTitle = from.getPostTitle();
-        this.postContent = from.getPostContent();
-        this.tagId = from.getTagId();
+    public void update(PostDto postDto) {
+        this.postTitle = postDto.getPostTitle();
+        this.postContent = postDto.getPostContent();
     }
 }

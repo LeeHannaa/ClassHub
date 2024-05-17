@@ -60,8 +60,15 @@ public class MemberService {
     public Optional<ClassHub_Member> findByUniqueId(String uniqueId) {
         return memberRepository.findByUniqueId(uniqueId);
     }
-    
+
     @Transactional
+    public String findNameByUniqueId(String uniqueId) {
+      return memberRepository.findByUniqueId(uniqueId)
+        .map(ClassHub_Member::getMember_name)
+        .orElse("Unknown"); // 해당 uniqueId를 가진 학생이 없을 경우 "Unknown" 반환
+    }
+
+  @Transactional
     public void delete(Long memberId) {
         memberRepository.deleteById(memberId);
     }
