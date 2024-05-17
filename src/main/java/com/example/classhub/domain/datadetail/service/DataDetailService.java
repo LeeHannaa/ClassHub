@@ -149,7 +149,7 @@ public class DataDetailService {
         data += "학번, 이름, 점수, 생성일, 수정일 \n";
         for(int i=0; i<dataStatisticListResponses.getDataStatistic().size(); i++){
             data += dataStatisticListResponses.getDataStatistic().get(i).getStudentNum() + ",";
-            data += dataStatisticListResponses.getDataStatistic().get(i).getName() + ",";
+            data += dataStatisticListResponses.getDataStatistic().get(i).getStudentName() + ",";
             data += dataStatisticListResponses.getDataStatistic().get(i).getScore() + ",";
             data += dataStatisticListResponses.getDataStatistic().get(i).getRegDate() + ",";
             data += dataStatisticListResponses.getDataStatistic().get(i).getModDate() + "\n";
