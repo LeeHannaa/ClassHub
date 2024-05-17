@@ -74,6 +74,7 @@ public class PostService {
                     .name(headerName)
                     .lRoomId(lRoom.getLRoomId())
                     .nan(!isScoreTag)
+                    .perfectScore(100)
                     .build();
             TagDto createdTagDto = tagService.createOrUpdateTag(tagDto, isCover, lRoom.getLRoomId());
 
