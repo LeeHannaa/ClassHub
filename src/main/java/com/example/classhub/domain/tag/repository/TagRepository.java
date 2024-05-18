@@ -13,9 +13,6 @@ import java.util.List;
 public interface TagRepository extends JpaRepository<ClassHub_Tag, Long> {
     List<ClassHub_Tag> findByLectureRoom(ClassHub_LRoom lectureRoom);
 
-    ClassHub_Tag findByName(String name);
-
-    boolean existsByName(String newName);
     @Query("SELECT t FROM ClassHub_Tag t WHERE t.name = :name AND t.lectureRoom.lRoomId = :lRoomId")
     ClassHub_Tag findByNameAndLectureRoom_LRoomId(@Param("name") String name, @Param("lRoomId") Long lRoomId);
 

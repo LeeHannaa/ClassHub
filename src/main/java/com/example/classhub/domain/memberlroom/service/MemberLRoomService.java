@@ -1,6 +1,7 @@
 package com.example.classhub.domain.memberlroom.service;
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
+import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.member.service.MemberService;
@@ -9,6 +10,7 @@ import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.repository.MemberLRoomRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,6 +93,77 @@ public class MemberLRoomService {
     }
     return s;
   }
+
+  @Transactional
+  public Boolean createMemberByOne(LectureRoomDto lectureRoomDto, MemberDto memberDto) {
+    System.out.println("lectureRoomDto.lRoomId : " + lectureRoomDto.getLectureRoomId());
+    System.out.println("memberDto.uniqueId: " + memberDto.getUniqueId());
+    ClassHub_LRoom lRoom = lectureRoomService.findByRoomIdOne(lectureRoomDto.getLectureRoomId());
+    ClassHub_MemberLRoom memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(lectureRoomDto.getLectureRoomId(), memberDto.getUniqueId());
+
+    if(memberLRoom == null) {
+//      System.out.println("memberLRoom is null");
+      // member에서 해당 member 찾기
+      Optional<ClassHub_Member> defaultMember = memberService.findByUniqueId(memberDto.getUniqueId());
+      if(defaultMember.isEmpty()){
+        ClassHub_Member createMember = memberService.createMember(ClassHub_Member.from(memberDto));
+        ClassHub_MemberLRoom memberLRoom1 = ClassHub_MemberLRoom.builder()
+                .lectureRoom(lRoom)
+                .classHubMember(createMember)
+                .permission(memberDto.getPermission())
+                .role(memberDto.getRole())
+                .build();
+        memberLRoomRepository.save(memberLRoom1);
+      }
+      else{
+        ClassHub_MemberLRoom memberLRoom1 = ClassHub_MemberLRoom.builder()
+                .lectureRoom(lRoom)
+                .classHubMember(defaultMember.get())
+                .permission(memberDto.getPermission())
+                .role(memberDto.getRole())
+                .build();
+        memberLRoomRepository.save(memberLRoom1);
+      }
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+//    System.out.println("확인" + classHubMember);
+
+//    if(defalutMember != null){
+//      // 1-1. 있다면 학생 id 가져오기
+//      Long memberId = defalutMember.getMemberId();
+//      String uniqueId = defalutMember.getUniqueId();
+//      // 4. 가져온 id를 바탕으로 ClassHub_MemberLRoom에 해당 id를 가진 학생이 있는지 파악하기
+//      ClassHub_MemberLRoom memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(lRoomId, uniqueId);
+//      // 4-1. 동일한 학생 id를 가진 학생이 있다면 에러 리턴
+//      if(memberLRoom != null){
+//        System.out.println("동일한 학생 id를 가진 학생이 있다면 에러");
+//      }
+//      // 4-2. 없다면 ClassHub_MemberLRoom 정보 추가
+//      else{
+//        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+defalutMember);
+//        classHubMemberLRoom.setClassHubMember(defalutMember);
+//        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+classHubMemberLRoom);
+//        classHubMemberLRoom.setLectureRoom(lectureRoomService.findByRoomIdByOne(lRoomId));
+//        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+classHubMemberLRoom);
+//        memberLRoomRepository.save(classHubMemberLRoom);
+//        System.out.println("확인2");
+//      }
+//
+//    }
+//    else {
+//      // 1-2. 없다면 ClassHub_Member에 학생 정보 추가와 동시에 ClassHub_MemberLRoom 정보 추가
+//      System.out.println("없다면 ClassHub_Member에 학생 정보 추가와 동시에 ClassHub_MemberLRoom 정보 추가");
+//      memberService.createMember(classHubMember);
+//      System.out.println("멤버 정보 추가");
+//    }
+
+//    return MemberLRoomDto.from(classHubMemberLRoom);
+//  }
 
   @Transactional
   public void createMemberLRoom(Long lRoomId, MultipartFile studentFile) {
