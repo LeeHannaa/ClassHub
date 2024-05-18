@@ -19,6 +19,8 @@ import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.controller.response.TagResponse;
 import com.example.classhub.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,7 +89,7 @@ public class DataDetailController {
         DataStatisticListResponse dataStatisticListResponse = dataDetailService.getDataStatisticsList(tagId);
         model.addAttribute("dataStatistics", dataStatisticListResponse.getDataStatistic());
 
-        Long lectureRoomId = dataStatisticListResponse.getDataStatistic().get(0).getLRoomId();
+        Long lectureRoomId = tagService.findLRoomIdByTagId(tagId);
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
         model.addAttribute("lectureRoom", lectureRoomDto);
 
@@ -98,6 +100,15 @@ public class DataDetailController {
         model.addAttribute("perfectScore", perfectScore);
 
       return "./statistical/statisticalData";
+    }
+
+    @GetMapping("/total/csv/download/{tagId}")
+    public ResponseEntity<String> downloadCSV(@PathVariable("tagId") Long tagId){
+        DataStatisticListResponse dataStatisticListResponse = dataDetailService.getDataStatisticsList(tagId);
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content-Type", "text/csv; charset=UTF-8");
+        header.add("Content-Disposition", "attachment; filename=\""+"student_data.csv"+"\"");
+        return new ResponseEntity<String>(dataDetailService.setContent(dataStatisticListResponse), header, HttpStatus.CREATED);
     }
 
     @PutMapping("/data-detail/statistics/{tagId}/score")

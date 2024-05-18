@@ -370,103 +370,109 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
-            <div style="margin: 0 auto; width: 70%">
+            <div class="container-fluid" style="width: 70%">
+                <div class="column justify-content-center" >
+                <h1 class="h3 mb-4 text-gray-800">데이터 분석</h1>
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">데이터 분석</h1>
-                <div class="statistics-container" th:each="statistic : ${dataStatistics[0]}">
-                  <p>데이터 등록일 : <span th:text="${#temporals.format(statistic.regDate, 'yyyy-MM-dd')}"></span></p>
-                  <p>데이터 수정일: <span th:text="${#temporals.format(statistic.modDate, 'yyyy-MM-dd')}"></span></p>
+                <div th:if="${not #lists.isEmpty(dataStatistics)}" class="statistics-container" style="justify-content: flex-end">
+                    <div th:each="statistic : ${dataStatistics[0]}">
+                        <p>데이터 등록일 : <span th:text="${#temporals.format(statistic.regDate, 'yyyy-MM-dd')}"></span></p>
+                        <p>데이터 수정일: <span th:text="${#temporals.format(statistic.modDate, 'yyyy-MM-dd')}"></span></p>
+                    </div>
                 </div>
                 <!-- Content Row -->
-                    <div style="width: 100%;">
-                        <!-- Area Chart -->
-                        <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" class="card shadow mb-4" th:object="${dataStatistics}">
-                          <div class="card-header py-3 d-flex justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
-                            <div class="m-0 font-weight-bold text-primary">
-                              만점 : <span th:data-tag-id="${dataStatistics[0].tagId}" id="perfectScore" th:text="${perfectScore}" class="editable" contenteditable="true"></span>
-                            </div>
-
-
-                          </div>
-
-                          <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="myAreaChart"></canvas>
-                                </div>
-                                <hr>
-                              <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" style="display: flex; justify-content: space-around; text-align: center;">
-                                <div>
-                                  <strong>평균</strong><br>
-                                  <span id="mean"></span>
-                                </div>
-                                <div>
-                                  <strong>평균(0점 제외)</strong><br>
-                                  <span id="meanExcludingZeros"></span>
-                                </div>
-                                <div>
-                                  <strong>표준 편차</strong><br>
-                                  <span id="standardDeviation"></span>
-                                </div>
-                                <div>
-                                  <strong>최고 점수</strong><br>
-                                  <span id="maxScore"></span>
-                                </div>
-                                <div>
-                                  <strong>최저 점수</strong><br>
-                                  <span id="minScore"></span>
-                                </div>
-                              </div>
-                            </div>
+                <div class="column justify-content-center" th:if="${not #lists.isEmpty(dataStatistics)}">
+                    <!-- Area Chart -->
+                    <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" class="card shadow mb-4" th:object="${dataStatistics}">
+                      <div class="card-header py-3 d-flex justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary" th:text="${dataStatistics[0].tagName} + ' 점수 통계'"></h6>
+                        <div class="m-0 font-weight-bold text-primary">
+                          만점 : <span th:data-tag-id="${dataStatistics[0].tagId}" id="perfectScore" th:text="${perfectScore}" class="editable" contenteditable="true"></span>
                         </div>
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;">
-                                <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 데이터</h6>
-                                <label class="btn btn-primary btn-sm" style="background: #425de3; border-color: #425de3;" onclick="downloadCSV()">
-                                    학생 명단 및 데이터 CSV 다운로드
-                                </label>
+                      </div>
+                      <div class="card-body">
+                          <div class="chart-area">
+                              <canvas id="myAreaChart"></canvas>
+                          </div>
+                          <hr>
+                          <div th:if="${dataStatistics.size() > 0 and dataStatistics[0].score != null}" style="display: flex; justify-content: space-around; text-align: center;">
+                            <div>
+                              <strong>평균</strong><br>
+                              <span id="mean"></span>
                             </div>
-                            <div class="card-body">
-                            <div class="table-responsive">
-                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                  <th>학번</th>
-                                  <th>이름</th>
-                                  <th>점수</th>
-                                  <th>생성일</th>
-                                  <th>수정일</th>
-                                  <th>작업</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                  <tr th:each="data, iterStat : ${dataStatistics}">
+                            <div>
+                              <strong>평균(0점 제외)</strong><br>
+                              <span id="meanExcludingZeros"></span>
+                            </div>
+                            <div>
+                              <strong>표준 편차</strong><br>
+                              <span id="standardDeviation"></span>
+                            </div>
+                            <div>
+                              <strong>최고 점수</strong><br>
+                              <span id="maxScore"></span>
+                            </div>
+                            <div>
+                              <strong>최저 점수</strong><br>
+                              <span id="minScore"></span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;" th:object="${dataStatistics}">
+                            <h6 class="m-0 font-weight-bold text-primary">학생 명단 및 데이터</h6>
+                            <label class="btn btn-primary btn-sm" style="background: #425de3; border-color: #425de3;"  th:onclick="|location.href='@{/total/csv/download/}' + ${dataStatistics[0].tagId}|">
+                                학생 명단 및 데이터 CSV 다운로드
+                            </label>
+                        </div>
+                        <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                              <th>학번</th>
+                              <th>이름</th>
+                              <th>점수</th>
+                              <th>생성일</th>
+                              <th>수정일</th>
+                              <th>작업</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="data, iterStat : ${dataStatistics}">
                                     <td th:text="${data.studentNum}"></td>
-                                    <td th:id="'name-'+${iterStat.index}"></td>
+                                    <td th:text="${data.studentName}"></td>
                                     <td>
-                                      <span th:id="'score-' + ${iterStat.index}" th:text="${data.score}"></span>
-                                      <input type="number" th:id="'input-score-' + ${iterStat.index}" th:value="${data.score}" style="display: none;"/>
+                                        <span th:id="'score-' + ${iterStat.index}" th:text="${data.score}"></span>
+                                        <input type="number" th:id="'input-score-' + ${iterStat.index}" th:value="${data.score}" style="display: none;"/>
                                     </td>
                                     <td th:text="${#temporals.format(data.regDate, 'yyyy/MM/dd')}"></td>
                                     <td th:text="${#temporals.format(data.modDate, 'yyyy/MM/dd')}"></td>
                                     <td>
-                                      <button th:id="'edit-button-' + ${iterStat.index}" type="button" class="btn btn-primary" onclick="editScore(this.id)">수정</button>
-                                      <button th:id="'save-button-' + ${iterStat.index}" type="button" class="btn btn-success" th:attr="data-tag-id=${data.id}" style="display: none;" onclick="saveScore(this.id, this.getAttribute('data-tag-id'))">저장</button>
+                                        <button th:id="'edit-button-' + ${iterStat.index}" type="button" class="btn btn-primary" onclick="editScore(this.id)">수정</button>
+                                        <button th:id="'save-button-' + ${iterStat.index}" type="button" class="btn btn-success" th:attr="data-tag-id=${data.id}" style="display: none;" onclick="saveScore(this.id, this.getAttribute('data-tag-id'))">저장</button>
                                     </td>
-                                  </tr>
-                                </tbody>
-                                <tfoot>
-                                </tfoot>
-                              </table>
-                            </div>
-                          </div>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                          </table>
                         </div>
+                      </div>
+                    </div>
                 </div>
               </div>
-            <!-- /.container-fluid -->
+                <!-- /.container-fluid -->
+                <div class="row justify-content-center" th:if="${#lists.isEmpty(dataStatistics)}">
+                    <div style="width: 40%; height: 20%; margin-top: 5%">
+                        <img src="/img/noDataImage.png" class="mb-4" style="width: 100%; height: 100%"/>
+                        <h5 style="text-align: center;">강의실에 있는 학생과 일치하는 유효한 데이터가 없습니다.</h5>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- End of Main Content -->
-
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
@@ -478,9 +484,8 @@
         <!-- End of Footer -->
     </div>
     <!-- End of Content Wrapper -->
-
     </div>
-  </div>
+
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
@@ -594,36 +599,36 @@
       });
     });
 </script>
-<script>
-    function downloadCSV() {
-        const csv = [];
-        const rows = document.querySelectorAll("table#dataTable tr");
+<!--<script>-->
+<!--    function downloadCSV() {-->
+<!--        const csv = [];-->
+<!--        const rows = document.querySelectorAll("table#dataTable tr");-->
 
-        for (let i = 0; i < rows.length; i++) {
-            const row = [], cols = rows[i].querySelectorAll("td, th");
+<!--        for (let i = 0; i < rows.length; i++) {-->
+<!--            const row = [], cols = rows[i].querySelectorAll("td, th");-->
 
-            for (let j = 0; j < cols.length - 1; j++) {
-                // 데이터 내에 쉼표가 있을 경우를 대비하여 쌍따옴표 처리
-                row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
-            }
-            csv.push(row.join(","));
-        }
-        const csvString = "\uFEFF" + csv.join("\n");
+<!--            for (let j = 0; j < cols.length - 1; j++) {-->
+<!--                // 데이터 내에 쉼표가 있을 경우를 대비하여 쌍따옴표 처리-->
+<!--                row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');-->
+<!--            }-->
+<!--            csv.push(row.join(","));-->
+<!--        }-->
+<!--        const csvString = "\uFEFF" + csv.join("\n");-->
 
-        const csvFile = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+<!--        const csvFile = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });-->
 
-        // 다운로드 링크 생성
-        const link = document.createElement("a");
-        link.download = "student_data.csv"; // 파일 이름 지정
-        link.href = window.URL.createObjectURL(csvFile);
-        link.style.display = "none";
+<!--        // 다운로드 링크 생성-->
+<!--        const link = document.createElement("a");-->
+<!--        link.download = "student_data.csv"; // 파일 이름 지정-->
+<!--        link.href = window.URL.createObjectURL(csvFile);-->
+<!--        link.style.display = "none";-->
 
-        // 링크를 body에 추가하고 클릭한 후 제거
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-</script>
+<!--        // 링크를 body에 추가하고 클릭한 후 제거-->
+<!--        document.body.appendChild(link);-->
+<!--        link.click();-->
+<!--        document.body.removeChild(link);-->
+<!--    }-->
+<!--</script>-->
 
 
 <script th:inline="javascript">

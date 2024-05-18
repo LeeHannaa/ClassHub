@@ -6,13 +6,11 @@ import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
