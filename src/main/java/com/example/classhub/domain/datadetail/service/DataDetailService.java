@@ -80,4 +80,12 @@ public class DataDetailService {
                 .toList();
         return new DataStatisticListResponse(dataStatisticResponses);
     }
+
+  public List<DataStatisticResponse> findByTagTagId(Long tagId) {
+    List<ClassHub_DataDetail> dataDetails = dataDetailRepository.findByTagTagId(tagId);
+    List<DataStatisticResponse> dataStatisticResponses = dataDetails.stream()
+            .map(DataStatisticResponse::new)
+            .toList();
+    return dataStatisticResponses;
+  }
 }
