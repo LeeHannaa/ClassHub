@@ -108,7 +108,6 @@
                 </div>
             </div>
         </li>
-
 <!--        태그 필터링 및 수정 관련 코드       -->
         <script>
             document.getElementById("tagSearchButton").addEventListener("click", function () {
@@ -483,7 +482,6 @@
             </div>
         </footer>
         <!-- End of Footer -->
-
     </div>
     <!-- End of Content Wrapper -->
     </div>
@@ -588,6 +586,18 @@
         console.log("태그 아이디: ", deleteTagId);
         deleteTag(deleteTagId); // deleteTag 함수 호출
     }
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // 이름 데이터 배열
+      var names = ["강준혁", "이한나", "장유진","김용현","김광일","최혜림","김신후","최지호","한시온"]; // 실제 이름 데이터로 대체하세요.
+
+      // 각 이름을 해당 위치에 삽입
+      names.forEach((name, index) => {
+        var nameCell = document.getElementById('name-' + index);
+        if (nameCell) {
+          nameCell.textContent = name;
+        }
+      });
+    });
 </script>
 <!--<script>-->
 <!--    function downloadCSV() {-->
@@ -765,6 +775,7 @@
 
           editButton.style.display = '';
           saveButton.style.display = 'none';
+          window.location.reload();
         } else {
           console.error('서버 저장 실패:', xhr.responseText);
         }

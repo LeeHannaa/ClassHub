@@ -91,31 +91,6 @@ public class DataDetailService {
     }
 
     //statistics
-//    @Transactional
-//    public DataStatisticListResponse getDataStatisticsList(Long tagId) {
-//        // ToDo: 통계자료 해당 강의실에 있는 학생의 학번과 동일한 학번만 저장
-////        1. 강의실 아이디 가져오기
-////        2. 해당 강의실 멤버 불러오기
-////        3. 데이터리스트에 있는 학번이랑 강의실에서 불러온 학번이랑 켭치는 것만 리스트에 저장하기
-//        List<ClassHub_MemberLRoom> memberLRoomList = memberLRoomService.findMembersByLRoomId(tagService.findLRoomIdByTagId(tagId));
-//        sou
-//        List<ClassHub_Member> memberList = memberLRoomList.stream()
-//                .map(ClassHub_MemberLRoom::getClassHubMember)
-//                .collect(Collectors.toList());
-//        List<ClassHub_DataDetail> dataStatistics = dataDetailRepository.findByTagTagId(tagId);
-//
-//        Set<String> memberStudentNums = memberList.stream()
-//                .map(ClassHub_Member::getUniqueId)
-//                .collect(Collectors.toSet());
-//
-//        List<DataStatisticResponse> statisticDataInMember = dataStatistics.stream()
-//                .filter(data -> memberStudentNums.contains(data.getStudentNum()))
-//                .map(data -> new DataStatisticResponse(data)) // DataStatisticResponse 생성자 수정 필요 시 여기 조정
-//                .collect(Collectors.toList());
-//
-//        return new DataStatisticListResponse(statisticDataInMember);
-//    }
-    //statistics
     @Transactional
     public DataStatisticListResponse getDataStatisticsList(Long tagId) {
         Long roomId = tagService.findLRoomIdByTagId(tagId);
@@ -157,4 +132,11 @@ public class DataDetailService {
         return data;
     }
 
+  public List<DataStatisticResponse> findByTagTagId(Long tagId) {
+    List<ClassHub_DataDetail> dataDetails = dataDetailRepository.findByTagTagId(tagId);
+    List<DataStatisticResponse> dataStatisticResponses = dataDetails.stream()
+            .map(DataStatisticResponse::new)
+            .toList();
+    return dataStatisticResponses;
+  }
 }
