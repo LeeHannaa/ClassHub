@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="">
 
 <head>
 
@@ -24,28 +24,6 @@
   <!-- 부트스트랩 CSS 파일 링크 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    .fixed-bottom-right {
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      z-index: 9999;
-      box-shadow: 0px 5px 9px rgba(43, 181, 74, 0.5);
-      color: white;
-    }
-    .custom-tooltip-icon {
-      cursor: pointer; /* 손가락 모양 커서로 변경 */
-    }
-
-    /* 툴팁 스타일 오버라이드 */
-    .tooltip-inner {
-      max-width: 200px; /* 너비 조정 */
-      width: auto; /* 너비 자동 조절 */
-      background-color: #5a5a5a; /* 배경색 변경 */
-      color: white; /* 글자색 변경 */
-      font-size: 13px; /* 글자 크기 조정 */
-      border: 1px solid #777; /* 테두리 색상 조정 */
-    }
-
     .tooltip.bs-tooltip-right .arrow::before {
       border-right-color: #5a5a5a; /* 화살표 색상 오른쪽 배치 툴팁에 대한 조정 */
     }
@@ -60,14 +38,14 @@
       align-items: center;
       width: 100%; /* 버튼의 전체 너비를 사용 */
     }
+    .accordion-body > div {
+      display: flex;
+      flex-wrap: wrap; /* 필요한 경우 줄바꿈 */
+      gap: 10px; /* 각 항목 사이의 간격 */
+    }
 
     .accordion-button > span {
       flex-shrink: 0;
-    }
-    #statistics {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     .stat-item {
       text-align: center;
@@ -80,6 +58,7 @@
     .stat-label {
       font-size: 0.9em;
     }
+
   </style>
 </head>
 
@@ -233,234 +212,293 @@
       <!-- Begin Page Content -->
       <div class="container-fluid">
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">학생 View</h1>
-        <div style="width:60%; margin:15px auto;">
+        <div style="width:70%; margin:15px auto;">
+          <h1 class="h3 mb-4 text-gray-800" th:text="'< '+${lectureRoom.roomName} + ' > 나의 데이터 요약'"></h1>
           <canvas id="scoreChart"></canvas>
         </div>
-        <div class="accordion" id="accordionPanelsStayOpenExample" style="width: 60%; margin: 15px auto;">
-<!--          &lt;!&ndash; 중간고사 &ndash;&gt;-->
-<!--          <div class="accordion-item">-->
-<!--            <h2 class="accordion-header d-flex justify-content-between">-->
-<!--              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">-->
-<!--                중간고사-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-caret-down-fill" viewBox="0 0 16 16">\n' +-->
-<!--                  '                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>\n' +-->
-<!--                  '                  </svg><span style="color: blue;">10.62%</span>-->
-<!--                <small class="text-muted" style="flex-shrink: 0;"> (최근 수정일: 2024-05-10)</small>-->
-<!--              </button>-->
-<!--            </h2>-->
-<!--            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">-->
-<!--              <div class="accordion-body">-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          &lt;!&ndash; 퀴즈1 &ndash;&gt;-->
-<!--          <div class="accordion-item">-->
-<!--            <h2 class="accordion-header d-flex justify-content-between">-->
-<!--              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">-->
-<!--                퀴즈1-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">\n' +-->
-<!--                  '                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>\n' +-->
-<!--                  '                  </svg><span style="color: red;">8.98%</span>-->
-<!--                <small class="text-muted" style="flex-shrink: 0;"> (최근 수정일: 2024-05-10)</small>-->
-<!--              </button>-->
-<!--            </h2>-->
-<!--            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">-->
-<!--              <div class="accordion-body">-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          &lt;!&ndash; 퀴즈2 &ndash;&gt;-->
-<!--          <div class="accordion-item">-->
-<!--            <h2 class="accordion-header d-flex justify-content-between">-->
-<!--              <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">-->
-<!--                퀴즈2-->
-<!--                <span id="scoreDifference" style="margin: 0 1rem;"></span>-->
-<!--                <small class="text-muted" style="flex-shrink: 0;"> (최근 수정일: 2024-05-10)</small>-->
-<!--              </button>-->
-<!--            </h2>-->
-<!--            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">-->
-<!--              <div class="accordion-body">-->
-<!--                <canvas id="myChart" width="400" height="100"></canvas>-->
-<!--                <div id="statistics"></div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-        <div class="accordion" style="width: 60%; margin: 15px auto;">
-          <div th:each="tag, iterStat : ${tags.tags}" class="accordion-item">
-            <h2 class="accordion-header d-flex justify-content-between" th:id="'heading' + ${iterStat.index}">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}">
-                <span th:text="${tag.name}"></span>
-                <!-- 여기에 추가적인 정보를 표시할 수 있습니다. 예: 점수 차이, 최근 수정일 등 -->
-                <span style="margin: 0 1rem;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                  </svg>
-                  <span style="color: red;" th:text="'20%'"></span>
+        <div class="accordion" id="accordionPanelsStayOpenExample" style="width: 70%; margin: 15px auto;">
+          <div class="accordion" style="width: 70%; margin: 15px auto;">
+            <div th:each="tag, iterStat : ${tags.tags}" class="accordion-item">
+              <h2 class="accordion-header d-flex justify-content-between" th:id="'heading' + ${iterStat.index}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}">
+                  <span th:text="${tag.name}" style="font-weight: bold;"></span>
+                  <!-- 여기에 추가적인 정보를 표시할 수 있습니다. 예: 점수 차이, 최근 수정일 등 -->
+                  <span style="margin: 0 1rem;">
+                    <!-- 아이콘 및 추가 정보 생략 -->
+                    <small th:id="'modDate-' + ${tag.tagId}">최근 수정일: 로딩 중...</small>
                 </span>
-                <small class="text-muted" style="flex-shrink: 0;" th:text="'(최근 수정일: 2024-05-10)'" ></small>
-              </button>
-            </h2>
-            <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.index}">
-              <div class="accordion-body">
-                <!-- 아코디언 바디에 표시할 내용 -->
-                <strong th:text="${tag.tagId}"></strong>
-                <strong th:text="${tag.perfectScore}"></strong>
+                </button>
+              </h2>
+              <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.index}">
+                <div class="accordion-body">
+                  <canvas th:id="'myChart' + ${tag.tagId}"></canvas>
+                  <!-- 아코디언 바디에 표시할 내용 -->
+                  <div th:if="${statisticsByTagId.containsKey(tag.tagId)}">
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].average}"></span><br><span class="stat-label">평균 점수</span></div>
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].max}"></span><br><span class="stat-label">최대 점수</span></div>
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].min}"></span><br><span class="stat-label">최소 점수</span></div>
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].stddev}"></span><br><span class="stat-label">표준편차</span></div>
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].averageExcludingZero}"></span><br><span class="stat-label">0점 제외 평균</span></div>
+                  </div>
+                  <div th:unless="${statisticsByTagId.containsKey(tag.tagId)}">
+                    <div class="stat-item"><span class="stat-value">N/A</span><br><span class="stat-label">해당 태그에 대한 데이터가 없습니다.</span></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+
+          <script th:inline="javascript">
+            /*<![CDATA[*/
+            var matchedStudentDetails = [[${matchedStudentDetails}]];
+            var myScores = matchedStudentDetails.map(function(detail) {
+              return {score: detail.score,modDate: detail.modDate, tagId: detail.tagId};
+            });
+            var groupedByTagId = matchedStudentDetails.reduce(function(acc, detail) {
+              var date = new Date(detail.modDate); // 문자열을 Date 객체로 변환
+              var year = date.getFullYear(); // 년도
+              var month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월 (0부터 시작하므로 1을 더함)
+              var day = date.getDate().toString().padStart(2, '0'); // 일
+              var formattedDate = `${year}-${month}-${day}`; // 'YYYY-MM-DD' 형식으로 변환
+              acc[detail.tagId] = formattedDate;
+              return acc;
+            }, {});
 
 
-        <script th:inline="javascript">
-          /*<![CDATA[*/
-          var dataDetails = [[${dataDetails}]]; // 서버 측에서 전달된 tags 객체를 자바스크립트 변수에 할당
-          console.log('DataDetails:', dataDetails);
-
-          var ctx = document.getElementById('scoreChart').getContext('2d');
-          var scoreChart = new Chart(ctx, {
-            type: 'bar', // 차트의 종류를 막대 그래프로 설정
-            data: {
-              labels: ['중간고사', '퀴즈1', '퀴즈2'], // X축 레이블
-              datasets: [{
-                label: '분반 평균 점수',
-                data: [85, 80, 50], // 분반 평균 점수 데이터
-                backgroundColor: 'rgba(54, 162, 235, 0.2)', // 파란색
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-              }, {
-                label: '나의 점수',
-                data: [75, 88, 70], // 나의 점수 데이터
-                backgroundColor: 'rgba(75, 192, 192, 0.2)', // 녹색
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-              }]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true, // Y축을 0부터 시작
-                  max: 100 // Y축 최대 값을 100으로 설정
+            document.addEventListener("DOMContentLoaded", function() {
+              // 모든 tag에 대해 동적으로 최근 수정일을 업데이트합니다.
+              Object.keys(groupedByTagId).forEach(function(tagId) {
+                var modDateElement = document.getElementById('modDate-' + tagId);
+                if (modDateElement) { // 해당하는 요소가 있을 경우에만 업데이트
+                  modDateElement.textContent = `( 수정일: ${groupedByTagId[tagId]} )`;
                 }
-              }
-            }
-          });
-          /*]]>*/
-        </script>
-        <script th:inline="javascript">
-          /*<![CDATA[*/
-          var scores = [    5, 10, 15, 20, 25, 30, 35, 40, 45, 50,
-                            55, 60, 65, 70, 75, 80, 85, 90, 92, 94,
-                            96, 98, 70, 72, 74, 76, 78, 82, 84, 86  ];
-          var perfectScore = 100; // 최고 점수
-          var myScore = 78; // 본인의 점수
-          var myScorePercentage = (myScore / perfectScore) * 100; // 본인의 점수를 백분율로 변환
+              });
+            });
 
-          // 점수를 백분율로 변환하는 함수
-          var convertScoresToPercentages = (scores, perfectScore) => scores.map(score => (score / perfectScore) * 100);
 
-          // 점수 분포 계산
-          var scoreDistribution = Array(10).fill(0); // 10개 구간으로 수정
-          convertScoresToPercentages(scores, perfectScore).forEach(scorePercentage => {
-            scoreDistribution[Math.floor((scorePercentage-1) / 10)]++; // 백분율을 기준으로 점수 분포 계산
-          });
 
-          // 점수 분포 데이터셋 생성
-          var distributionDataset = {
-            label: '점수 분포',
-            data: scoreDistribution,
-            backgroundColor: scoreDistribution.map((_, index) =>
-              Math.floor((myScorePercentage-1) / 10) === index ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)'
-            ),
-            borderColor: scoreDistribution.map((_, index) =>
-              Math.floor((myScorePercentage-1) / 10) === index ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)'
-            ),
-            borderWidth: 1,
-            type: 'bar'
-          };
+            var statisticsByTagId = [[${statisticsByTagId}]];
+            console.log(statisticsByTagId);
+            var averages = Object.values(statisticsByTagId).map(function(stat) {
+              return stat.average;
+            });
 
-          var myScoreLabel = {
-            label: '나의 점수',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            type: 'bubble'
+            var tags = [[${tags}]];
+            var tagNames = tags.tags.map(function(tag) {
+              return tag.name;
+            });
+            var tagPerfectScores = tags.tags.map(function(tag) {
+              return tag.perfectScore;
+            });
 
-          }
+            var maxPerfectScore = Math.max(...tagPerfectScores);
 
-          // 혼합 차트 생성
-          var ctx = document.getElementById('myChart').getContext('2d');
-          var mixedChart = new Chart(ctx, {
-            data: {
-              labels: Array.from({length: 10}, (_, i) => `${i*10+1}~${i*10+10}`), // X 축 레이블 수정
-              datasets: [distributionDataset,myScoreLabel]
-            },
-            options: {
-              scales: {
-                x: {
-                  display: true,
-                  title: {
-                    display: true,
-                    text: '점수 범위 (%)'
-                  }
-                },
-                y: {
-                  beginAtZero: true,
-                  suggestedMax: Math.max(...scoreDistribution) + 1, // Y축 최대값 조정
-                  title: {
-                    display: true,
-                    text: '인원 수'
+            var ctx = document.getElementById('scoreChart').getContext('2d');
+            var scoreChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: tagNames,
+                datasets: [{
+                  label: '분반 평균 점수',
+                  data: averages,
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+                }, {
+                  label: '나의 점수',
+                  data: myScores.map(function(score) {
+                    return score.score;
+                  }),
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    max:maxPerfectScore
                   }
                 }
               }
+            });
+            /*]]>*/
+          </script>
+
+          <script th:inline="javascript">
+          /*<![CDATA[*/
+          var dataDetails = [[${dataDetails}]]; // 데이터 세부사항
+
+          var scoresByTagId = dataDetails.reduce(function(acc, currentValue) {
+            if (!acc[currentValue.tagId]) {
+              acc[currentValue.tagId] = [];
             }
+            acc[currentValue.tagId].push(currentValue.score);
+            return acc;
+          }, {});
+
+          var extractedData = tags.tags.map(function(tag) {
+            return {tagId: tag.tagId, perfectScore: tag.perfectScore};
           });
+
+
+          Object.keys(scoresByTagId).forEach(function(tagId) {
+            var perfectScore = extractedData.find(function(data) {
+              return data.tagId == tagId;
+            }).perfectScore;
+
+            var myScorePercentage = myScores.find(function(scoreP) {
+              return scoreP.tagId == tagId;
+            }).score / perfectScore * 100;
+            console.log(myScorePercentage);
+
+            var percentages = scoresByTagId[tagId].map(function(score) {
+              return (score / perfectScore) * 100;
+            });
+
+            // 구간 별 학생 수를 계산합니다.
+            var rangeCounts = Array(10).fill(0); // 0%~10%, 11%~20%, ..., 91%~100%
+            percentages.forEach(function(pct) {
+              if (pct === 100) {
+                rangeCounts[9]++;
+              } else {
+                var index = Math.floor(pct / 10);
+                rangeCounts[index]++;
+              }
+            });
+
+            // var myCount = Array(10).fill(0);
+            // if (myScorePercentage === 100) {
+            //   myCount[9]++;
+            // } else {
+            //   var index = Math.floor(myScorePercentage / 10);
+            //   myCount[index]++;
+            // }
+            // console.log(myCount);
+
+            var distributionDataset = {
+              label: '점수 분포',
+              data: rangeCounts,
+              backgroundColor: rangeCounts.map((_, index) =>
+                Math.floor((percentages-1) / 10) === index ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)'
+              ),
+              borderColor: rangeCounts.map((_, index) =>
+                Math.floor((percentages-1) / 10) === index ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)'
+              ),
+              borderWidth: 1,
+              type: 'bar'
+            };
+
+
+            var myScoreLabel = {
+              label: '나의 점수',
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              type: 'bubble'
+
+            }
+
+            // 그래프를 그립니다.
+            var ctx = document.getElementById('myChart' + tagId).getContext('2d');
+            var mixedChart = new Chart(ctx, {
+              data: {
+                labels: Array.from({length: 10}, (_, i) => `${i*10+1}~${i*10+10}`), // X 축 레이블 수정
+                datasets: [distributionDataset,myScoreLabel]
+              },
+              options: {
+                scales: {
+                  x: {
+                    display: true,
+                    title: {
+                      display: true,
+                      text: '점수 범위 (%)'
+                    }
+                  },
+                  y: {
+                    beginAtZero: true,
+                    suggestedMax: Math.max(...rangeCounts) + 1, // Y축 최대값 조정
+                    title: {
+                      display: true,
+                      text: '인원 수'
+                    }
+                  }
+                }
+              }
+            });
+            // new Chart(ctx, {
+            //   type: 'bar',
+            //   data: {
+            //     labels: ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100'],
+            //     datasets: [{
+            //       label: '학생 수',
+            //       data: rangeCounts,
+            //       backgroundColor: 'rgba(75, 192, 192, 1)',
+            //       borderColor: 'rgba(75, 192, 192, 1)',
+            //       borderWidth: 1,
+            //       barThickness: 20, // 막대의 너비를 설정합니다.
+            //     },{
+            //       label: '나의 점수',
+            //     }]
+            //   },
+            //   options: {
+            //     scales: {
+            //       y: {
+            //         beginAtZero: true,
+            //         max: maxYValue
+            //       }
+            //     }
+            //   }
+            // });
+          });
+
+
 
           // 통계 정보 계산 및 표시 함수 내부에 상위 퍼센티지 계산 로직 추가
-          var calculateStatistics = () => {
-            var percentages = convertScoresToPercentages(scores, perfectScore);
-            var maxPercentage = Math.max(...percentages);
-            var minPercentage = Math.min(...percentages);
-            var nonZeroPercentages = percentages.filter(score => score > 0);
-            var nonZeroAverage = nonZeroPercentages.reduce((acc, score) => acc + score, 0) / nonZeroPercentages.length;
-            var overallAverage = percentages.reduce((acc, score) => acc + score, 0) / scores.length;
-            var variance = nonZeroPercentages.reduce((acc, score) => acc + Math.pow(score - nonZeroAverage, 2), 0) / nonZeroPercentages.length;
-            var stdDeviation = Math.sqrt(variance);
-
-            // 본인 점수가 상위 몇 퍼센트인지 계산
-            var scoresHigherThanMine = percentages.filter(score => score > myScorePercentage).length;
-            var percentileRank = ((percentages.length - scoresHigherThanMine) / percentages.length) * 100;
-
-            // 본인 점수와 전체 평균 점수의 차이 계산
-            var scoreDifference = myScorePercentage - overallAverage;
-
-            // 점수 차이를 표시할 요소 선택
-            var scoreDifferenceElement = document.getElementById('scoreDifference');
-
-            // 점수 차이에 따라 다른 텍스트 및 스타일 적용
-            if (scoreDifference < 0) {
-              scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-caret-down-fill" viewBox="0 0 16 16">\n' +
-                '                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>\n' +
-                '                  </svg><span style="color: blue;">' + Math.abs(scoreDifference).toFixed(2) + '%</span>';
-              // 여기서 <svg ...></svg>는 음수일 때 표시할 아이콘의 SVG 코드입니다.
-            } else {
-              scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">\n' +
-                '                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>\n' +
-                '                  </svg><span style="color: red;">' + scoreDifference.toFixed(2) + '%</span>';
-              // 여기서 <svg ...></svg>는 양수일 때 표시할 아이콘의 SVG 코드입니다.
-            }
-
-            document.getElementById('statistics').innerHTML = `
-              <div class="stat-item"><span class="stat-value">${maxPercentage.toFixed(2)}%</span><br><span class="stat-label">최대값</span></div>
-              <div class="stat-item"><span class="stat-value">${minPercentage.toFixed(2)}%</span><br><span class="stat-label">최소값</span></div>
-              <div class="stat-item"><span class="stat-value">${nonZeroAverage.toFixed(2)}%</span><br><span class="stat-label">평균(0점 제외)</span></div>
-              <div class="stat-item"><span class="stat-value">${overallAverage.toFixed(2)}%</span><br><span class="stat-label">전체 평균</span></div>
-              <div class="stat-item"><span class="stat-value">${stdDeviation.toFixed(2)}</span><br><span class="stat-label">표준편차</span></div>
-              <div class="stat-item"><span class="stat-value">${percentileRank.toFixed(2)}%</span><br><span class="stat-label">상위</span></div>
-            `;
-          };
-
-          calculateStatistics();
+          // var calculateStatistics = () => {
+          //   var percentages = convertScoresToPercentages(scores, perfectScore);
+          //   var maxPercentage = Math.max(...percentages);
+          //   var minPercentage = Math.min(...percentages);
+          //   var nonZeroPercentages = percentages.filter(score => score > 0);
+          //   var nonZeroAverage = nonZeroPercentages.reduce((acc, score) => acc + score, 0) / nonZeroPercentages.length;
+          //   var overallAverage = percentages.reduce((acc, score) => acc + score, 0) / scores.length;
+          //   var variance = nonZeroPercentages.reduce((acc, score) => acc + Math.pow(score - nonZeroAverage, 2), 0) / nonZeroPercentages.length;
+          //   var stdDeviation = Math.sqrt(variance);
+          //
+          //   // 본인 점수가 상위 몇 퍼센트인지 계산
+          //   var scoresHigherThanMine = percentages.filter(score => score > myScorePercentage).length;
+          //   var percentileRank = ((percentages.length - scoresHigherThanMine) / percentages.length) * 100;
+          //
+          //   // 본인 점수와 전체 평균 점수의 차이 계산
+          //   var scoreDifference = myScorePercentage - overallAverage;
+          //
+          //   // 점수 차이를 표시할 요소 선택
+          //   var scoreDifferenceElement = document.getElementById('scoreDifference');
+          //
+          //   // 점수 차이에 따라 다른 텍스트 및 스타일 적용
+          //   if (scoreDifference < 0) {
+          //     scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-caret-down-fill" viewBox="0 0 16 16">\n' +
+          //       '                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>\n' +
+          //       '                  </svg><span style="color: blue;">' + Math.abs(scoreDifference).toFixed(2) + '%</span>';
+          //     // 여기서 <svg ...></svg>는 음수일 때 표시할 아이콘의 SVG 코드입니다.
+          //   } else {
+          //     scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">\n' +
+          //       '                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>\n' +
+          //       '                  </svg><span style="color: red;">' + scoreDifference.toFixed(2) + '%</span>';
+          //     // 여기서 <svg ...></svg>는 양수일 때 표시할 아이콘의 SVG 코드입니다.
+          //   }
+          //
+          //   document.getElementById('statistics').innerHTML = `
+          //     <div class="stat-item"><span class="stat-value">${maxPercentage.toFixed(2)}%</span><br><span class="stat-label">최대값</span></div>
+          //     <div class="stat-item"><span class="stat-value">${minPercentage.toFixed(2)}%</span><br><span class="stat-label">최소값</span></div>
+          //     <div class="stat-item"><span class="stat-value">${nonZeroAverage.toFixed(2)}%</span><br><span class="stat-label">평균(0점 제외)</span></div>
+          //     <div class="stat-item"><span class="stat-value">${overallAverage.toFixed(2)}%</span><br><span class="stat-label">전체 평균</span></div>
+          //     <div class="stat-item"><span class="stat-value">${stdDeviation.toFixed(2)}</span><br><span class="stat-label">표준편차</span></div>
+          //     <div class="stat-item"><span class="stat-value">${percentileRank.toFixed(2)}%</span><br><span class="stat-label">상위</span></div>
+          //   `;
+          // };
+          //
+          // calculateStatistics();
           /*]]>*/
         </script>
 
