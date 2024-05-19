@@ -404,7 +404,7 @@
             var mixedChart = new Chart(ctx, {
               data: {
                 labels: Array.from({length: 10}, (_, i) => `${i*10+1}~${i*10+10}`), // X 축 레이블 수정
-                datasets: [distributionDataset,myScoreLabel]
+                datasets: [distributionDataset]
               },
               options: {
                 scales: {
