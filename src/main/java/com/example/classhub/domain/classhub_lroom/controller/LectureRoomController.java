@@ -62,10 +62,13 @@ public class LectureRoomController {
     @GetMapping("/lecture-room/detail/{lectureRoomId}")
     public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model,
                                         @RequestParam(value = "page", defaultValue = "0") int page,
-                                        @RequestParam(value = "size", defaultValue = "5") int size) {
+                                        @RequestParam(value = "size", defaultValue = "5") int size,
+                                        HttpSession session) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
-        TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
+        MemberDto memberDto = (MemberDto) session.getAttribute("member");
+        memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
 
+        TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         PostListResponse postListResponse = postService.getPostListByLectureRoomId(lectureRoomId, page, size);
 
         model.addAttribute("posts", postListResponse.getPosts()); // 수정된 부분
