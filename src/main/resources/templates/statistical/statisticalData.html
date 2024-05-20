@@ -257,7 +257,7 @@
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
                     <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
-                    <a class="collapse-item" th:href="@{'/lecture-room/member/info/' + ${lectureRoom.lectureRoomId}}">강의실 구성원 정보</a>
+                    <a class="collapse-item" th:href="@{/lecture-room/member/info/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId}, page=${0})}">강의실 구성원 정보</a>
                 </div>
             </div>
         </li>

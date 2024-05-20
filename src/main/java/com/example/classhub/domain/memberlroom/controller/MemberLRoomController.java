@@ -17,6 +17,7 @@ import com.example.classhub.domain.tag.service.TagService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,10 +56,15 @@ public class MemberLRoomController {
 
   // 해당 강의실에 입장한 멤버만 불러오기
   @GetMapping("/lecture-room/member/info/{lectureRoomId}")
-  public String listMemberLRooms(@PathVariable Long lectureRoomId, Model model) {
+  public String listMemberLRooms(@PathVariable Long lectureRoomId, Model model,
+                                 @RequestParam(value = "page", defaultValue = "0") int page) {
     LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
     model.addAttribute("lectureRoom", lectureRoomDto);
-    model.addAttribute("memberLRooms", memberLRoomService.findMembersByLRoomId(lectureRoomId));
+
+    Page<ClassHub_MemberLRoom> classHub_memberLRoomPageList = memberLRoomService.findMembersByLRoomId(lectureRoomId, page);
+    model.addAttribute("memberLRooms", classHub_memberLRoomPageList);
+    model.addAttribute("maxPage", 5);
+
     TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
     model.addAttribute("tags", tagListResponse.getTags());
 //    model.addAttribute("classHubMemberLRoom", new ClassHub_MemberLRoom());

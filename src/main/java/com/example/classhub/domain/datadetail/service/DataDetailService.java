@@ -21,6 +21,7 @@ import com.example.classhub.domain.tag.service.TagService;
 import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -94,7 +95,7 @@ public class DataDetailService {
     @Transactional
     public DataStatisticListResponse getDataStatisticsList(Long tagId) {
         Long roomId = tagService.findLRoomIdByTagId(tagId);
-        List<ClassHub_MemberLRoom> memberList = memberLRoomService.findMembersByLRoomId(roomId);
+        List<ClassHub_MemberLRoom> memberList = memberLRoomService.findMembersByLRoomIdWithoutPaging(roomId);
         System.out.println("memberList"+ memberList);
         if(memberList.isEmpty()) return new DataStatisticListResponse(Collections.emptyList());
 

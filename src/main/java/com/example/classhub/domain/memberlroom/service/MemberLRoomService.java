@@ -14,6 +14,9 @@ import com.example.classhub.domain.memberlroom.repository.MemberLRoomRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,16 +60,21 @@ public class MemberLRoomService {
   }
 
   // 강의실 아이디에 따라 해당 멤버 불러오기
-  public List<ClassHub_MemberLRoom> findMembersByLRoomId(Long LRoomId) {
-    return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
+  public Page<ClassHub_MemberLRoom> findMembersByLRoomId(Long LRoomId, int startAt) {
+    Pageable pageable = PageRequest.of(startAt, 7);
+    return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId, pageable);
+  }
+
+  public List<ClassHub_MemberLRoom> findMembersByLRoomIdWithoutPaging(Long LRoomId) {
+    return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId, Pageable.unpaged()).getContent();
   }
 
   // 강의실 아이디에 따라 강의실 정보 불러오기
-  public ClassHub_MemberLRoom findMemberByLRoomId(Long LRoomId) {
-    List<ClassHub_MemberLRoom> classHub_memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
-    ClassHub_MemberLRoom result = classHub_memberLRoom.get(0);
-    return result;
-  }
+//  public ClassHub_MemberLRoom findMemberByLRoomId(Long LRoomId) {
+//    List<ClassHub_MemberLRoom> classHub_memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
+//    ClassHub_MemberLRoom result = classHub_memberLRoom.get(0);
+//    return result;
+//  }
 
 
   // Update
