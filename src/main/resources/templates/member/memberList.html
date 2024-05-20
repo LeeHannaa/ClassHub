@@ -431,7 +431,7 @@
                         </thead>
                         <tbody th:if="${not #lists.isEmpty(memberLRooms)}">
                         <tr th:each="member, index : ${memberLRooms}">
-                            <td th:text="${index.index + 1}"></td>
+                            <td th:text="${index.index + memberLRooms.number * memberLRooms.size} + 1"></td>
                             <td th:text="${member.getClassHubMember().getMember_name()}"></td>
                             <td th:text="${member.getClassHubMember().getUniqueId()}"></td>
                             <td th:text="${member.getClassHubMember().getEmail()}" class="d-none d-sm-table-cell"></td>
@@ -488,7 +488,7 @@
                                     // 템플릿 복사
                                     var newRow = $('#newRowTemplate').clone().removeAttr('id').show();
                                     // 번호 설정 (이 부분은 필요에 따라 조정해야 함)
-                                    newRow.find('td:first').text($('table tbody tr').length);
+                                    // newRow.find('td:first').text($('table tbody tr').length);
                                     // 행을 테이블에 추가
                                     $('table tbody').append(newRow);
                                 });
@@ -507,7 +507,8 @@
 
                                     var currentURL = window.location.href;
                                     // 현재 URL에서 마지막 '/' 다음에 오는 숫자를 lectureRoomId로 추출
-                                    var lectureRoomId = currentURL.match(/\/(\d+)$/)[1];
+                                    var lectureRoomId = currentURL.match(/\/info\/(\d+)\?/)[1];
+                                    console.log("lectureRoomId" , lectureRoomId);
                                     // AJAX를 사용하여 데이터를 서버로 전송
                                     $.ajax({
                                         type: "POST",
@@ -523,7 +524,7 @@
                                         }),
                                         success: function(response) {
                                             if (response === "Success") {
-                                                alert('학생이 성공적으로 추가되었습니다.');
+                                                alert('학생이 성공적으로 추가되었습니다. 추가된 학생은 강의실 내 끝번호로 추가됩니다.');
                                                 window.location.reload();
                                             } else {
                                                 alert("현재 강의실에 들어와있는 학생입니다.");
@@ -654,7 +655,7 @@
                                         // 템플릿 복사
                                         var newRow = $('#newRowTemplateNo').clone().removeAttr('id').show();
                                         // 번호 설정 (이 부분은 필요에 따라 조정해야 함)
-                                        newRow.find('td:first').text($('table tbody tr').length - 1);
+                                        // newRow.find('td:first').text($('table tbody tr').length - 1);
                                         // 행을 테이블에 추가
                                         $('table tbody').append(newRow);
                                     });
@@ -673,7 +674,8 @@
 
                                         var currentURL = window.location.href;
                                         // 현재 URL에서 마지막 '/' 다음에 오는 숫자를 lectureRoomId로 추출
-                                        var lectureRoomId = currentURL.match(/\/(\d+)$/)[1];
+                                        var lectureRoomId = currentURL.match(/\/info\/(\d+)\?/)[1];
+                                        console.log("lectureRoomId" , lectureRoomId);
                                         // AJAX를 사용하여 데이터를 서버로 전송
                                         $.ajax({
                                             type: "POST",
@@ -689,7 +691,7 @@
                                             }),
                                             success: function(response) {
                                                 if (response === "Success") {
-                                                    alert('학생이 성공적으로 추가되었습니다.');
+                                                    alert('학생이 성공적으로 추가되었습니다. 추가된 학생은 강의실 내 끝번호로 추가됩니다.');
                                                     window.location.reload();
                                                 } else {
                                                     alert("현재 강의실에 들어와있는 학생입니다.");
@@ -723,6 +725,33 @@
                             </script>
                         </tbody>
                     </table>
+                    <div class="row">
+                        <div class="col">
+                            <nav aria-label="Page navigation example">
+                                <div class="page-num"
+                                     th:with="start=${(memberLRooms.number / maxPage) * maxPage + 1},
+                          end=${(memberLRooms.totalPages == 0) ? 1 : (start + maxPage - 1 < memberLRooms.totalPages ? start + maxPage - 1 : memberLRooms.totalPages)}">
+                                    <ul class="pagination justify-content-center">
+                                        <li th:if="${start > 1}" class="page-item">
+                                            <a class="page-link" th:href="@{/lecture-room/member/info/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${start - maxPage - 1})}" aria-label="Previous">
+                                                &laquo;
+                                            </a>
+                                        </li>
+
+                                        <li th:each="page : ${#numbers.sequence(start, end)}" class="page-item">
+                                            <a class="page-link" th:href="@{/lecture-room/member/info/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${page - 1})}" th:text="${page}"></a>
+                                        </li>
+
+                                        <li th:if="${end < memberLRooms.totalPages}" class="page-item">
+                                            <a class="page-link" th:href="@{/lecture-room/member/info/{lectureRoomId}(lectureRoomId=${lectureRoomId}, page=${start + maxPage - 1})}" aria-label="Next">
+                                                &raquo;
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div> <!-- /page -->
+                            </nav>
+                        </div>
+                    </div>
                 </div><!-- /.container-fluid -->
             </div>
             <div class="row justify-content-center">
