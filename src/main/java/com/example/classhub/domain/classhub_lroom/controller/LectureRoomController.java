@@ -5,11 +5,13 @@ import com.example.classhub.domain.classhub_lroom.controller.request.LectureRoom
 import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomListResponse;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
+import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
 import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.service.PostService;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,12 +30,14 @@ public class LectureRoomController {
     private final MemberLRoomService memberLRoomService;
 
     @GetMapping("/lecture-room")
-    public String findLectureRoomList(Model model, @RequestParam(name = "searchKeyword", required = false, defaultValue = "")String searchKeyword){
+    public String findLectureRoomList(Model model, @RequestParam(name = "searchKeyword", required = false, defaultValue = "")String searchKeyword, HttpSession session){
         LectureRoomListResponse lectureRoomListResponse = null;
         TagListResponse tagListResponse = tagService.getTagList();
 
+        MemberDto memberDto = (MemberDto) session.getAttribute("member");
+        System.out.println("memberDto.getMemberId() = " + memberDto.getMemberId());
         if (searchKeyword.isEmpty()){
-            lectureRoomListResponse = lectureRoomService.getLectureRoomList();
+            lectureRoomListResponse = lectureRoomService.getLectureRoomList(memberDto.getMemberId());
         }
         else{
             lectureRoomListResponse = lectureRoomService.findByKeyword(searchKeyword);

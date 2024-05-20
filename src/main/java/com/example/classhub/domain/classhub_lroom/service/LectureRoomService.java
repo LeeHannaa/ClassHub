@@ -5,6 +5,8 @@ import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoo
 import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomResponse;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
+import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
+import com.example.classhub.domain.memberlroom.repository.MemberLRoomRepository;
 import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.repository.TagRepository;
 import jakarta.transaction.Transactional;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LectureRoomService {
     private final LectureRoomRepository lectureRoomRepository;
+    private final MemberLRoomRepository memberLRoomRepository;
     private final TagRepository tagRepository;
 
     @Transactional
@@ -38,8 +41,13 @@ public class LectureRoomService {
     }
 
     @Transactional
-    public LectureRoomListResponse getLectureRoomList() {
-        List<ClassHub_LRoom> lectureRooms = lectureRoomRepository.findAll();
+    public LectureRoomListResponse getLectureRoomList(Long memberId) {
+        List<ClassHub_MemberLRoom> memberLRooms = memberLRoomRepository.findByClassHubMemberMemberId(memberId);
+
+        List<ClassHub_LRoom> lectureRooms = memberLRooms.stream()
+                .map(ClassHub_MemberLRoom::getLectureRoom)
+                .toList();
+
         List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
                 .map(LectureRoomResponse::new)
                 .collect(Collectors.toList());
