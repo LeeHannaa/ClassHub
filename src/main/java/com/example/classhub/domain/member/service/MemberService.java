@@ -20,18 +20,13 @@ public class MemberService {
 
     @Transactional
     public MemberDto createMember(MemberDto memberDto) {
-//        if (memberRepository.existsByEmail(memberDto.getEmail())) {
-//            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
-//        }
-
-        if (memberRepository.existsByUniqueId(memberDto.getUniqueId())) {
-            throw new IllegalArgumentException("이미 사용 중인 유니크 ID입니다.");
+        ClassHub_Member existingMember = memberRepository.findByUniqueId(memberDto.getUniqueId()).orElse(null);
+        if (existingMember != null) {
+            return MemberDto.from(existingMember);
         }
-
         ClassHub_Member classHubMember = ClassHub_Member.from(memberDto);
-        memberRepository.save(classHubMember); // 저장된 Member 객체를 반환받음
-
-        return MemberDto.from(classHubMember); // MemberDto로 변환
+        memberRepository.save(classHubMember);
+        return MemberDto.from(classHubMember);
     }
     @Transactional
     public ClassHub_Member createMember(ClassHub_Member classHubMember) {
