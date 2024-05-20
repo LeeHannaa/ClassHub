@@ -113,9 +113,10 @@ public class MemberLRoomController {
     return ResponseEntity.ok().body("MemberLRoom Permission updated successfully.");
   }
   // Delete
-  @GetMapping("/memberlroom/delete/{id}")
-  public String deleteMemberLRoom(@PathVariable Long id) {
+  @PostMapping("/memberlroom/delete/{lectureRoomId}/{uniqueId}")
+  public String deleteMemberLRoom(@PathVariable Long lectureRoomId, @PathVariable String uniqueId) {
+    Long id = memberLRoomService.findMemberIdForDelete(lectureRoomId, uniqueId);
     memberLRoomService.deleteMemberLRoom(id);
-    return "redirect:/memberlroom";
+    return "redirect:/lecture-room";
   }
 }

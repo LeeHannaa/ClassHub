@@ -207,4 +207,10 @@ public class MemberLRoomService {
       return null;
     }
   }
+  public Long findMemberIdForDelete(Long lectureRoomId, String uniqueId){
+    ClassHub_MemberLRoom member = memberLRoomRepository.findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(lectureRoomId, uniqueId);
+    Long memberId = member.getId();
+    return memberId;
+  }
+
 }
