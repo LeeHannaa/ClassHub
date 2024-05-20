@@ -2,6 +2,7 @@ package com.example.classhub.domain.member.dto;
 
 
 import com.example.classhub.domain.member.ClassHub_Member;
+import com.example.classhub.domain.member.controller.request.LoginRequest;
 import com.example.classhub.domain.member.controller.request.MemberCreateRequest;
 import com.example.classhub.domain.member.controller.request.MemberUpdateRequest;
 import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomMemberCreateRequest;
@@ -25,6 +26,11 @@ public class MemberDto {
     private int login_count;
     private Role role;
     private Permission permission;
+    private String hisnetToken;
+
+    public static MemberDto from(LoginRequest request) {
+        return MemberDto.builder().hisnetToken(request.getHisnetToken()).build();
+    }
 
     public static MemberDto from(MemberCreateRequest request){
         return MemberDto.builder()
@@ -61,6 +67,11 @@ public class MemberDto {
                 .uniqueId(memberLRoomMemberCreateRequest.getUniqueId())
                 .role(memberLRoomMemberCreateRequest.getRole())
                 .permission(memberLRoomMemberCreateRequest.getPermission())
+                .build();
+    }
+    public static MemberDto from(String hisnetToken){
+        return MemberDto.builder()
+                .hisnetToken(hisnetToken)
                 .build();
     }
 }

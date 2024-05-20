@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberLRoomRepository extends JpaRepository<ClassHub_MemberLRoom, Long> {
-  Optional<ClassHub_MemberLRoom> findByClassHubMember_MemberIdAndLectureRoom_lRoomId(Long classHubMemberId, Long lRoomId); // 반환 유형 수정
-  Page<ClassHub_MemberLRoom> findByLectureRoom_lRoomId(Long lRoomId, Pageable pageable);
-  ClassHub_MemberLRoom findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(Long lRoomId, String uniqueId);
-
+    Optional<ClassHub_MemberLRoom> findByClassHubMember_MemberIdAndLectureRoom_lRoomId(Long classHubMemberId, Long lRoomId); // 반환 유형 수정
+    Page<ClassHub_MemberLRoom> findByLectureRoom_lRoomId(Long lRoomId, Pageable pageable);
+    ClassHub_MemberLRoom findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(Long lRoomId, String uniqueId);
+    List<ClassHub_MemberLRoom> findByLectureRoom_lRoomId(Long lRoomId);
+    ClassHub_MemberLRoom findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(Long lRoomId, String uniqueId);
+    List<ClassHub_MemberLRoom> findByClassHubMemberMemberId(Long memberId);
+    Optional<ClassHub_MemberLRoom> findByClassHubMember_MemberIdAndLectureRoom_lRoomId(Long classHubMemberId, Long lRoomId); // 반환 유형 수정
+    ClassHub_MemberLRoom findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(Long lRoomId, String uniqueId);
 }
