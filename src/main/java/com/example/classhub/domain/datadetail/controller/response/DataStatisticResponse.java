@@ -19,6 +19,7 @@ public class DataStatisticResponse {
     private Double score;
     private String comment;
     private Long tagId;
+    private String studentName;
     private String tagName;
     private Long lRoomId;
     private String name;
@@ -31,6 +32,12 @@ public class DataStatisticResponse {
         this.score = detail.getScore();
         this.comment = detail.getComment();
         this.tagId = detail.getTag().getTagId();
+        this.studentName = detail.getTag().getLectureRoom().getClassHubMemberLRooms()
+                .stream()
+                .filter(memberLRoom -> memberLRoom.getClassHubMember().getUniqueId().equals(detail.getStudentNum()))
+                .map(memberLRoom -> memberLRoom.getClassHubMember().getMember_name())
+                .findFirst()
+                .orElse(null);
         this.tagName = detail.getTag().getName();
         this.lRoomId = detail.getTag().getLectureRoom().getLRoomId();
         this.regDate = detail.getRegDate();

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>ClassHub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom fonts for this template-->
+  <!--    <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />-->
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link th:href="@{/bootstrap/css/sb-admin-2.min.css}" rel="stylesheet" />
+  <!-- 부트스트랩 CSS 파일 링크 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .tooltip.bs-tooltip-right .arrow::before {
+      border-right-color: #5a5a5a; /* 화살표 색상 오른쪽 배치 툴팁에 대한 조정 */
+    }
+
+    .tooltip.bs-tooltip-left .arrow::before {
+      border-left-color: #5a5a5a; /* 화살표 색상 왼쪽 배치 툴팁에 대한 조정 */
+    }
+
+    .accordion-button {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%; /* 버튼의 전체 너비를 사용 */
+    }
+    .accordion-body > div {
+      display: flex;
+      flex-wrap: wrap; /* 필요한 경우 줄바꿈 */
+      gap: 10px; /* 각 항목 사이의 간격 */
+    }
+
+    .accordion-button > span {
+      flex-shrink: 0;
+    }
+    .stat-item {
+      text-align: center;
+      margin: 0 auto;
+    }
+    .stat-value {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    .stat-label {
+      font-size: 0.9em;
+    }
+
+  </style>
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/lecture-room">
+      <div class="sidebar-brand-icon rotate-n-15">
+        <i class="fas fa-laugh-wink"></i>
+      </div>
+      <div class="sidebar-brand-text mx-3">ClassHub <sup style="font-size: 10px">hgu</sup></div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+      <a class="nav-link" href="index.html">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>대시보드</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      ClassHub
+    </div>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+  </ul>
+  <!-- End of Sidebar -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+      <!-- Topbar -->
+      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+          <i class="fa fa-bars"></i>
+        </button>
+
+        <!-- Topbar Search -->
+        <form th:action="@{/lecture-room}" method="get" class="form-inline mr-auto w-100 navbar-search">
+          <div class="input-group w-50">
+            <input type="text" name="searchKeyword" th:value="${param.searchKeyword}"
+                   class="form-control bg-light border-0 small"
+                   placeholder="Search for..." aria-label="Search"
+                   aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search fa-sm"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Topbar Navbar -->
+        <ul class="navbar-nav ml-auto">
+          <!-- Nav Item - Alerts -->
+          <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-bell fa-fw"></i>
+              <!-- Counter - Alerts -->
+              <span class="badge badge-danger badge-counter">3+</span>
+            </a>
+            <!-- Dropdown - Alerts -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="alertsDropdown">
+              <h6 class="dropdown-header">
+                알림
+              </h6>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                  <div class="icon-circle bg-primary">
+                    <i class="fas fa-file-alt text-white"></i>
+                  </div>
+                </div>
+                <div>
+                  <div class="small text-gray-500">December 12, 2019</div>
+                  <span class="font-weight-bold">와랩에 입장하신 것을 환영합니다.</span>
+                </div>
+              </a>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                  <div class="icon-circle bg-success">
+                    <i class="fas fa-donate text-white"></i>
+                  </div>
+                </div>
+                <div>
+                  <div class="small text-gray-500">December 7, 2019</div>
+                  데이터구조 수업에서 중간고사 성적이 공지되었습니다.
+                </div>
+              </a>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                  <div class="icon-circle bg-warning">
+                    <i class="fas fa-exclamation-triangle text-white"></i>
+                  </div>
+                </div>
+                <div>
+                  <div class="small text-gray-500">December 2, 2019</div>
+                  실전프로젝트 수업에서 과제가 공지되었습니다.
+                </div>
+              </a>
+              <a class="dropdown-item text-center small text-gray-500" href="#">모든 알림 보기</a>
+            </div>
+          </li>
+          <!-- Nav Item - User Information -->
+          <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="mr-2 d-none d-lg-inline text-gray-600 small">이한나학부생</span>
+              <img class="img-profile rounded-circle"
+                   src="/bootstrap/img/undraw_profile.svg">
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                로그아웃
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <!-- End of Topbar -->
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <!-- Page Heading -->
+        <div style="width:70%; margin:15px auto;">
+          <h1 class="h3 mb-4 text-gray-800" th:text="'< '+${lectureRoom.roomName} + ' > 나의 데이터 요약'"></h1>
+          <canvas id="scoreChart"></canvas>
+        </div>
+        <div class="accordion" id="accordionPanelsStayOpenExample" style="width: 70%; margin: 15px auto;">
+          <div class="accordion" style="width: 70%; margin: 15px auto;">
+            <div th:each="tag, iterStat : ${tags.tags}" class="accordion-item">
+              <h2 class="accordion-header d-flex justify-content-between" th:id="'heading' + ${iterStat.index}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}">
+                  <span th:text="${tag.name}" style="font-weight: bold;"></span>
+                  <!-- 여기에 추가적인 정보를 표시할 수 있습니다. 예: 점수 차이, 최근 수정일 등 -->
+                  <span style="margin: 0 1rem;">
+                    <!-- 아이콘 및 추가 정보 생략 -->
+                    <small th:id="'modDate-' + ${tag.tagId}">최근 수정일: 로딩 중...</small>
+                </span>
+                </button>
+              </h2>
+              <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.index}">
+                <div class="accordion-body">
+                  <canvas th:id="'myChart' + ${tag.tagId}"></canvas>
+                  <!-- 아코디언 바디에 표시할 내용 -->
+                  <div th:if="${statisticsByTagId.containsKey(tag.tagId)}">
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].average}"></span><br><span class="stat-label">평균 점수</span></div>
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].max}"></span><br><span class="stat-label">최대 점수</span></div>
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].min}"></span><br><span class="stat-label">최소 점수</span></div>
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].stddev}"></span><br><span class="stat-label">표준편차</span></div>
+                    <div class="stat-item"><span class="stat-value" th:text="${statisticsByTagId[tag.tagId].averageExcludingZero}"></span><br><span class="stat-label">0점 제외 평균</span></div>
+                  </div>
+                  <div th:unless="${statisticsByTagId.containsKey(tag.tagId)}">
+                    <div class="stat-item"><span class="stat-value">N/A</span><br><span class="stat-label">해당 태그에 대한 데이터가 없습니다.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script th:inline="javascript">
+            /*<![CDATA[*/
+            var matchedStudentDetails = [[${matchedStudentDetails}]];
+            var myScores = matchedStudentDetails.map(function(detail) {
+              return {score: detail.score,modDate: detail.modDate, tagId: detail.tagId};
+            });
+            var groupedByTagId = matchedStudentDetails.reduce(function(acc, detail) {
+              var date = new Date(detail.modDate); // 문자열을 Date 객체로 변환
+              var year = date.getFullYear(); // 년도
+              var month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월 (0부터 시작하므로 1을 더함)
+              var day = date.getDate().toString().padStart(2, '0'); // 일
+              var formattedDate = `${year}-${month}-${day}`; // 'YYYY-MM-DD' 형식으로 변환
+              acc[detail.tagId] = formattedDate;
+              return acc;
+            }, {});
+
+
+            document.addEventListener("DOMContentLoaded", function() {
+              // 모든 tag에 대해 동적으로 최근 수정일을 업데이트합니다.
+              Object.keys(groupedByTagId).forEach(function(tagId) {
+                var modDateElement = document.getElementById('modDate-' + tagId);
+                if (modDateElement) { // 해당하는 요소가 있을 경우에만 업데이트
+                  modDateElement.textContent = `( 수정일: ${groupedByTagId[tagId]} )`;
+                }
+              });
+            });
+
+
+
+            var statisticsByTagId = [[${statisticsByTagId}]];
+            console.log(statisticsByTagId);
+            var averages = Object.values(statisticsByTagId).map(function(stat) {
+              return stat.average;
+            });
+
+            var tags = [[${tags}]];
+            var tagNames = tags.tags.map(function(tag) {
+              return tag.name;
+            });
+            var tagPerfectScores = tags.tags.map(function(tag) {
+              return tag.perfectScore;
+            });
+
+            var maxPerfectScore = Math.max(...tagPerfectScores);
+
+            var ctx = document.getElementById('scoreChart').getContext('2d');
+            var scoreChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: tagNames,
+                datasets: [{
+                  label: '분반 평균 점수',
+                  data: averages,
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+                }, {
+                  label: '나의 점수',
+                  data: myScores.map(function(score) {
+                    return score.score;
+                  }),
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    max:maxPerfectScore
+                  }
+                }
+              }
+            });
+            /*]]>*/
+          </script>
+
+          <script th:inline="javascript">
+          /*<![CDATA[*/
+          var dataDetails = [[${dataDetails}]]; // 데이터 세부사항
+
+          var scoresByTagId = dataDetails.reduce(function(acc, currentValue) {
+            if (!acc[currentValue.tagId]) {
+              acc[currentValue.tagId] = [];
+            }
+            acc[currentValue.tagId].push(currentValue.score);
+            return acc;
+          }, {});
+
+          var extractedData = tags.tags.map(function(tag) {
+            return {tagId: tag.tagId, perfectScore: tag.perfectScore};
+          });
+
+
+          Object.keys(scoresByTagId).forEach(function(tagId) {
+            var perfectScore = extractedData.find(function(data) {
+              return data.tagId == tagId;
+            }).perfectScore;
+
+            var myScorePercentage = myScores.find(function(scoreP) {
+              return scoreP.tagId == tagId;
+            }).score / perfectScore * 100;
+            console.log(myScorePercentage);
+
+            var percentages = scoresByTagId[tagId].map(function(score) {
+              return (score / perfectScore) * 100;
+            });
+
+            // 구간 별 학생 수를 계산합니다.
+            var rangeCounts = Array(10).fill(0); // 0%~10%, 11%~20%, ..., 91%~100%
+            percentages.forEach(function(pct) {
+              if (pct === 100) {
+                rangeCounts[9]++;
+              } else {
+                var index = Math.floor(pct / 10);
+                rangeCounts[index]++;
+              }
+            });
+
+            // var myCount = Array(10).fill(0);
+            // if (myScorePercentage === 100) {
+            //   myCount[9]++;
+            // } else {
+            //   var index = Math.floor(myScorePercentage / 10);
+            //   myCount[index]++;
+            // }
+            // console.log(myCount);
+
+            var distributionDataset = {
+              label: '점수 분포',
+              data: rangeCounts,
+              backgroundColor: rangeCounts.map((_, index) =>
+                Math.floor((percentages-1) / 10) === index ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)'
+              ),
+              borderColor: rangeCounts.map((_, index) =>
+                Math.floor((percentages-1) / 10) === index ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)'
+              ),
+              borderWidth: 1,
+              type: 'bar'
+            };
+
+
+            var myScoreLabel = {
+              label: '나의 점수',
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              type: 'bubble'
+
+            }
+
+            // 그래프를 그립니다.
+            var ctx = document.getElementById('myChart' + tagId).getContext('2d');
+            var mixedChart = new Chart(ctx, {
+              data: {
+                labels: Array.from({length: 10}, (_, i) => `${i*10+1}~${i*10+10}`), // X 축 레이블 수정
+                datasets: [distributionDataset]
+              },
+              options: {
+                scales: {
+                  x: {
+                    display: true,
+                    title: {
+                      display: true,
+                      text: '점수 범위 (%)'
+                    }
+                  },
+                  y: {
+                    beginAtZero: true,
+                    suggestedMax: Math.max(...rangeCounts) + 1, // Y축 최대값 조정
+                    title: {
+                      display: true,
+                      text: '인원 수'
+                    }
+                  }
+                }
+              }
+            });
+            // new Chart(ctx, {
+            //   type: 'bar',
+            //   data: {
+            //     labels: ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100'],
+            //     datasets: [{
+            //       label: '학생 수',
+            //       data: rangeCounts,
+            //       backgroundColor: 'rgba(75, 192, 192, 1)',
+            //       borderColor: 'rgba(75, 192, 192, 1)',
+            //       borderWidth: 1,
+            //       barThickness: 20, // 막대의 너비를 설정합니다.
+            //     },{
+            //       label: '나의 점수',
+            //     }]
+            //   },
+            //   options: {
+            //     scales: {
+            //       y: {
+            //         beginAtZero: true,
+            //         max: maxYValue
+            //       }
+            //     }
+            //   }
+            // });
+          });
+
+
+
+          // 통계 정보 계산 및 표시 함수 내부에 상위 퍼센티지 계산 로직 추가
+          // var calculateStatistics = () => {
+          //   var percentages = convertScoresToPercentages(scores, perfectScore);
+          //   var maxPercentage = Math.max(...percentages);
+          //   var minPercentage = Math.min(...percentages);
+          //   var nonZeroPercentages = percentages.filter(score => score > 0);
+          //   var nonZeroAverage = nonZeroPercentages.reduce((acc, score) => acc + score, 0) / nonZeroPercentages.length;
+          //   var overallAverage = percentages.reduce((acc, score) => acc + score, 0) / scores.length;
+          //   var variance = nonZeroPercentages.reduce((acc, score) => acc + Math.pow(score - nonZeroAverage, 2), 0) / nonZeroPercentages.length;
+          //   var stdDeviation = Math.sqrt(variance);
+          //
+          //   // 본인 점수가 상위 몇 퍼센트인지 계산
+          //   var scoresHigherThanMine = percentages.filter(score => score > myScorePercentage).length;
+          //   var percentileRank = ((percentages.length - scoresHigherThanMine) / percentages.length) * 100;
+          //
+          //   // 본인 점수와 전체 평균 점수의 차이 계산
+          //   var scoreDifference = myScorePercentage - overallAverage;
+          //
+          //   // 점수 차이를 표시할 요소 선택
+          //   var scoreDifferenceElement = document.getElementById('scoreDifference');
+          //
+          //   // 점수 차이에 따라 다른 텍스트 및 스타일 적용
+          //   if (scoreDifference < 0) {
+          //     scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-caret-down-fill" viewBox="0 0 16 16">\n' +
+          //       '                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>\n' +
+          //       '                  </svg><span style="color: blue;">' + Math.abs(scoreDifference).toFixed(2) + '%</span>';
+          //     // 여기서 <svg ...></svg>는 음수일 때 표시할 아이콘의 SVG 코드입니다.
+          //   } else {
+          //     scoreDifferenceElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">\n' +
+          //       '                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>\n' +
+          //       '                  </svg><span style="color: red;">' + scoreDifference.toFixed(2) + '%</span>';
+          //     // 여기서 <svg ...></svg>는 양수일 때 표시할 아이콘의 SVG 코드입니다.
+          //   }
+          //
+          //   document.getElementById('statistics').innerHTML = `
+          //     <div class="stat-item"><span class="stat-value">${maxPercentage.toFixed(2)}%</span><br><span class="stat-label">최대값</span></div>
+          //     <div class="stat-item"><span class="stat-value">${minPercentage.toFixed(2)}%</span><br><span class="stat-label">최소값</span></div>
+          //     <div class="stat-item"><span class="stat-value">${nonZeroAverage.toFixed(2)}%</span><br><span class="stat-label">평균(0점 제외)</span></div>
+          //     <div class="stat-item"><span class="stat-value">${overallAverage.toFixed(2)}%</span><br><span class="stat-label">전체 평균</span></div>
+          //     <div class="stat-item"><span class="stat-value">${stdDeviation.toFixed(2)}</span><br><span class="stat-label">표준편차</span></div>
+          //     <div class="stat-item"><span class="stat-value">${percentileRank.toFixed(2)}%</span><br><span class="stat-label">상위</span></div>
+          //   `;
+          // };
+          //
+          // calculateStatistics();
+          /*]]>*/
+        </script>
+
+
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          <span>ClassHub Walab B1A2 강준혁 이한나 장유진</span>
+        </div>
+      </div>
+    </footer>
+    <!-- End of Footer -->
+
+  </div>
+  <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">로그아웃하시겠습니까?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+        <a class="btn btn-primary" href="index.html">로그아웃</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- LectureRoom Create Modal-->
+<div class="modal fade" id="LectureRoomCreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">새로운 강의실 등록</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/bootstrap/js/sb-admin-2.min.js"></script>
+<!-- 부트스트랩 JavaScript 파일 링크 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

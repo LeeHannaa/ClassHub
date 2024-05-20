@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MemberLRoomService {
@@ -59,6 +60,7 @@ public class MemberLRoomService {
   public List<ClassHub_MemberLRoom> findMembersByLRoomId(Long LRoomId) {
     return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
   }
+
   // 강의실 아이디에 따라 강의실 정보 불러오기
   public ClassHub_MemberLRoom findMemberByLRoomId(Long LRoomId) {
     List<ClassHub_MemberLRoom> classHub_memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
@@ -131,41 +133,6 @@ public class MemberLRoomService {
       return false;
     }
   }
-
-//    System.out.println("확인" + classHubMember);
-
-//    if(defalutMember != null){
-//      // 1-1. 있다면 학생 id 가져오기
-//      Long memberId = defalutMember.getMemberId();
-//      String uniqueId = defalutMember.getUniqueId();
-//      // 4. 가져온 id를 바탕으로 ClassHub_MemberLRoom에 해당 id를 가진 학생이 있는지 파악하기
-//      ClassHub_MemberLRoom memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(lRoomId, uniqueId);
-//      // 4-1. 동일한 학생 id를 가진 학생이 있다면 에러 리턴
-//      if(memberLRoom != null){
-//        System.out.println("동일한 학생 id를 가진 학생이 있다면 에러");
-//      }
-//      // 4-2. 없다면 ClassHub_MemberLRoom 정보 추가
-//      else{
-//        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+defalutMember);
-//        classHubMemberLRoom.setClassHubMember(defalutMember);
-//        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+classHubMemberLRoom);
-//        classHubMemberLRoom.setLectureRoom(lectureRoomService.findByRoomIdByOne(lRoomId));
-//        System.out.println("해당 강의실에 동일한 학생 아이디를 가진 학생이 없다면 학생을 강의실에 추가하기"+classHubMemberLRoom);
-//        memberLRoomRepository.save(classHubMemberLRoom);
-//        System.out.println("확인2");
-//      }
-//
-//    }
-//    else {
-//      // 1-2. 없다면 ClassHub_Member에 학생 정보 추가와 동시에 ClassHub_MemberLRoom 정보 추가
-//      System.out.println("없다면 ClassHub_Member에 학생 정보 추가와 동시에 ClassHub_MemberLRoom 정보 추가");
-//      memberService.createMember(classHubMember);
-//      System.out.println("멤버 정보 추가");
-//    }
-
-//    return MemberLRoomDto.from(classHubMemberLRoom);
-//  }
-
   @Transactional
   public void createMemberLRoom(Long lRoomId, MultipartFile studentFile) {
     ClassHub_LRoom lRoom = lectureRoomService.findExistingLectureRoom(lRoomId);
@@ -211,6 +178,25 @@ public class MemberLRoomService {
     } catch (Exception e) {
       e.printStackTrace();
       throw new RuntimeException("Failed to process student file", e);
+    }
+  }
+
+  public MemberLRoomDto findByMemberIdAndLroomId(Long memberId, Long lRoomId) {
+    Optional<ClassHub_MemberLRoom> memberLRoomOpt = memberLRoomRepository.findByClassHubMember_MemberIdAndLectureRoom_lRoomId(memberId, lRoomId);
+    if (memberLRoomOpt.isPresent()) {
+      ClassHub_MemberLRoom memberLRoom = memberLRoomOpt.get();
+      // 예시에서는 MemberLRoomDto 생성자와 필요한 데이터를 가정합니다.
+      // 실제로는 MemberLRoomDto 클래스의 정의와 생성자에 따라 다를 수 있습니다.
+      MemberLRoomDto memberLRoomDto = new MemberLRoomDto(
+        memberLRoom.getId(),
+        memberLRoom.getRole(),
+        memberLRoom.getPermission()
+      );
+      return memberLRoomDto;
+    } else {
+      // 데이터가 없는 경우 적절한 처리를 합니다. 여기서는 null을 반환합니다.
+      // 실제로는 예외를 발생시키거나, Optional.empty() 등을 활용할 수 있습니다.
+      return null;
     }
   }
 }
