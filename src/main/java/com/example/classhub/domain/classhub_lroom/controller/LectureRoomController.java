@@ -61,12 +61,17 @@ public class LectureRoomController {
 
     @GetMapping("/lecture-room/detail/{lectureRoomId}")
     public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model,
+                                        @RequestParam(value = "searchKeyword", required = false, defaultValue = "") String searchKeyword,
                                         @RequestParam(value = "page", defaultValue = "0") int page,
                                         @RequestParam(value = "size", defaultValue = "5") int size,
                                         HttpSession session) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
-        memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
+
+        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+            System.out.println("searchKeyword = " + searchKeyword);
+            memberLRoomService.createMemberByOne(lectureRoomDto, memberDto, searchKeyword);
+        }
 
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         PostListResponse postListResponse = postService.getPostListByLectureRoomId(lectureRoomId, page, size);
