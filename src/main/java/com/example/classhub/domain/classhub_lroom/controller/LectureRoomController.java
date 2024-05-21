@@ -6,6 +6,7 @@ import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoo
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.member.dto.MemberDto;
+import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
 import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.service.PostService;
@@ -76,11 +77,18 @@ public class LectureRoomController {
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         PostListResponse postListResponse = postService.getPostListByLectureRoomId(lectureRoomId, page, size);
 
-        model.addAttribute("posts", postListResponse.getPosts()); // 수정된 부분
+        MemberLRoomDto memberLRoomDto = memberLRoomService.findByMemberIdAndLroomId(memberDto.getMemberId(), lectureRoomId);
+
+        model.addAttribute("posts", postListResponse.getPosts());
         model.addAttribute("totalPages", postListResponse.getTotalPages());
         model.addAttribute("currentPage", postListResponse.getCurrentPage());
         model.addAttribute("lectureRoom", lectureRoomDto);
         model.addAttribute("tags", tagListResponse.getTags());
+
+        String memberRole = memberLRoomDto.getRole().getRole();
+        if ("학생".equals(memberRole)) {
+            return "redirect:/student/" + memberDto.getUniqueId() + "/" + lectureRoomId;
+        }
 
         return "lectureRoomDetail";
     }
