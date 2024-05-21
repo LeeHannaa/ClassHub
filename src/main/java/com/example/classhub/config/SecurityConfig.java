@@ -12,25 +12,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests(authorizeRequests ->
-//                        authorizeRequests
-//                                .requestMatchers("/auth/login", "/css/**", "/js/**", "../bootstrap/**").permitAll()
-//                                .anyRequest().authenticated() // 나머지 요청은 인증 필요
-//                )
-//                .formLogin(formLogin ->
-//                        formLogin
-//                                .loginPage("/auth/login") // 커스텀 로그인 페이지
-//                                .defaultSuccessUrl("/lecture-room", true) // 로그인 성공 후 리디렉션
-//                                .permitAll()
-//                )
-//                .logout(logout ->
-//                        logout
-//                                .logoutUrl("/auth/logout")
-//                                .logoutSuccessUrl("/auth/login")
-//                                .permitAll()
-//                );
 
+        http
+                .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 }
