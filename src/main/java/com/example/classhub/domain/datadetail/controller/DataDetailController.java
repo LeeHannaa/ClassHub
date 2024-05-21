@@ -201,8 +201,6 @@ public class DataDetailController {
           // 계산된 통계 정보를 모델에 추가
           model.addAttribute("statisticsByTagId", statisticsByTagId);
 
-
-
           return "./student/studentView";
         }
       }
