@@ -30,4 +30,10 @@ public class AuthController {
 
         return "redirect:/lecture-room";
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/classhub";
+    }
 }
