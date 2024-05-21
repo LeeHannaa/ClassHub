@@ -46,6 +46,17 @@ public class MemberLRoomService {
     return memberLRoomRepository.save(classHubMemberLRoom);
   }
 
+  public void createMemberLRoom(Long lRoomId, Long memberId) {
+    ClassHub_LRoom lRoom = lectureRoomService.findExistingLectureRoom(lRoomId);
+    ClassHub_Member member = memberService.findByMemberId(memberId);
+    ClassHub_MemberLRoom classHubMemberLRoom = ClassHub_MemberLRoom.builder()
+            .lectureRoom(lRoom)
+            .classHubMember(member)
+            .role(Role.PROFESSOR)
+            .permission(Permission.APPROVED)
+            .build();
+    memberLRoomRepository.save(classHubMemberLRoom);
+  }
   // Read All
   public List<ClassHub_MemberLRoom> findAllMemberLRooms() {
     return memberLRoomRepository.findAll();
@@ -206,8 +217,8 @@ public class MemberLRoomService {
         ClassHub_MemberLRoom classHubMemberLRoom = ClassHub_MemberLRoom.builder()
                 .lectureRoom(lRoom)
                 .classHubMember(member)
-                .role(Role.STUDENT)
-                .permission(Permission.UNAPPROVED)
+                .role(Role.PROFESSOR)
+                .permission(Permission.APPROVED)
                 .build();
 
         memberLRoomRepository.save(classHubMemberLRoom);

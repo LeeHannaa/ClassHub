@@ -45,10 +45,17 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberDto findByMemberId(Long memberId) {
+    public MemberDto findMemberDtoByMemberId(Long memberId) {
         ClassHub_Member classHubMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
         return MemberDto.from(classHubMember);
+    }
+
+    @Transactional
+    public ClassHub_Member findByMemberId(Long memberId) {
+        ClassHub_Member classHubMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        return classHubMember;
     }
 
     @Transactional

@@ -36,7 +36,6 @@ public class LectureRoomController {
         TagListResponse tagListResponse = tagService.getTagList();
 
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
-        System.out.println("memberDto.getMemberId() = " + memberDto.getMemberId());
         if (searchKeyword.isEmpty()){
             lectureRoomListResponse = lectureRoomService.getLectureRoomList(memberDto.getMemberId());
         }
@@ -53,10 +52,14 @@ public class LectureRoomController {
     }
 
     @PostMapping("/lecture-room/saveLecture")
-    public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request, @RequestParam("studentFile") MultipartFile studentFile) {
+    public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request,
+                                    @RequestParam("studentFile") MultipartFile studentFile,
+                                    HttpSession session) {
         LectureRoomDto lectureRoomDto = lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
+        MemberDto member = (MemberDto) session.getAttribute("member");
         if(studentFile != null && !studentFile.isEmpty())
             memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
+        else memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), member.getMemberId());
         return "redirect:/lecture-room";
     }
 
