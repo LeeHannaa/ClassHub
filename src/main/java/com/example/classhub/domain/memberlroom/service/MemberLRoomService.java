@@ -78,6 +78,11 @@ public class MemberLRoomService {
     return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId, Pageable.unpaged()).getContent();
   }
 
+
+  public Optional<ClassHub_MemberLRoom> findById(Long id){
+    return memberLRoomRepository.findById(id);
+  }
+
   // Update
   public ClassHub_MemberLRoom updateMemberLRoomRole(Long id, ClassHub_MemberLRoom classHubMemberLRoomDetails) {
     ClassHub_MemberLRoom classHubMemberLRoom = memberLRoomRepository.findById(id)
@@ -247,4 +252,10 @@ public class MemberLRoomService {
       return null;
     }
   }
+  public Long findMemberIdForDelete(Long lectureRoomId, String uniqueId){
+    ClassHub_MemberLRoom member = memberLRoomRepository.findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(lectureRoomId, uniqueId);
+    Long memberId = member.getId();
+    return memberId;
+  }
+
 }
