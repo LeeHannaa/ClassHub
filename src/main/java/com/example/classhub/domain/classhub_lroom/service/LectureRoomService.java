@@ -44,6 +44,7 @@ public class LectureRoomService {
         List<ClassHub_MemberLRoom> memberLRooms = memberLRoomRepository.findByClassHubMemberMemberId(memberId);
 
         List<LectureRoomResponse> lectureRoomResponses = memberLRooms.stream()
+                .filter(memberLRoom -> "APPROVED".equals(memberLRoom.getPermission().name()))
                 .map(memberLRoom -> new LectureRoomResponse(
                         memberLRoom.getLectureRoom(),
                         memberLRoom.getRole()
