@@ -119,8 +119,9 @@ public class LectureRoomController {
         model.addAttribute("currentPage", postListResponse.getCurrentPage());
         model.addAttribute("lectureRoom", lectureRoomDto);
         model.addAttribute("tags", tagListResponse.getTags());
+        model.addAttribute("uniqueId", memberDto.getUniqueId());
 
-        return "student/studentPost";
+        return "./student/studentPost";
     }
 
 }

@@ -18,6 +18,7 @@ import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateR
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.controller.response.TagResponse;
 import com.example.classhub.domain.tag.service.TagService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -125,11 +126,14 @@ public class DataDetailController {
     }
 
     @GetMapping("student/{uniqueId}/{LRoomId}")
-    public String findStudentList(@PathVariable Long LRoomId,@PathVariable String uniqueId, Model model){
+    public String findStudentList(@PathVariable Long LRoomId, @PathVariable String uniqueId, Model model, HttpSession session) {
+      MemberDto mem = (MemberDto) session.getAttribute("member");
+      model.addAttribute("uniqueId", mem.getUniqueId());
       // uniqueId로 member_id 찾기
       MemberDto member = memberService.findByUniqueIdDto(uniqueId);
       LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(LRoomId);
       model.addAttribute("lectureRoom", lectureRoomDto);
+      model.addAttribute("LRoomId", LRoomId);
       if (member != null) {
         // member_id와 LroomId가 모두 일치하는지 확인
         MemberLRoomDto memberLroom = memberLRoomService.findByMemberIdAndLroomId(member.getMemberId(), LRoomId);
