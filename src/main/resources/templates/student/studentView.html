@@ -212,19 +212,25 @@
       <!-- Begin Page Content -->
       <div class="container-fluid">
         <!-- Page Heading -->
-        <div style="width:70%; margin:15px auto;">
+        <div id="whichLR_data" style="width:70%; margin:15px auto; display: none;">
           <h1 class="h3 mb-4 text-gray-800" th:text="'< '+${lectureRoom.roomName} + ' > 나의 데이터 요약'"></h1>
+        </div>
+
+        <div style="width:70%; margin:15px auto; display: none;">
           <canvas id="scoreChart"></canvas>
         </div>
-        <div class="accordion" id="accordionPanelsStayOpenExample" style="width: 70%; margin: 15px auto;">
+        <!--등록된 데이터가 없을 때 나오는 부분-->
+        <div id="noScoresMessage" style="display: block; width: 70%; margin: 10% auto; text-align: center;">
+          <img src="/img/noDataImage.png" style="width: 50%; height: 50%;">
+        </div>
+
+        <div class="accordion" id="accordionPanelsStayOpenExample" style="min-width:300px; width: 70%; margin: 15px auto; display: none">
           <div class="accordion" style="width: 70%; margin: 15px auto;">
             <div th:each="tag, iterStat : ${tags.tags}" class="accordion-item">
               <h2 class="accordion-header d-flex justify-content-between" th:id="'heading' + ${iterStat.index}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}">
                   <span th:text="${tag.name}" style="font-weight: bold;"></span>
-                  <!-- 여기에 추가적인 정보를 표시할 수 있습니다. 예: 점수 차이, 최근 수정일 등 -->
                   <span style="margin: 0 1rem;">
-                    <!-- 아이콘 및 추가 정보 생략 -->
                     <small th:id="'modDate-' + ${tag.tagId}">최근 수정일: 로딩 중...</small>
                 </span>
                 </button>
@@ -247,7 +253,6 @@
               </div>
             </div>
           </div>
-
           <script th:inline="javascript">
             /*<![CDATA[*/
             var matchedStudentDetails = [[${matchedStudentDetails}]];
@@ -273,9 +278,16 @@
                   modDateElement.textContent = `( 수정일: ${groupedByTagId[tagId]} )`;
                 }
               });
+
+              // myScores 배열이 비어 있는지 확인합니다.
+              if (myScores.length !== 0) {
+                // 차트를 숨기고, 메시지를 보여줍니다.
+                document.getElementById('scoreChart').style.display = 'block';
+                document.getElementById('whichLR_data').style.display = 'block';
+                document.getElementById('accordionPanelsStayOpenExample').style.display = 'block';
+                document.getElementById('noScoresMessage').style.display = 'none';
+              }
             });
-
-
 
             var statisticsByTagId = [[${statisticsByTagId}]];
             var averages = Object.values(statisticsByTagId).map(function(stat) {
@@ -419,8 +431,6 @@
             });
           });
 
-
-
           // 통계 정보 계산 및 표시 함수 내부에 상위 퍼센티지 계산 로직 추가
           // var calculateStatistics = () => {
           //   var percentages = convertScoresToPercentages(scores, perfectScore);
@@ -471,10 +481,8 @@
 
 
       </div>
-      <!-- /.container-fluid -->
     </div>
-    <!-- End of Main Content -->
-
+  </div>
     <!-- Footer -->
     <footer class="sticky-footer bg-white">
       <div class="container my-auto">
@@ -484,10 +492,6 @@
       </div>
     </footer>
     <!-- End of Footer -->
-
-  </div>
-  <!-- End of Content Wrapper -->
-
 </div>
 <!-- End of Page Wrapper -->
 
