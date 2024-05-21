@@ -76,6 +76,9 @@ public class MemberLRoomService {
 //    return result;
 //  }
 
+  public Optional<ClassHub_MemberLRoom> findById(Long id){
+    return memberLRoomRepository.findById(id);
+  }
 
   // Update
   public ClassHub_MemberLRoom updateMemberLRoomRole(Long id, ClassHub_MemberLRoom classHubMemberLRoomDetails) {

@@ -22,8 +22,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -71,13 +73,26 @@ public class MemberLRoomController {
     return "member/memberList";
   }
 
+//  @PostMapping("/memberlroom/create/one/{lectureRoomId}")
+//  public ResponseEntity<String> createMemberByOne(@PathVariable Long lectureRoomId, @RequestBody MemberLRoomMemberCreateRequest memberLRoomMemberCreateRequest) {
+//    LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+//    MemberDto memberDto = MemberDto.from(memberLRoomMemberCreateRequest);
+//    // 강의실 정보 + 입력받은 새 멤버의 정보를 이용해서 멤버강의실에서 처리하겠다.
+//    Boolean createSuccess = memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
+//    return createSuccess ? ResponseEntity.ok().body("Success") : ResponseEntity.ok().body("Failure");
+//  }
+
   @PostMapping("/memberlroom/create/one/{lectureRoomId}")
-  public ResponseEntity<String> createMemberByOne(@PathVariable Long lectureRoomId, @RequestBody MemberLRoomMemberCreateRequest memberLRoomMemberCreateRequest) {
-    LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
-    MemberDto memberDto = MemberDto.from(memberLRoomMemberCreateRequest);
-    // 강의실 정보 + 입력받은 새 멤버의 정보를 이용해서 멤버강의실에서 처리하겠다.
-    Boolean createSuccess = memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
-    return createSuccess ? ResponseEntity.ok().body("Success") : ResponseEntity.ok().body("Failure");
+  public String createMemberByOne(@PathVariable Long lectureRoomId, @ModelAttribute MemberLRoomMemberCreateRequest memberLRoomMemberCreateRequest, RedirectAttributes redirectAttributes) {
+    try {
+      LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+      MemberDto memberDto = MemberDto.from(memberLRoomMemberCreateRequest);
+      memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
+      redirectAttributes.addFlashAttribute("message", "학생이 성공적으로 추가되었습니다.");
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", "학생 추가에 실패했습니다: " + e.getMessage());
+    }
+    return "member/memberList";
   }
 
   // Read One
@@ -100,17 +115,40 @@ public class MemberLRoomController {
     return "memberLRoom/update-memberlroom";
   }
 
-  @PostMapping("/memberlroom/update/role/{id}")
-  public ResponseEntity<String> updateMemberLRoomRole(@PathVariable Long id, @RequestBody ClassHub_MemberLRoom classHubMemberLRoom) {
-    classHubMemberLRoom.setRole(Role.from(classHubMemberLRoom.getRole().getRole()));
-    memberLRoomService.updateMemberLRoomRole(id, classHubMemberLRoom);
-    return ResponseEntity.ok().body("MemberLRoom Role updated successfully.");
+  @PostMapping("/memberlroom/update/role")
+  public String updateMemberLRoomRole(@RequestParam("id") Long id, @RequestParam("index") Long index, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom, RedirectAttributes redirectAttributes) {
+    // 역할 업데이트 로직 구현
+    Optional<ClassHub_MemberLRoom> classHub_memberLRoomOptional = memberLRoomService.findById(id);
+    String page = String.valueOf((index - 1) / 7);
+    String lRoomId = null;
+    if (classHub_memberLRoomOptional.isPresent()) {
+      lRoomId = classHub_memberLRoomOptional.get().getLectureRoom().getLRoomId().toString();
+      ClassHub_MemberLRoom existingMemberLRoom = classHub_memberLRoomOptional.get();
+      existingMemberLRoom.setRole(classHubMemberLRoom.getRole());
+      memberLRoomService.updateMemberLRoomRole(id, classHubMemberLRoom);
+      redirectAttributes.addAttribute("status", true);
+    } else {
+      redirectAttributes.addAttribute("status", false);
+    }
+    return "redirect:/lecture-room/member/info/" + lRoomId + "?page=" + page;
   }
 
-  @PostMapping("/memberlroom/update/permission/{id}")
-  public ResponseEntity<String> updateMemberLRoomPermission(@PathVariable Long id, @RequestBody ClassHub_MemberLRoom classHubMemberLRoom) {
-    memberLRoomService.updateMemberLRoomPermission(id, classHubMemberLRoom);
-    return ResponseEntity.ok().body("MemberLRoom Permission updated successfully.");
+  @PostMapping("/memberlroom/update/permission")
+  public String updateMemberLRoomPermission(@RequestParam("id") Long id, @RequestParam("index") Long index, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom, RedirectAttributes redirectAttributes) {
+    // 역할 업데이트 로직 구현
+    Optional<ClassHub_MemberLRoom> classHub_memberLRoomOptional = memberLRoomService.findById(id);
+    String page = String.valueOf((index - 1) / 7);
+    String lRoomId = null;
+    if (classHub_memberLRoomOptional.isPresent()) {
+      lRoomId = classHub_memberLRoomOptional.get().getLectureRoom().getLRoomId().toString();
+      ClassHub_MemberLRoom existingMemberLRoom = classHub_memberLRoomOptional.get();
+      existingMemberLRoom.setPermission(classHubMemberLRoom.getPermission());
+      memberLRoomService.updateMemberLRoomPermission(id, classHubMemberLRoom);
+      redirectAttributes.addAttribute("status", true);
+    } else {
+      redirectAttributes.addAttribute("status", false);
+    }
+    return "redirect:/lecture-room/member/info/" + lRoomId + "?page=" + page;
   }
   // Delete
   @PostMapping("/memberlroom/delete/{lectureRoomId}/{uniqueId}")
