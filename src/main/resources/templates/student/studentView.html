@@ -278,7 +278,6 @@
 
 
             var statisticsByTagId = [[${statisticsByTagId}]];
-            console.log(statisticsByTagId);
             var averages = Object.values(statisticsByTagId).map(function(stat) {
               return stat.average;
             });
@@ -351,7 +350,6 @@
             var myScorePercentage = myScores.find(function(scoreP) {
               return scoreP.tagId == tagId;
             }).score / perfectScore * 100;
-            console.log(myScorePercentage);
 
             var percentages = scoresByTagId[tagId].map(function(score) {
               return (score / perfectScore) * 100;
@@ -368,23 +366,17 @@
               }
             });
 
-            // var myCount = Array(10).fill(0);
-            // if (myScorePercentage === 100) {
-            //   myCount[9]++;
-            // } else {
-            //   var index = Math.floor(myScorePercentage / 10);
-            //   myCount[index]++;
-            // }
-            // console.log(myCount);
+            // 나의 점수가 속하는 구간을 찾습니다.
+            var myScoreIndex = myScorePercentage === 100 ? 9 : Math.floor(myScorePercentage / 10);
 
             var distributionDataset = {
               label: '점수 분포',
               data: rangeCounts,
               backgroundColor: rangeCounts.map((_, index) =>
-                Math.floor((percentages-1) / 10) === index ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)'
+                index === myScoreIndex ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)'
               ),
               borderColor: rangeCounts.map((_, index) =>
-                Math.floor((percentages-1) / 10) === index ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)'
+                index === myScoreIndex ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)'
               ),
               borderWidth: 1,
               type: 'bar'
@@ -395,8 +387,7 @@
               label: '나의 점수',
               backgroundColor: 'rgba(255, 99, 132, 0.2)',
               borderColor: 'rgba(255, 99, 132, 1)',
-              type: 'bubble'
-
+              type: 'bubble',
             }
 
             // 그래프를 그립니다.
@@ -404,7 +395,7 @@
             var mixedChart = new Chart(ctx, {
               data: {
                 labels: Array.from({length: 10}, (_, i) => `${i*10+1}~${i*10+10}`), // X 축 레이블 수정
-                datasets: [distributionDataset]
+                datasets: [distributionDataset,myScoreLabel]
               },
               options: {
                 scales: {
@@ -426,30 +417,6 @@
                 }
               }
             });
-            // new Chart(ctx, {
-            //   type: 'bar',
-            //   data: {
-            //     labels: ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100'],
-            //     datasets: [{
-            //       label: '학생 수',
-            //       data: rangeCounts,
-            //       backgroundColor: 'rgba(75, 192, 192, 1)',
-            //       borderColor: 'rgba(75, 192, 192, 1)',
-            //       borderWidth: 1,
-            //       barThickness: 20, // 막대의 너비를 설정합니다.
-            //     },{
-            //       label: '나의 점수',
-            //     }]
-            //   },
-            //   options: {
-            //     scales: {
-            //       y: {
-            //         beginAtZero: true,
-            //         max: maxYValue
-            //       }
-            //     }
-            //   }
-            // });
           });
 
 
