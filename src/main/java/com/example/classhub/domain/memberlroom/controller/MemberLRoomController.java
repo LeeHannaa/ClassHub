@@ -58,12 +58,11 @@ public class MemberLRoomController {
 
   // 해당 강의실에 입장한 멤버만 불러오기
   @GetMapping("/lecture-room/member/info/{lectureRoomId}")
-  public String listMemberLRooms(@PathVariable Long lectureRoomId, Model model,
-                                 @RequestParam(value = "page", defaultValue = "0") int page) {
+  public String listMemberLRooms(@PathVariable Long lectureRoomId, Model model) {
     LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
     model.addAttribute("lectureRoom", lectureRoomDto);
 
-    Page<ClassHub_MemberLRoom> classHub_memberLRoomPageList = memberLRoomService.findMembersByLRoomId(lectureRoomId, page);
+    List<ClassHub_MemberLRoom> classHub_memberLRoomPageList = memberLRoomService.findMembersByLRoomId(lectureRoomId);
     model.addAttribute("memberLRooms", classHub_memberLRoomPageList);
     model.addAttribute("maxPage", 5);
 
@@ -73,26 +72,19 @@ public class MemberLRoomController {
     return "member/memberList";
   }
 
-//  @PostMapping("/memberlroom/create/one/{lectureRoomId}")
-//  public ResponseEntity<String> createMemberByOne(@PathVariable Long lectureRoomId, @RequestBody MemberLRoomMemberCreateRequest memberLRoomMemberCreateRequest) {
-//    LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
-//    MemberDto memberDto = MemberDto.from(memberLRoomMemberCreateRequest);
-//    // 강의실 정보 + 입력받은 새 멤버의 정보를 이용해서 멤버강의실에서 처리하겠다.
-//    Boolean createSuccess = memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
-//    return createSuccess ? ResponseEntity.ok().body("Success") : ResponseEntity.ok().body("Failure");
-//  }
 
   @PostMapping("/memberlroom/create/one/{lectureRoomId}")
   public String createMemberByOne(@PathVariable Long lectureRoomId, @ModelAttribute MemberLRoomMemberCreateRequest memberLRoomMemberCreateRequest, RedirectAttributes redirectAttributes) {
     try {
       LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
       MemberDto memberDto = MemberDto.from(memberLRoomMemberCreateRequest);
-      memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
-      redirectAttributes.addFlashAttribute("message", "학생이 성공적으로 추가되었습니다.");
+      Boolean success = memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
+      if(success) redirectAttributes.addAttribute("createState", true);
+      else redirectAttributes.addAttribute("failState", true);
     } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("error", "학생 추가에 실패했습니다: " + e.getMessage());
+      redirectAttributes.addAttribute("error", "추가 중 에러 발생");
     }
-    return "member/memberList";
+    return "redirect:/lecture-room/member/info/" + lectureRoomId;
   }
 
   // Read One
@@ -116,10 +108,9 @@ public class MemberLRoomController {
   }
 
   @PostMapping("/memberlroom/update/role")
-  public String updateMemberLRoomRole(@RequestParam("id") Long id, @RequestParam("index") Long index, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom, RedirectAttributes redirectAttributes) {
+  public String updateMemberLRoomRole(@RequestParam("id") Long id, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom, RedirectAttributes redirectAttributes) {
     // 역할 업데이트 로직 구현
     Optional<ClassHub_MemberLRoom> classHub_memberLRoomOptional = memberLRoomService.findById(id);
-    String page = String.valueOf((index - 1) / 7);
     String lRoomId = null;
     if (classHub_memberLRoomOptional.isPresent()) {
       lRoomId = classHub_memberLRoomOptional.get().getLectureRoom().getLRoomId().toString();
@@ -130,14 +121,13 @@ public class MemberLRoomController {
     } else {
       redirectAttributes.addAttribute("status", false);
     }
-    return "redirect:/lecture-room/member/info/" + lRoomId + "?page=" + page;
+    return "redirect:/lecture-room/member/info/" + lRoomId;
   }
 
   @PostMapping("/memberlroom/update/permission")
-  public String updateMemberLRoomPermission(@RequestParam("id") Long id, @RequestParam("index") Long index, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom, RedirectAttributes redirectAttributes) {
+  public String updateMemberLRoomPermission(@RequestParam("id") Long id, @ModelAttribute ClassHub_MemberLRoom classHubMemberLRoom, RedirectAttributes redirectAttributes) {
     // 역할 업데이트 로직 구현
     Optional<ClassHub_MemberLRoom> classHub_memberLRoomOptional = memberLRoomService.findById(id);
-    String page = String.valueOf((index - 1) / 7);
     String lRoomId = null;
     if (classHub_memberLRoomOptional.isPresent()) {
       lRoomId = classHub_memberLRoomOptional.get().getLectureRoom().getLRoomId().toString();
@@ -148,7 +138,7 @@ public class MemberLRoomController {
     } else {
       redirectAttributes.addAttribute("status", false);
     }
-    return "redirect:/lecture-room/member/info/" + lRoomId + "?page=" + page;
+    return "redirect:/lecture-room/member/info/" + lRoomId;
   }
   // Delete
   @PostMapping("/memberlroom/delete/{lectureRoomId}/{uniqueId}")
