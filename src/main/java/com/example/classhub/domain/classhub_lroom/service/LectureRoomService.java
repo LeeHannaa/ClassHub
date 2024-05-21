@@ -39,17 +39,16 @@ public class LectureRoomService {
 
         return LectureRoomDto.from(lectureRoom);
     }
-
     @Transactional
     public LectureRoomListResponse getLectureRoomList(Long memberId) {
         List<ClassHub_MemberLRoom> memberLRooms = memberLRoomRepository.findByClassHubMemberMemberId(memberId);
 
-        List<ClassHub_LRoom> lectureRooms = memberLRooms.stream()
-                .map(ClassHub_MemberLRoom::getLectureRoom)
-                .toList();
-
-        List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
-                .map(LectureRoomResponse::new)
+        List<LectureRoomResponse> lectureRoomResponses = memberLRooms.stream()
+                .filter(memberLRoom -> "APPROVED".equals(memberLRoom.getPermission().name()))
+                .map(memberLRoom -> new LectureRoomResponse(
+                        memberLRoom.getLectureRoom(),
+                        memberLRoom.getRole()
+                ))
                 .collect(Collectors.toList());
         return new LectureRoomListResponse(lectureRoomResponses);
     }

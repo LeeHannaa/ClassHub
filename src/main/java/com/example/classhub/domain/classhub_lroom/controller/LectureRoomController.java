@@ -6,6 +6,7 @@ import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoo
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.member.dto.MemberDto;
+import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
 import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.service.PostService;
@@ -35,7 +36,6 @@ public class LectureRoomController {
         TagListResponse tagListResponse = tagService.getTagList();
 
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
-        System.out.println("memberDto.getMemberId() = " + memberDto.getMemberId());
         if (searchKeyword.isEmpty()){
             lectureRoomListResponse = lectureRoomService.getLectureRoomList(memberDto.getMemberId());
         }
@@ -52,30 +52,46 @@ public class LectureRoomController {
     }
 
     @PostMapping("/lecture-room/saveLecture")
-    public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request, @RequestParam("studentFile") MultipartFile studentFile) {
+    public String createLectureRoom(@ModelAttribute("lectureRoom") LectureRoomCreateRequest request,
+                                    @RequestParam("studentFile") MultipartFile studentFile,
+                                    HttpSession session) {
         LectureRoomDto lectureRoomDto = lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
+        MemberDto member = (MemberDto) session.getAttribute("member");
         if(studentFile != null && !studentFile.isEmpty())
             memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
+        else memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), member.getMemberId());
         return "redirect:/lecture-room";
     }
 
     @GetMapping("/lecture-room/detail/{lectureRoomId}")
     public String findLectureRoomDetail(@PathVariable Long lectureRoomId, Model model,
+                                        @RequestParam(value = "searchKeyword", required = false, defaultValue = "") String searchKeyword,
                                         @RequestParam(value = "page", defaultValue = "0") int page,
                                         @RequestParam(value = "size", defaultValue = "5") int size,
                                         HttpSession session) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
-        memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
+
+        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+            System.out.println("searchKeyword = " + searchKeyword);
+            memberLRoomService.createMemberByOne(lectureRoomDto, memberDto, searchKeyword);
+        }
 
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         PostListResponse postListResponse = postService.getPostListByLectureRoomId(lectureRoomId, page, size);
 
-        model.addAttribute("posts", postListResponse.getPosts()); // 수정된 부분
+        MemberLRoomDto memberLRoomDto = memberLRoomService.findByMemberIdAndLroomId(memberDto.getMemberId(), lectureRoomId);
+
+        model.addAttribute("posts", postListResponse.getPosts());
         model.addAttribute("totalPages", postListResponse.getTotalPages());
         model.addAttribute("currentPage", postListResponse.getCurrentPage());
         model.addAttribute("lectureRoom", lectureRoomDto);
         model.addAttribute("tags", tagListResponse.getTags());
+
+        String memberRole = memberLRoomDto.getRole().getRole();
+        if ("학생".equals(memberRole)) {
+            return "redirect:/student/" + memberDto.getUniqueId() + "/" + lectureRoomId;
+        }
 
         return "lectureRoomDetail";
     }

@@ -215,9 +215,21 @@
                     <div th:each="lectureRoom : ${lectureRooms}" class="col mb-4">
                         <div class="card h-100">
                             <div class="card-body d-flex flex-column justify-content-between">
-                                <h5 class="card-title mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.roomName}"></h5>
+                                <div style="display: flex; justify-content: space-between">
+                                    <h5 class="card-title mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.roomName}"></h5>
+                                    <p class="card-text text-muted mt-2" th:if="${lectureRoom.role != null}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.getRole().getRole()}"></p>
+                                </div>
                                 <p class="card-text text-muted mt-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.description}"></p>
-                                <a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;">강의실 입장</a>
+<!--                                <a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;">강의실 입장</a>-->
+                                <a th:if="${param.searchKeyword}"
+                                   th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId}, searchKeyword=${param.searchKeyword})}"
+                                   class="btn btn-primary btn-sm align-self-end"
+                                   style="background: #425de3; border-color: #425de3;">강의실 입장</a>
+                                <a th:unless="${param.searchKeyword}"
+                                   th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}"
+                                   class="btn btn-primary btn-sm align-self-end"
+                                   style="background: #425de3; border-color: #425de3;">강의실 입장</a>
+
                             </div>
                         </div>
                     </div>
@@ -266,7 +278,7 @@
             <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                <a class="btn btn-primary" href="/lecture-room">로그아웃</a>
+                <a class="btn btn-primary" href="/logout">로그아웃</a>
             </div>
         </div>
     </div>

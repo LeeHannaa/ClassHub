@@ -11,7 +11,6 @@ import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.dto.Permission;
 import com.example.classhub.domain.memberlroom.dto.Role;
 import com.example.classhub.domain.memberlroom.repository.MemberLRoomRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MemberLRoomService {
@@ -48,6 +46,17 @@ public class MemberLRoomService {
     return memberLRoomRepository.save(classHubMemberLRoom);
   }
 
+  public void createMemberLRoom(Long lRoomId, Long memberId) {
+    ClassHub_LRoom lRoom = lectureRoomService.findExistingLectureRoom(lRoomId);
+    ClassHub_Member member = memberService.findByMemberId(memberId);
+    ClassHub_MemberLRoom classHubMemberLRoom = ClassHub_MemberLRoom.builder()
+            .lectureRoom(lRoom)
+            .classHubMember(member)
+            .role(Role.PROFESSOR)
+            .permission(Permission.APPROVED)
+            .build();
+    memberLRoomRepository.save(classHubMemberLRoom);
+  }
   // Read All
   public List<ClassHub_MemberLRoom> findAllMemberLRooms() {
     return memberLRoomRepository.findAll();
@@ -69,12 +78,6 @@ public class MemberLRoomService {
     return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId, Pageable.unpaged()).getContent();
   }
 
-  // 강의실 아이디에 따라 강의실 정보 불러오기
-//  public ClassHub_MemberLRoom findMemberByLRoomId(Long LRoomId) {
-//    List<ClassHub_MemberLRoom> classHub_memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
-//    ClassHub_MemberLRoom result = classHub_memberLRoom.get(0);
-//    return result;
-//  }
 
   public Optional<ClassHub_MemberLRoom> findById(Long id){
     return memberLRoomRepository.findById(id);
@@ -107,7 +110,47 @@ public class MemberLRoomService {
     }
     return s;
   }
+  private Role determineRoleBasedOnCode(String inviteCode, LectureRoomDto lectureRoomDto) {
+    if (inviteCode.equals(lectureRoomDto.getStInviteCode())) {
+      return Role.STUDENT;
+    } else if (inviteCode.equals(lectureRoomDto.getTaInviteCode())) {
+      return Role.TA;
+    }
+    return Role.STUDENT;
+  }
 
+  @Transactional
+  public void createMemberByOne(LectureRoomDto lectureRoomDto, MemberDto memberDto, String inviteCode) {
+    System.out.println("lectureRoomDto.lRoomId : " + lectureRoomDto.getLectureRoomId());
+    System.out.println("memberDto.uniqueId: " + memberDto.getUniqueId());
+    ClassHub_LRoom lRoom = lectureRoomService.findByRoomIdOne(lectureRoomDto.getLectureRoomId());
+    ClassHub_MemberLRoom memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(lectureRoomDto.getLectureRoomId(), memberDto.getUniqueId());
+
+    if(memberLRoom == null) {
+      Role role = determineRoleBasedOnCode(inviteCode, lectureRoomDto);
+
+      Optional<ClassHub_Member> defaultMember = memberService.findByUniqueId(memberDto.getUniqueId());
+      if(defaultMember.isEmpty()){
+        ClassHub_Member createMember = memberService.createMember(ClassHub_Member.from(memberDto));
+        ClassHub_MemberLRoom memberLRoom1 = ClassHub_MemberLRoom.builder()
+                .lectureRoom(lRoom)
+                .classHubMember(createMember)
+                .permission(Permission.APPROVED)
+                .role(role)
+                .build();
+        memberLRoomRepository.save(memberLRoom1);
+      }
+      else{
+        ClassHub_MemberLRoom memberLRoom1 = ClassHub_MemberLRoom.builder()
+                .lectureRoom(lRoom)
+                .classHubMember(defaultMember.get())
+                .permission(Permission.APPROVED)
+                .role(role)
+                .build();
+        memberLRoomRepository.save(memberLRoom1);
+      }
+    }
+  }
   @Transactional
   public Boolean createMemberByOne(LectureRoomDto lectureRoomDto, MemberDto memberDto) {
     System.out.println("lectureRoomDto.lRoomId : " + lectureRoomDto.getLectureRoomId());
@@ -116,7 +159,6 @@ public class MemberLRoomService {
     ClassHub_MemberLRoom memberLRoom = memberLRoomRepository.findByLectureRoom_lRoomIdAndClassHubMember_UniqueId(lectureRoomDto.getLectureRoomId(), memberDto.getUniqueId());
 
     if(memberLRoom == null) {
-//      System.out.println("memberLRoom is null");
       // member에서 해당 member 찾기
       Optional<ClassHub_Member> defaultMember = memberService.findByUniqueId(memberDto.getUniqueId());
       if(defaultMember.isEmpty()){
@@ -180,8 +222,8 @@ public class MemberLRoomService {
         ClassHub_MemberLRoom classHubMemberLRoom = ClassHub_MemberLRoom.builder()
                 .lectureRoom(lRoom)
                 .classHubMember(member)
-                .role(Role.STUDENT)
-                .permission(Permission.UNAPPROVED)
+                .role(Role.PROFESSOR)
+                .permission(Permission.APPROVED)
                 .build();
 
         memberLRoomRepository.save(classHubMemberLRoom);

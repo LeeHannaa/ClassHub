@@ -60,7 +60,7 @@ public class MemberController {
 
   @GetMapping("/updateForm/{memberId}") // member 수정하기
   public String updateForm(@ModelAttribute("memberId") Long memberId, Model model){
-    MemberDto memberDto = memberService.findByMemberId(memberId);
+    MemberDto memberDto = memberService.findMemberDtoByMemberId(memberId);
     model.addAttribute("member", memberDto);
     return "/member/memberUpdate";
   }
