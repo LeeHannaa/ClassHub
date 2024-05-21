@@ -2,6 +2,7 @@ package com.example.classhub.domain.classhub_lroom.controller.response;
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
+import com.example.classhub.domain.memberlroom.dto.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class LectureRoomResponse {
     private String description;
     private boolean onOff;
     private String studentInfoKey;
+    private Role role;
 
     public LectureRoomResponse(ClassHub_LRoom lectureRoom){
         this.lectureRoomId = lectureRoom.getLRoomId();
@@ -25,6 +27,16 @@ public class LectureRoomResponse {
         this.onOff = lectureRoom.isOnOff();
         this.description = lectureRoom.getDescription();
         this.studentInfoKey = lectureRoom.getStudentInfoKey();
+    }
+    public LectureRoomResponse(ClassHub_LRoom lectureRoom, Role role){
+        this.lectureRoomId = lectureRoom.getLRoomId();
+        this.roomName = lectureRoom.getRoomName();
+        this.taInviteCode = lectureRoom.getTaInviteCode();
+        this.stInviteCode = lectureRoom.getStInviteCode();
+        this.onOff = lectureRoom.isOnOff();
+        this.description = lectureRoom.getDescription();
+        this.studentInfoKey = lectureRoom.getStudentInfoKey();
+        this.role = role;
     }
 
     public LectureRoomResponse(LectureRoomDto lectureRoomDto){
