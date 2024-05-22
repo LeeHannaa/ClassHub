@@ -2,7 +2,6 @@ package com.example.classhub.domain.member.controller;
 
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
-import com.example.classhub.domain.member.controller.request.LoginRequest;
 import com.example.classhub.domain.member.controller.request.MemberCreateRequest;
 import com.example.classhub.domain.member.controller.response.MemberListResponse;
 import com.example.classhub.domain.member.dto.MemberDto;
@@ -27,7 +26,7 @@ public class MemberController {
     MemberListResponse memberListResponse = memberService.getMemberList();
     model.addAttribute("members", memberListResponse.getMembers());
 
-    LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+    LectureRoomDto lectureRoomDto = lectureRoomService.findLRoomDtoByRoomId(lectureRoomId);
     TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
     model.addAttribute("lectureRoom", lectureRoomDto);
     model.addAttribute("tags", tagListResponse.getTags());
