@@ -204,7 +204,7 @@
                         var newTagName = inputElement.value.trim();
                         // AJAX 요청
                         var xhr = new XMLHttpRequest();
-                        xhr.open('POST', '/tag/update/' + tagId); // tagId를 URL에 포함하여 전송
+                        xhr.open('POST', '/ClassHub/tag/update/' + tagId); // tagId를 URL에 포함하여 전송
                         xhr.setRequestHeader('Content-Type', 'application/json');
                         xhr.onload = function () {
                             if (xhr.status === 200) {
@@ -347,7 +347,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${session.member.member_name}"></span>
                             <img class="img-profile rounded-circle"
-                                 src="/bootstrap/img/undraw_profile.svg">
+                                 src="/ClassHub/bootstrap/img/undraw_profile.svg">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -568,7 +568,7 @@
     function deleteTag(tagId) {
         $.ajax({
             type: "POST",
-            url: "/tag/delete/" + tagId,
+            url: "/ClassHub/tag/delete/" + tagId,
             success: function(response) {
                 console.log("태그가 성공적으로 삭제되었습니다.");
                 location.href = '/lecture-room/detail/' + lectureRoomId;
@@ -725,7 +725,7 @@
     function updatePerfectScore(tagId, newScore) {
       const xhr = new XMLHttpRequest();
       // URL을 새로운 엔드포인트로 변경
-      const url = `/data-detail/statistics/${tagId}/perfect-score`; // URL 동적 생성
+      const url = `/ClassHub/data-detail/statistics/${tagId}/perfect-score`; // URL 동적 생성
       xhr.open('PUT', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onreadystatechange = function () {
@@ -806,23 +806,23 @@
     /*]]>*/
 </script>
 <!-- Bootstrap core JavaScript-->
-<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
-<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="/bootstrap/js/sb-admin-2.min.js"></script>
+<script src="/ClassHub/bootstrap/js/sb-admin-2.min.js"></script>
 
 <!-- Page level plugins -->
-<script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
-<script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/chart.js/Chart.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- Page level custom scripts -->
-<script src="/bootstrap/js/demo/chart-area-demo.js"></script>
-<script src="/bootstrap/js/demo/datatables-demo.js"></script>
+<script src="/ClassHub/bootstrap/js/demo/chart-area-demo.js"></script>
+<script src="/ClassHub/bootstrap/js/demo/datatables-demo.js"></script>
 
 </body>
 </html>

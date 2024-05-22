@@ -63,7 +63,7 @@
 <script>
     function loadHeadersIntoModal() {
         $.ajax({
-            url: '/post/postModal',
+            url: '/ClassHub/post/postModal',
             type: 'GET',
             cache: false,
             success: function(response) {
@@ -80,7 +80,7 @@
         var formData = new FormData($('#postForm')[0]);
 
         $.ajax({
-            url: '/post/postForm',
+            url: '/ClassHub/post/postForm',
             type: 'POST',
             data: formData,
             cache: false,
@@ -91,7 +91,7 @@
                     loadHeadersIntoModal(response);
                 },
                 204: function() {
-                    window.location.href = '/lecture-room/detail/' + $('#lRoomId').val();
+                    window.location.href = '/ClassHub/lecture-room/detail/' + $('#lRoomId').val();
                 }
             },
             error: function() {

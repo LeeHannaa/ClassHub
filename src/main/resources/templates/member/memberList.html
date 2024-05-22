@@ -64,7 +64,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item" th:object="${lectureRoom}">
-            <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
+            <a class="nav-link" th:href="@{'/ClassHub/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>대시보드</span></a>
         </li>
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                     <div id="tagList">
-                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                        <a class="collapse-item" th:href="@{'/ClassHub/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
                     </div>
                 </div>
             </div>
@@ -171,8 +171,8 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
-                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
-                    <a class="collapse-item active" th:href="@{'/lecture-room/member/info/' + ${lectureRoom.lectureRoomId}}">강의실 구성원 정보</a>
+                    <a class="collapse-item" th:href="@{'/ClassHub/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
+                    <a class="collapse-item active" th:href="@{'/ClassHub/lecture-room/member/info/' + ${lectureRoom.lectureRoomId}}">강의실 구성원 정보</a>
                 </div>
             </div>
         </li>
@@ -278,7 +278,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${session.member.member_name}"></span>
                             <img class="img-profile rounded-circle"
-                                 src="/bootstrap/img/undraw_profile.svg">
+                                 src="/ClassHub/bootstrap/img/undraw_profile.svg">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -789,14 +789,14 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
-<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="/bootstrap/js/sb-admin-2.min.js"></script>
+<script src="/ClassHub/bootstrap/js/sb-admin-2.min.js"></script>
 
 </body>
 
