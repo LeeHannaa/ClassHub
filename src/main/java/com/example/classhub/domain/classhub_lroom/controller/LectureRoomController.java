@@ -126,15 +126,14 @@ public class LectureRoomController {
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
         memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
 
-        TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         PostListResponse postListResponse = postService.getPostListByLectureRoomId(lectureRoomId, page, size);
 
         model.addAttribute("posts", postListResponse.getPosts()); // 수정된 부분
         model.addAttribute("totalPages", postListResponse.getTotalPages());
         model.addAttribute("currentPage", postListResponse.getCurrentPage());
         model.addAttribute("lectureRoom", lectureRoomDto);
-        model.addAttribute("tags", tagListResponse.getTags());
         model.addAttribute("uniqueId", memberDto.getUniqueId());
+        model.addAttribute("name", memberDto.getMember_name());
 
         return "./student/studentPost";
     }
