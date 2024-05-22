@@ -201,6 +201,7 @@ public class MemberLRoomService {
         String[] data = line.split(",");
 
         String uniqueId = headerMap.containsKey("학번") ? data[headerMap.get("학번")] : null;
+
         Optional<ClassHub_Member> existingMember = memberService.findByUniqueId(uniqueId);
 
         ClassHub_Member member = existingMember.orElseGet(() -> ClassHub_Member.builder()
@@ -216,7 +217,7 @@ public class MemberLRoomService {
         ClassHub_MemberLRoom classHubMemberLRoom = ClassHub_MemberLRoom.builder()
                 .lectureRoom(lRoom)
                 .classHubMember(member)
-                .role(Role.PROFESSOR)
+                .role(Role.STUDENT)
                 .permission(Permission.APPROVED)
                 .build();
 

@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 public class LectureRoomController {
@@ -57,9 +55,10 @@ public class LectureRoomController {
                                     HttpSession session) {
         LectureRoomDto lectureRoomDto = lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
         MemberDto member = (MemberDto) session.getAttribute("member");
+
+        memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), member.getMemberId());
         if(studentFile != null && !studentFile.isEmpty())
             memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
-        else memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), member.getMemberId());
         return "redirect:/lecture-room";
     }
 
@@ -69,7 +68,7 @@ public class LectureRoomController {
                                         @RequestParam(value = "page", defaultValue = "0") int page,
                                         @RequestParam(value = "size", defaultValue = "5") int size,
                                         HttpSession session) {
-        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        LectureRoomDto lectureRoomDto = lectureRoomService.findLRoomDtoByRoomId(lectureRoomId);
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
 
         if (searchKeyword != null && !searchKeyword.isEmpty()) {
@@ -98,7 +97,7 @@ public class LectureRoomController {
 
     @GetMapping("/lecture-room/detail/info/{lectureRoomId}")
     public String findLectureRoomDetailInfo(@PathVariable Long lectureRoomId, Model model) {
-        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        LectureRoomDto lectureRoomDto = lectureRoomService.findLRoomDtoByRoomId(lectureRoomId);
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
         model.addAttribute("lectureRoom", lectureRoomDto);
         model.addAttribute("tags", tagListResponse.getTags());
@@ -123,7 +122,7 @@ public class LectureRoomController {
                                         @RequestParam(value = "page", defaultValue = "0") int page,
                                         @RequestParam(value = "size", defaultValue = "5") int size,
                                         HttpSession session) {
-        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        LectureRoomDto lectureRoomDto = lectureRoomService.findLRoomDtoByRoomId(lectureRoomId);
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
         memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
 

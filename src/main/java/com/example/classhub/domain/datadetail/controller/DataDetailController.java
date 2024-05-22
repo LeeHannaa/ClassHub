@@ -13,7 +13,6 @@ import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.service.MemberService;
 import com.example.classhub.domain.memberlroom.dto.MemberLRoomDto;
 import com.example.classhub.domain.memberlroom.service.MemberLRoomService;
-import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.controller.response.TagResponse;
@@ -91,7 +90,7 @@ public class DataDetailController {
         model.addAttribute("dataStatistics", dataStatisticListResponse.getDataStatistic());
 
         Long lectureRoomId = tagService.findLRoomIdByTagId(tagId);
-        LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(lectureRoomId);
+        LectureRoomDto lectureRoomDto = lectureRoomService.findLRoomDtoByRoomId(lectureRoomId);
         model.addAttribute("lectureRoom", lectureRoomDto);
 
         TagListResponse tagListResponse = tagService.getTagListByLectureId(lectureRoomId);
@@ -131,7 +130,7 @@ public class DataDetailController {
       model.addAttribute("uniqueId", mem.getUniqueId());
       // uniqueId로 member_id 찾기
       MemberDto member = memberService.findByUniqueIdDto(uniqueId);
-      LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(LRoomId);
+      LectureRoomDto lectureRoomDto = lectureRoomService.findLRoomDtoByRoomId(LRoomId);
       model.addAttribute("lectureRoom", lectureRoomDto);
       model.addAttribute("LRoomId", LRoomId);
       if (member != null) {
