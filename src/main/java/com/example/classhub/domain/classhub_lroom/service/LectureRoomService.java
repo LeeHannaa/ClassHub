@@ -44,7 +44,7 @@ public class LectureRoomService {
         List<ClassHub_MemberLRoom> memberLRooms = memberLRoomRepository.findByClassHubMemberMemberId(memberId);
 
         List<LectureRoomResponse> lectureRoomResponses = memberLRooms.stream()
-                .filter(memberLRoom -> "APPROVED".equals(memberLRoom.getPermission().name()))
+                .filter(memberLRoom -> memberLRoom.getLectureRoom() != null && "APPROVED".equals(memberLRoom.getPermission().name()))
                 .map(memberLRoom -> new LectureRoomResponse(
                         memberLRoom.getLectureRoom(),
                         memberLRoom.getRole()
@@ -90,6 +90,7 @@ public class LectureRoomService {
     @Transactional
     public void delete(Long lectureRoomId) {
         Optional<ClassHub_LRoom> optionalLectureRoom = lectureRoomRepository.findById(lectureRoomId);
+        System.out.println("optionalLectureRoom = " + optionalLectureRoom.get().getRoomName());
         optionalLectureRoom.ifPresent(lectureRoom -> {
             List<ClassHub_Tag> tags = tagRepository.findByLectureRoom(lectureRoom);
             tagRepository.deleteAll(tags);
