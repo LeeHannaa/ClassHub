@@ -55,9 +55,10 @@ public class LectureRoomController {
                                     HttpSession session) {
         LectureRoomDto lectureRoomDto = lectureRoomService.createLectureRoom(LectureRoomDto.from(request));
         MemberDto member = (MemberDto) session.getAttribute("member");
+
+        memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), member.getMemberId());
         if(studentFile != null && !studentFile.isEmpty())
             memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), studentFile);
-        else memberLRoomService.createMemberLRoom(lectureRoomDto.getLectureRoomId(), member.getMemberId());
         return "redirect:/lecture-room";
     }
 
