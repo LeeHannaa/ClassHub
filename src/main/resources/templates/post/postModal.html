@@ -52,22 +52,22 @@
                     </div>
                 </div>
                 <div class="modal fade" id="configModal" tabindex="-1" role="dialog" aria-labelledby="configModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-lg" role="document" style="width: 60%; max-width: 800px; height: 50%; max-height: 400px">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="configModalLabel">생성될 태그 선택</h5>
+                                <h5 class="modal-title" id="configModalLabel">생성될 태그 정보 입력</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                                 <form action="#" th:action="@{/post/postModal}" th:object="${headers}" method="post" enctype="multipart/form-data">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                         <tr>
                                             <th>번호</th>
                                             <th>찾은 헤더 이름</th>
-                                            <th>키로 사용</th>
+                                            <th>식별자(키)로 사용</th>
                                             <th>점수 여부</th>
                                             <th>태그 생성 여부</th>
                                             <th>덮어쓰기</th>
@@ -107,7 +107,9 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <button type="submit" class="btn btn-primary">저장하기</button>
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-primary">저장하기</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
