@@ -129,6 +129,7 @@ public class DataDetailController {
     public String findStudentList(@PathVariable Long LRoomId, @PathVariable String uniqueId, Model model, HttpSession session) {
       MemberDto mem = (MemberDto) session.getAttribute("member");
       model.addAttribute("uniqueId", mem.getUniqueId());
+      model.addAttribute("name", mem.getMember_name());
       // uniqueId로 member_id 찾기
       MemberDto member = memberService.findByUniqueIdDto(uniqueId);
       LectureRoomDto lectureRoomDto = lectureRoomService.findByRoomId(LRoomId);
