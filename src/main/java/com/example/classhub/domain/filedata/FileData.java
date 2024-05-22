@@ -3,7 +3,7 @@ package com.example.classhub.domain.filedata;
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.filedata.dto.FileDataDto;
 import com.example.classhub.domain.post.ClassHub_Post;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

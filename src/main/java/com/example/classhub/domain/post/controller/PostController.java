@@ -8,7 +8,7 @@ import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
 import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.service.PostService;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

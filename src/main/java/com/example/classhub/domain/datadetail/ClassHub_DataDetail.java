@@ -3,7 +3,7 @@ package com.example.classhub.domain.datadetail;
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.datadetail.dto.DataDetailDto;
 import com.example.classhub.domain.tag.ClassHub_Tag;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -3,7 +3,7 @@ package com.example.classhub.domain.tag;
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.tag.dto.TagDto;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;

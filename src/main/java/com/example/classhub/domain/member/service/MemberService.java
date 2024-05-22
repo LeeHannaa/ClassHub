@@ -6,12 +6,14 @@ import com.example.classhub.domain.member.controller.response.MemberResponse;
 import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.member.repository.MemberRepository;
 import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomMemberCreateRequest;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor //클래스 내부에 final 또는 @NonNull로 표시된 필드만을 매개변수로 하는 생성자를 생성
@@ -40,7 +42,7 @@ public class MemberService {
         List<ClassHub_Member> classHubMembers = memberRepository.findAll();
         List<MemberResponse> memberResponses = classHubMembers.stream()
                 .map(MemberResponse::new)
-                .toList();
+                .collect(Collectors.toList());
         return new MemberListResponse(memberResponses);
     }
 

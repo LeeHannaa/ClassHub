@@ -5,8 +5,8 @@ import com.example.classhub.domain.post.controller.request.PostCheckRequest;
 import com.example.classhub.domain.post.controller.request.PostCreateRequest;
 import com.example.classhub.domain.post.controller.request.PostUpdateRequest;
 import com.example.classhub.domain.tag.service.TagService;
-import jakarta.annotation.Nullable;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

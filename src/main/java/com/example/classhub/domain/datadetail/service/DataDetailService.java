@@ -18,7 +18,7 @@ import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.controller.response.TagResponse;
 import com.example.classhub.domain.tag.service.TagService;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,7 +51,7 @@ public class DataDetailService {
         List<ClassHub_DataDetail> dataDetails = dataDetailRepository.findAll();
         List<DataDetailResponse> dataDetailResponses = dataDetails.stream()
                 .map(DataDetailResponse::new)
-                .toList();
+                .collect(Collectors.toList());
         return new DataDetailListResponse(dataDetailResponses);
     }
 
@@ -59,7 +59,7 @@ public class DataDetailService {
         List<ClassHub_DataDetail> dataDetails = dataDetailRepository.findByStudentNumAndTagTagId(studentNum, tagId);
         List<DataDetailResponse> dataDetailResponses = dataDetails.stream()
                 .map(DataDetailResponse::new)
-                .toList();
+                .collect(Collectors.toList());
         return new DataDetailListResponse(dataDetailResponses);
     }
 
@@ -106,7 +106,7 @@ public class DataDetailService {
 
         List<DataStatisticResponse> dataStatisticResponses = lastList.stream()
                 .map(DataStatisticResponse::new)
-                .toList();
+                .collect(Collectors.toList());
         return new DataStatisticListResponse(dataStatisticResponses);
     }
 
@@ -137,7 +137,7 @@ public class DataDetailService {
     List<ClassHub_DataDetail> dataDetails = dataDetailRepository.findByTagTagId(tagId);
     List<DataStatisticResponse> dataStatisticResponses = dataDetails.stream()
             .map(DataStatisticResponse::new)
-            .toList();
+            .collect(Collectors.toList());
     return dataStatisticResponses;
   }
 }
