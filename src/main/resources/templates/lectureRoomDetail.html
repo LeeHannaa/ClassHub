@@ -440,13 +440,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <button id="openModalButton" class="btn btn btn-primary" data-toggle="modal" data-target="#PostHeaderModal">게시물 생성</button>
+                <button id="openModalButton" class="btn btn-primary">게시물 생성</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="PostHeaderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="PostHeaderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
         </div>
@@ -569,7 +569,23 @@
         deletePost(deletePostId); // deleteTag 함수 호출
     }
 </script>
+<!-- Add this script block -->
 <script>
+    $(document).ready(function() {
+        // Show the first modal when the create post button is clicked
+        $('#createPostButton').click(function() {
+            let lRoomId = $(this).data('lroom-id');
+            $('#modalLRoomId').val(lRoomId);
+            $('#CreatePostModal').modal('show');
+        });
+
+        // Function to hide the first modal and open the second modal
+        $('#openModalButton').click(function(event) {
+            event.preventDefault();
+            submitPostFormAndLoadModal(); // Submit the form and load the second modal
+        });
+    });
+
     function loadHeadersIntoModal() {
         $.ajax({
             url: '/ClassHub/post/postModal',
@@ -584,9 +600,14 @@
             }
         });
     }
+
     function submitPostFormAndLoadModal() {
         var formData = new FormData($('#createPostForm')[0]);
         var lRoomId = $('#createPostButton').data('lroom-id');
+
+        // Hide the first modal before showing the second one
+        $('#CreatePostModal').modal('hide');
+
         $.ajax({
             url: '/ClassHub/post/postForm',
             type: 'POST',
