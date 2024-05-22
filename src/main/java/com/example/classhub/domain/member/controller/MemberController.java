@@ -34,11 +34,11 @@ public class MemberController {
     return "/member";
   }
 
-  @GetMapping("/login") // member form 보여주기
-  public String createMemberForm(Model model){
-    model.addAttribute("member", new LoginRequest());
-    return "/member/login";
-  }
+//  @GetMapping("/login") // member form 보여주기
+//  public String createMemberForm(Model model){
+//    model.addAttribute("member", new LoginRequest());
+//    return "/member/login";
+//  }
 
   @PostMapping("/saveMember") // member 저장하기
   // TODO : hisnet login 연결

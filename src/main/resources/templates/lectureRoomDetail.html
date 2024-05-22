@@ -72,7 +72,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active" th:object="${lectureRoom}">
-            <a class="nav-link" th:href="@{'/ClassHub/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
+            <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>대시보드</span></a>
         </li>
@@ -170,8 +170,8 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
-                    <a class="collapse-item" th:href="@{'/ClassHub/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
-                    <a class="collapse-item" th:href="@{/ClassHub/lecture-room/member/info/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId}, page=${0})}">강의실 구성원 정보</a>
+                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
+                    <a class="collapse-item" th:href="@{/lecture-room/member/info/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId}, page=${0})}">강의실 구성원 정보</a>
                 </div>
             </div>
         </li>
@@ -410,7 +410,7 @@
             <div class="modal-body">로그아웃 클릭 시 현재 사이트에서 로그아웃됩니다.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                <a class="btn btn-primary" href="/logout">로그아웃</a>
+                <a class="btn btn-primary" href="/ClassHub/logout">로그아웃</a>
             </div>
         </div>
     </div>

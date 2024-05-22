@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class HomeController {
-    @GetMapping("/classhub")
+    @GetMapping("/")
     public String home() {
         return "home";
     }

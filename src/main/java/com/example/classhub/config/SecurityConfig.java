@@ -15,7 +15,10 @@ public class SecurityConfig {
 
         http
                 .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
-                .csrf(csrf -> csrf.disable());
+                .csrf(csrf -> csrf.disable())
+                .logout()
+                    .logoutUrl("/ClassHub/logout")
+                    .logoutSuccessUrl("/ClassHub/");
         return http.build();
     }
 }
