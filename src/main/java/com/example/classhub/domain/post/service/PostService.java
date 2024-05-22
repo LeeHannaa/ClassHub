@@ -14,14 +14,15 @@ import com.example.classhub.domain.post.dto.PostDto;
 import com.example.classhub.domain.post.repository.PostRepository;
 import com.example.classhub.domain.tag.dto.TagDto;
 import com.example.classhub.domain.tag.service.TagService;
-import jakarta.annotation.Nullable;
-import jakarta.transaction.Transactional;
+//import javax.annotation.Nullable;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;

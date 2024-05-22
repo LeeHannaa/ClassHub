@@ -7,11 +7,12 @@ import com.example.classhub.domain.filedata.dto.FileDataDto;
 import com.example.classhub.domain.filedata.repository.FileDataRepository;
 import com.example.classhub.domain.post.ClassHub_Post;
 import com.example.classhub.domain.post.repository.PostRepository;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class FileDataService {
         List<FileData> fileDatas = fileDataRepository.findAll();
         List<FileDataResponse> fileDataResponses = fileDatas.stream()
                 .map(FileDataResponse::new)
-                .toList();
+                .collect(Collectors.toList());
         return new FileDataListResponse(fileDataResponses);
     }
 

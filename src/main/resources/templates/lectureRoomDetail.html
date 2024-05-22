@@ -72,7 +72,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active" th:object="${lectureRoom}">
-            <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
+            <a class="nav-link" th:href="@{'/ClassHub/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>대시보드</span></a>
         </li>
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <div id="tagList">
-                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                        <a class="collapse-item" th:href="@{'/ClassHub/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
                     </div>
                 </div>
             </div>
@@ -170,8 +170,8 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
-                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
-                    <a class="collapse-item" th:href="@{/lecture-room/member/info/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId}, page=${0})}">강의실 구성원 정보</a>
+                    <a class="collapse-item" th:href="@{'/ClassHub/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
+                    <a class="collapse-item" th:href="@{/ClassHub/lecture-room/member/info/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId}, page=${0})}">강의실 구성원 정보</a>
                 </div>
             </div>
         </li>
@@ -277,7 +277,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${session.member.member_name}"></span>
                             <img class="img-profile rounded-circle"
-                                 src="/bootstrap/img/undraw_profile.svg">
+                                 src="/ClassHub/bootstrap/img/undraw_profile.svg">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -530,7 +530,7 @@
         };
         $.ajax({
             type: "POST",
-            url: "/post/updateForm/" + postId,
+            url: "/ClassHub/post/updateForm/" + postId,
             contentType: "application/json",
             data: JSON.stringify(postData),
             success: function(response) {
@@ -579,7 +579,7 @@
     function deletePost(postId) {
         $.ajax({
             type: "POST",
-            url: "/post/delete/" + postId,
+            url: "/ClassHub/post/delete/" + postId,
             success: function(response) {
                 console.log("공지가 성공적으로 삭제되었습니다.");
                 location.reload();
@@ -598,7 +598,7 @@
 <script>
     function loadHeadersIntoModal() {
         $.ajax({
-            url: '/post/postModal',
+            url: '/ClassHub/post/postModal',
             type: 'GET',
             cache: false,
             success: function(response) {
@@ -614,7 +614,7 @@
         var formData = new FormData($('#createPostForm')[0]);
         var lRoomId = $('#createPostButton').data('lroom-id');
         $.ajax({
-            url: '/post/postForm',
+            url: '/ClassHub/post/postForm',
             type: 'POST',
             data: formData,
             cache: false,
@@ -625,7 +625,7 @@
                     loadHeadersIntoModal(response);
                 },
                 204: function() {
-                    window.location.href = '/lecture-room/detail/' + lRoomId;
+                    window.location.href = '/ClassHub/lecture-room/detail/' + lRoomId;
                 }
             },
             error: function() {
@@ -634,10 +634,10 @@
         });
     }
 </script>
-<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
-<script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
-<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/bootstrap/js/sb-admin-2.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="/ClassHub/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/ClassHub/bootstrap/js/sb-admin-2.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#openModalButton').click(function(event) {

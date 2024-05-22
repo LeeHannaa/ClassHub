@@ -3,9 +3,10 @@ package com.example.classhub.domain.member;
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 import lombok.*;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

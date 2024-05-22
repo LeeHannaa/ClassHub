@@ -12,7 +12,7 @@ import com.example.classhub.domain.post.controller.response.PostListResponse;
 import com.example.classhub.domain.post.service.PostService;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
 import com.example.classhub.domain.tag.service.TagService;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
