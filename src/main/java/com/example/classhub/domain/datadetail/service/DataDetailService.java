@@ -95,7 +95,7 @@ public class DataDetailService {
     @Transactional
     public DataStatisticListResponse getDataStatisticsList(Long tagId) {
         Long roomId = tagService.findLRoomIdByTagId(tagId);
-        List<ClassHub_MemberLRoom> memberList = memberLRoomService.findMembersByLRoomIdWithoutPaging(roomId);
+        List<ClassHub_MemberLRoom> memberList = memberLRoomService.findMembersByLRoomId(roomId);
         System.out.println("memberList"+ memberList);
         if(memberList.isEmpty()) return new DataStatisticListResponse(Collections.emptyList());
 

@@ -69,15 +69,9 @@ public class MemberLRoomService {
   }
 
   // 강의실 아이디에 따라 해당 멤버 불러오기
-  public Page<ClassHub_MemberLRoom> findMembersByLRoomId(Long LRoomId, int startAt) {
-    Pageable pageable = PageRequest.of(startAt, 7);
-    return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId, pageable);
+  public List<ClassHub_MemberLRoom> findMembersByLRoomId(Long LRoomId) {
+    return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId);
   }
-
-  public List<ClassHub_MemberLRoom> findMembersByLRoomIdWithoutPaging(Long LRoomId) {
-    return memberLRoomRepository.findByLectureRoom_lRoomId(LRoomId, Pageable.unpaged()).getContent();
-  }
-
 
   public Optional<ClassHub_MemberLRoom> findById(Long id){
     return memberLRoomRepository.findById(id);

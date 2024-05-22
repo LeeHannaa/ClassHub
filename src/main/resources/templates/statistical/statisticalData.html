@@ -571,7 +571,7 @@
             url: "/ClassHub/tag/delete/" + tagId,
             success: function(response) {
                 console.log("태그가 성공적으로 삭제되었습니다.");
-                location.href = '/lecture-room/detail/' + lectureRoomId;
+                location.href = 'ClassHub/lecture-room/detail/' + lectureRoomId;
             },
             error: function(xhr, status, error) {
                 // 삭제 중 에러가 발생했을 때 실행할 작업
@@ -759,7 +759,7 @@
 
       // AJAX 요청을 통해 서버에 데이터 저장
       var xhr = new XMLHttpRequest();
-      xhr.open('PUT', `/data-detail/statistics/${tagId}/score`, true);
+      xhr.open('PUT', `/ClassHub/data-detail/statistics/${tagId}/score`, true);
       // 'Content-Type'을 'application/json'으로 설정
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function() {
