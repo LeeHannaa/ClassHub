@@ -330,11 +330,8 @@
                                         <span th:text="${post.getTagNames() != null and post.getTagNames() != '' ? post.getTagNames() : '없음'}"></span>
                                     </small>
                                 </p>
-                                <p class="card-text">
-                                    <small class="text-muted">생성일: <span th:text="${post.getRegDate()}"></span></small>
-                                </p>
-                                <p class="card-text">
-                                    <small class="text-muted">수정일: <span th:text="${post.getModDate()}"></span></small>
+                                <p class="card-text" style="text-align: right">
+                                    <small class="text-muted">최근 수정일: <span th:text="${post.getModDate()}"></span></small>
                                 </p>
                             </div>
                         </div>
