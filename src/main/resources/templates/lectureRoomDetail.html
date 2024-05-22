@@ -19,9 +19,8 @@
     <style>
         .fixed-bottom-right {
             position: fixed;
-            bottom: 20px;
+            top: 100px;
             right: 70px;
-            z-index: 9999;
         }
 
         .card {
@@ -308,7 +307,7 @@
                 </div>
                 <div class="row justify-content-center">
                     <div th:each="post : ${posts}" class="col-12 mb-4">
-                        <div class="card shadow mb-4">
+                        <div class="card  mb-2">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary" th:text="${post.postTitle}">Dropdown Card Example</h6>
@@ -316,7 +315,7 @@
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown-menu dropdown-menu-right animated--fade-in" aria-labelledby="dropdownMenuLink">
                                         <a data-toggle="modal" data-target="#PostUpdateModal" class="dropdown-item" th:postTitle="${post.postTitle}" th:postContent="${post.postContent}" th:postId="${post.id}" th:tag="${post.getTagNames()}" th:onclick="setUpdatePostId(this.getAttribute('postId'),this.getAttribute('postTitle'),this.getAttribute('postContent'),this.getAttribute('tag'))">수정</a>
                                         <a data-toggle="modal" data-target="#PostDeleteModal" class="dropdown-item" th:onclick="'setDeletePostId(\'' + ${post.id} + '\')'">삭제</a>
                                     </div>
@@ -438,7 +437,7 @@
 
 <!-- Create Post Modal -->
 <div class="modal fade" id="CreatePostModal" tabindex="-1" aria-labelledby="CreateModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="width: 60%; max-width: 800px; height: 50%; max-height: 400px">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="CreateModalLabel">게시물 생성</h5>
@@ -463,7 +462,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <button id="openModalButton" class="btn btn-info" data-toggle="modal" data-target="#PostHeaderModal">게시물 생성</button>
+                <button id="openModalButton" class="btn btn btn-primary" data-toggle="modal" data-target="#PostHeaderModal">게시물 생성</button>
             </div>
         </div>
     </div>
