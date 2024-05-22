@@ -60,7 +60,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/lecture-room">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/ClassHub/lecture-room">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <div id="tagList">
-                        <a class="collapse-item" th:href="@{'/ClassHub/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
                     </div>
                 </div>
             </div>
