@@ -75,7 +75,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/lecture-room">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/ClassHub/lecture-room">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -87,7 +87,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item" th:object="${lectureRoom}">
-            <a class="nav-link" th:href="@{'/ClassHub/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
+            <a class="nav-link" th:href="@{'/lecture-room/detail/' + ${lectureRoom.lectureRoomId}}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>대시보드</span></a>
         </li>
@@ -126,7 +126,7 @@
                         </div>
                     </div>
                     <div id="tagList">
-                        <a class="collapse-item" th:href="@{'/ClassHub/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
+                        <a class="collapse-item" th:href="@{'/data-detail/statistics/' + ${tag.tagId}}" th:each="tag : ${tags}" th:text="${tag.name}"></a>
                     </div>
                 </div>
             </div>
@@ -194,8 +194,8 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded" th:object="${lectureRoom}">
                     <h6 class="collapse-header">수정</h6>
-                    <a class="collapse-item" th:href="@{'/ClassHub/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
-                    <a class="collapse-item active" th:href="@{'/ClassHub/lecture-room/member/info/' + ${lectureRoom.lectureRoomId}}">강의실 구성원 정보</a>
+                    <a class="collapse-item" th:href="@{'/lecture-room/detail/info/' + ${lectureRoom.lectureRoomId}}">강의실 정보</a>
+                    <a class="collapse-item active" th:href="@{'/lecture-room/member/info/' + ${lectureRoom.lectureRoomId}}">강의실 구성원 정보</a>
                 </div>
             </div>
         </li>
@@ -594,7 +594,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form id="createStudentForm" th:action="@{/memberlroom/create/one/}" method="post" enctype="multipart/form-data">
+                <form id="createStudentForm" th:action="@{/ClassHub/memberlroom/create/one/}" method="post" enctype="multipart/form-data">
                     <div class="modal-body modal-body-centered">
                         <h6 class="mb-8">강의실에 추가할 학생 정보를 입력하세요.</h6>
                         <div class="modal-body-centered">
@@ -643,23 +643,23 @@
     <script th:inline="javascript">
         function setCreateRoomId(lRoomId) {
             var form = document.getElementById('createStudentForm');
-            form.action = '/memberlroom/create/one/' + lRoomId;
+            form.action = '/ClassHub/memberlroom/create/one/' + lRoomId;
         }
     </script>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
-    <script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <script src="/bootstrap/js/demo/datatables-demo.js"></script>
+    <script src="/ClassHub/bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="/ClassHub/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/ClassHub/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/ClassHub/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/ClassHub/bootstrap/js/demo/datatables-demo.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/ClassHub/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="/bootstrap/js/sb-admin-2.min.js"></script>
-
+    <script src="/ClassHub/bootstrap/js/sb-admin-2.min.js"></script>
+</div>
 </body>
 
 </html>
