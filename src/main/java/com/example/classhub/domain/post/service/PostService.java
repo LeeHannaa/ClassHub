@@ -169,10 +169,12 @@ public class PostService {
     public void delete(Long postId) {
         PostDto postDto = findByPostId(postId);
         System.out.println("findByPostId" + postDto);
-        String[] tagIdsArray = postDto.getTagId().split(",");
-        for (String tagIdStr : tagIdsArray) {
-            Long tagId = Long.parseLong(tagIdStr.trim());
-            tagService.tagDelete(tagId);
+        String[] tagIdsArray = postDto.getTagId() != null ? postDto.getTagId().split(",") : null;
+        if (tagIdsArray != null && tagIdsArray.length > 0 && !tagIdsArray[0].trim().isEmpty()) {
+            for (String tagIdStr : tagIdsArray) {
+                Long tagId = Long.parseLong(tagIdStr.trim());
+                tagService.tagDelete(tagId);
+            }
         }
         postRepository.deleteById(postId);
     }

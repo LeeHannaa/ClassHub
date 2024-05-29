@@ -93,7 +93,14 @@ public class TagService {
         return tagDto.from(tag);
     }
     @Transactional
-    public void tagDelete(Long tagId){tagRepository.deleteById(tagId);}
+    public void tagDelete(Long tagId) {
+        if (tagRepository.existsById(tagId)) {
+            tagRepository.deleteById(tagId);
+        } else {
+            // 존재하지 않는 엔티티에 대한 로그를 남깁니다.
+            System.err.println("ID가 " + tagId + "인 엔티티가 존재하지 않습니다!");
+        }
+    }
 
 //    public TagDto findByName(String name) {
 //        ClassHub_Tag tag = tagRepository.findByName(name);
