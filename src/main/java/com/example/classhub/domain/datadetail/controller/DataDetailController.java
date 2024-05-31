@@ -106,7 +106,7 @@ public class DataDetailController {
     public ResponseEntity<String> downloadCSV(@PathVariable("tagId") Long tagId){
         DataStatisticListResponse dataStatisticListResponse = dataDetailService.getDataStatisticsList(tagId);
         HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "text/csv; charset=UTF-8");
+        header.add("Content-Type", "application/vnd.ms-excel; charset=euc-kr");
         header.add("Content-Disposition", "attachment; filename=\""+"student_data.csv"+"\"");
         return new ResponseEntity<String>(dataDetailService.setContent(dataStatisticListResponse), header, HttpStatus.CREATED);
     }
