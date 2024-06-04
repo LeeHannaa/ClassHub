@@ -21,6 +21,6 @@ public interface TagRepository extends JpaRepository<ClassHub_Tag, Long> {
 
     List<ClassHub_Tag> findByTagIdIn(List<Long> tagIdList);
 
-    @Query("SELECT t FROM ClassHub_Tag t JOIN t.dataDetails d WHERE d.studentNum = :studentNum")
-    List<ClassHub_Tag> findByStudentNum(@Param("studentNum") String studentNum);
+  @Query("SELECT t FROM ClassHub_Tag t JOIN t.dataDetails dd WHERE t.lectureRoom.lRoomId = :lRoomId AND dd.studentNum = :studentNum")
+  List<ClassHub_Tag> findByLectureRoomIdAndStudentNum(@Param("lRoomId") Long lRoomId, @Param("studentNum") String studentNum);
 }

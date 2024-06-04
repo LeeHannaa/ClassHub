@@ -139,7 +139,7 @@ public class DataDetailController {
         MemberLRoomDto memberLroom = memberLRoomService.findByMemberIdAndLroomId(member.getMemberId(), LRoomId);
         if (memberLroom != null) {
           // Lroom에 연결된 태그 목록 찾기
-          TagListResponse tagListResponse = tagService.getTagListByStudentNum(uniqueId);
+          TagListResponse tagListResponse = tagService.getTagsByLectureRoomIdAndStudentNum(LRoomId,uniqueId);
           model.addAttribute("tags", tagListResponse);
 
           // datadetail에서 해당 태그와 일치하는 데이터 목록을 가져오기

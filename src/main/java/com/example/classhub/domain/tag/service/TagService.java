@@ -67,14 +67,11 @@ public class TagService {
     }
 
   @Transactional
-  public TagListResponse getTagListByStudentNum(String studentNum) {
-    // 학생 번호를 기준으로 태그 목록을 검색
-    List<ClassHub_Tag> tags = tagRepository.findByStudentNum(studentNum);
-    // 태그 목록을 TagResponse DTO로 변환
+  public TagListResponse getTagsByLectureRoomIdAndStudentNum(Long lRoomId, String studentNum) {
+    List<ClassHub_Tag> tags = tagRepository.findByLectureRoomIdAndStudentNum(lRoomId, studentNum);
     List<TagResponse> tagResponses = tags.stream()
       .map(TagResponse::new)
       .collect(Collectors.toList());
-    // 변환된 태그 목록을 포함하는 TagListResponse 객체를 반환
     return new TagListResponse(tagResponses);
   }
 
