@@ -220,6 +220,14 @@
                   <div th:unless="${statisticsByTagId.containsKey(tag.tagId)}">
                     <div class="stat-item"><span class="stat-value">N/A</span><br><span class="stat-label">해당 태그에 대한 데이터가 없습니다.</span></div>
                   </div>
+                  <hr/>
+                  <div th:each="detail : ${matchedStudentDetails}" th:if="${detail.tagId} == ${tag.tagId}">
+                    <div class="comment" style="padding: 10px;">
+                      <strong>코멘트:</strong>
+                      <span th:if="${detail.comment != null and detail.comment != ''}" th:text="${detail.comment}"></span>
+                      <span th:unless="${detail.comment != null and detail.comment != ''}">작성된 코멘트가 없습니다.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -227,6 +235,7 @@
           <script th:inline="javascript">
             /*<![CDATA[*/
             var matchedStudentDetails = [[${matchedStudentDetails}]];
+            console.log(matchedStudentDetails);
             var myScores = matchedStudentDetails.map(function(detail) {
               return {score: detail.score,modDate: detail.modDate, tagId: detail.tagId};
             });
@@ -323,7 +332,6 @@
           var extractedData = tags.tags.map(function(tag) {
             return {tagId: tag.tagId, idealScore: tag.perfectScore}; // 변수명 변경
           });
-          console.log(extractedData);
 
           Object.keys(scoresByTagId).forEach(function(tagId) {
             var tagData = extractedData.find(function(data) { // 변수명 변경
@@ -336,7 +344,6 @@
             }
 
             var idealScore = tagData.idealScore; // 변수명 변경
-            console.log(idealScore);
 
             var myScorePercentage = myScores.find(function(scoreP) {
               return scoreP.tagId == tagId;
