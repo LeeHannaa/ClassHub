@@ -3,6 +3,8 @@ package com.example.classhub.domain.tag.service;
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
+import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
+import com.example.classhub.domain.datadetail.repository.DataDetailRepository;
 import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
@@ -24,8 +26,9 @@ import java.util.stream.Collectors;
 public class TagService {
     private final TagRepository tagRepository;
     private final LectureRoomRepository lectureRoomRepository;
+  private final DataDetailRepository dataDetailRepository;
 
-    @Transactional
+  @Transactional
     public TagDto createTag(TagDto tagDto, Long lRoomId){
         String tagName = tagDto.getName();
         String newName = tagName;
@@ -62,7 +65,19 @@ public class TagService {
                 .collect(Collectors.toList());
         return new TagListResponse(tagResponses);
     }
-    @Transactional
+
+  @Transactional
+  public TagListResponse getTagsByLectureRoomIdAndStudentNum(Long lRoomId, String studentNum) {
+    List<ClassHub_Tag> tags = tagRepository.findByLectureRoomIdAndStudentNum(lRoomId, studentNum);
+    List<TagResponse> tagResponses = tags.stream()
+      .map(TagResponse::new)
+      .collect(Collectors.toList());
+    return new TagListResponse(tagResponses);
+  }
+
+
+
+  @Transactional
     public TagDto findByTagId(Long tagId){
         ClassHub_Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
