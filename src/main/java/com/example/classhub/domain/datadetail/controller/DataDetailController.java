@@ -1,5 +1,6 @@
 package com.example.classhub.domain.datadetail.controller;
 
+import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomListResponse;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.datadetail.controller.request.DataDetailCreateRequest;
@@ -127,6 +128,8 @@ public class DataDetailController {
     @GetMapping("student/{uniqueId}/{LRoomId}")
     public String findStudentList(@PathVariable Long LRoomId, @PathVariable String uniqueId, Model model, HttpSession session) {
       MemberDto mem = (MemberDto) session.getAttribute("member");
+      LectureRoomListResponse lectureRoomListResponse = lectureRoomService.getLectureRoomList(mem.getMemberId());
+      model.addAttribute("myLectureRooms", lectureRoomListResponse.getLectureRooms());
       model.addAttribute("uniqueId", mem.getUniqueId());
       model.addAttribute("name", mem.getMember_name());
       // uniqueId로 member_id 찾기
