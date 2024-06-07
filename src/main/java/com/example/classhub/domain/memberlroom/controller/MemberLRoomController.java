@@ -2,6 +2,7 @@ package com.example.classhub.domain.memberlroom.controller;
 
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
+import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomMemberCreateRequest;

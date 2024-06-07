@@ -54,8 +54,8 @@ public class LectureRoomService {
     }
     @Transactional
     public LectureRoomListResponse findByKeyword(String keyword) {
-        // 이름, TA 초대 코드 또는 학생 초대 코드 중 하나라도 입력한 키워드와 일치하는 강의실 정보를 조회
-        List<ClassHub_LRoom> lectureRooms = lectureRoomRepository.findByTaInviteCodeOrStInviteCodeOrRoomName(keyword, keyword, keyword);
+        // 강의실 이름, 강의실 설명, 교수이름, 입장코드 중 하나라도 입력한 키워드와 일치하는 강의실 정보를 조회
+        List<ClassHub_LRoom> lectureRooms = lectureRoomRepository.findByTaInviteCodeOrStInviteCodeOrRoomNameOrDescriptionContainingOrCreator(keyword, keyword, keyword, keyword, keyword);
         List<LectureRoomResponse> lectureRoomResponses = lectureRooms.stream()
                 .map(LectureRoomResponse::new)
                 .collect(Collectors.toList());
