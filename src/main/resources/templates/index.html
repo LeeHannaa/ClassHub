@@ -196,7 +196,9 @@
                                     <p class="card-text text-muted mt-2" th:if="${lectureRoom.role != null}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.getRole().getRole()}"></p>
                                 </div>
                                 <p class="card-text text-muted mt-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${lectureRoom.description}"></p>
-<!--                                <a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;">강의실 입장</a>-->
+                                <p class="card-text text-muted mt-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    현재 강의실 인원: <span th:text="${lectureRoom.memberCount}">0</span> 명
+                                </p><!--                                <a th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId})}" class="btn btn-primary btn-sm align-self-end" style="background: #425de3; border-color: #425de3;">강의실 입장</a>-->
                                 <a th:if="${param.searchKeyword}"
                                    th:href="@{/lecture-room/detail/{lectureRoomId}(lectureRoomId=${lectureRoom.lectureRoomId}, searchKeyword=${param.searchKeyword})}"
                                    class="btn btn-primary btn-sm align-self-end"

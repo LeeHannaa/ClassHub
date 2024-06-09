@@ -366,6 +366,7 @@
                                                 </div>
                                             </div>
                                         </th>
+                                        <th>삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody th:if="${not #lists.isEmpty(memberLRooms)}">
@@ -397,6 +398,7 @@
                                                 </select>
                                             </form>
                                         </td>
+                                        <td><button class="btn btn-danger delete-btn" style="padding: 5px 10px;" data-toggle="modal" data-target="#memberDeleteModal" th:onclick="'setRoomId(\'' + ${lectureRoom.lectureRoomId} + '\')'"><i class="fas fa-times"></i></button></td>
                                     </tr>
                                     </tbody>
                                     <tbody th:unless="${not #lists.isEmpty(memberLRooms)}">
@@ -618,12 +620,79 @@
             </div>
         </div>
     </div>
+
+    <!-- 삭제 확인 Modal -->
+    <div class="modal fade" id="memberDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">학생 삭제</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>강의실에서 다음 학생을 삭제하시겠습니까?</p>
+                    <p><strong>이름:</strong> <span id="deleteMemberName"></span></p>
+                    <p><strong>고유 ID:</strong> <span id="deleteUniqueId"></span></p>
+                    <p><strong>Email:</strong> <span id="deleteEmail"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <button id="deleteConfirmButton" class="btn btn-danger">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script th:inline="javascript">
         function setCreateRoomId(lRoomId) {
             var form = document.getElementById('createStudentForm');
             form.action = '/ClassHub/memberlroom/create/one/' + lRoomId;
         }
+
+        var currentLectureRoomId;
+        function setRoomId(lRoomId) {
+            currentLectureRoomId = lRoomId;
+        }
+
+        $(function() {
+            // 삭제 확인 모달에 학생 정보 표시
+            $('.delete-btn').click(function() {
+                var row = $(this).closest('tr');
+                var name = row.find('td:nth-child(2)').text();
+                var uniqueId = row.find('td:nth-child(3)').text();
+                var email = row.find('td:nth-child(4)').text();
+
+                $('#deleteMemberName').text(name);
+                $('#deleteUniqueId').text(uniqueId);
+                $('#deleteEmail').text(email);
+
+                // 확인 버튼에 삭제 요청을 보내는 함수
+                function sendDeleteRequest() {
+                    $.ajax({
+                        type: "POST",
+                        url: "/ClassHub/memberlroom/delete/" + Number(currentLectureRoomId) + "/" + uniqueId,
+                        success: function() {
+                            // 요청이 성공하면 강의실 정보 페이지로 리다이렉트
+                            window.location.href = "/ClassHub/lecture-room/member/info/" + Number(currentLectureRoomId);
+                        },
+                        error: function() {
+                            // 요청이 실패하면 사용자에게 알림을 표시할 수 있습니다.
+                            alert("요청 실패!");
+                        }
+                    });
+                }
+
+                // 확인 버튼 클릭 이벤트 핸들러
+                $('#deleteConfirmButton').unbind('click').click(function() {
+                    sendDeleteRequest();
+                });
+            });
+        });
+
     </script>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="/ClassHub/bootstrap/vendor/jquery/jquery.min.js"></script>

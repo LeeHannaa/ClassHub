@@ -136,8 +136,9 @@ public class MemberLRoomController {
   // Delete
   @PostMapping("/memberlroom/delete/{lectureRoomId}/{uniqueId}")
   public String deleteMemberLRoom(@PathVariable Long lectureRoomId, @PathVariable String uniqueId) {
+    System.out.println("멤버 삭제 확인" + lectureRoomId + uniqueId);
     Long id = memberLRoomService.findMemberIdForDelete(lectureRoomId, uniqueId);
     memberLRoomService.deleteMemberLRoom(id);
-    return "redirect:/lecture-room";
+    return "redirect:/lecture-room/member/info/" + lectureRoomId;
   }
 }

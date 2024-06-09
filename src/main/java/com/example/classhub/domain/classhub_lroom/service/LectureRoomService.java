@@ -43,11 +43,13 @@ public class LectureRoomService {
     public LectureRoomListResponse getLectureRoomList(Long memberId) {
         List<ClassHub_MemberLRoom> memberLRooms = memberLRoomRepository.findByClassHubMemberMemberId(memberId);
 
+
         List<LectureRoomResponse> lectureRoomResponses = memberLRooms.stream()
                 .filter(memberLRoom -> memberLRoom.getLectureRoom() != null && "APPROVED".equals(memberLRoom.getPermission().name()))
                 .map(memberLRoom -> new LectureRoomResponse(
                         memberLRoom.getLectureRoom(),
-                        memberLRoom.getRole()
+                        memberLRoom.getRole(),
+                        memberLRoomRepository.countByLectureRoom_lRoomId(memberLRoom.getLectureRoom().getLRoomId())
                 ))
                 .collect(Collectors.toList());
         return new LectureRoomListResponse(lectureRoomResponses);

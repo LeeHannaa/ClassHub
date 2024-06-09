@@ -20,6 +20,7 @@ public class LectureRoomDto {
     private String description;
     private boolean onOff;
     private String studentInfoKey;
+    private int memberCount;
 
     public static LectureRoomDto from(LectureRoomCreateRequest request) {
         return LectureRoomDto.builder()
