@@ -34,6 +34,24 @@
             z-index: 9999;
         }
     </style>
+    <script src="/ClassHub/bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="/ClassHub/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/ClassHub/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/ClassHub/bootstrap/js/sb-admin-2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#openModalButton').click(function(event) {
+                event.preventDefault();
+                submitPostFormAndLoadModal();
+            });
+
+            $('#createPostButton').click(function() {
+                let lRoomId = $(this).data('lroom-id');
+                $('#modalLRoomId').val(lRoomId);
+                $('#CreatePostModal').modal('show');
+            });
+        });
+    </script>
 </head>
 <script>
     function copyCode(codeId) {
@@ -628,24 +646,6 @@
             }
         });
     }
-</script>
-<script src="/ClassHub/bootstrap/vendor/jquery/jquery.min.js"></script>
-<script src="/ClassHub/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
-<script src="/ClassHub/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/ClassHub/bootstrap/js/sb-admin-2.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#openModalButton').click(function(event) {
-            event.preventDefault();
-            submitPostFormAndLoadModal();
-        });
-
-        $('#createPostButton').click(function() {
-            let lRoomId = $(this).data('lroom-id');
-            $('#modalLRoomId').val(lRoomId);
-            $('#CreatePostModal').modal('show');
-        });
-    });
 </script>
 </body>
 </html>

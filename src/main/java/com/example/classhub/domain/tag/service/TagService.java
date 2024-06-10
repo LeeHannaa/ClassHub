@@ -131,6 +131,7 @@ public class TagService {
             return createTag(tagDto, lRoomId);
         } else {
             if (isCover) {
+                dataDetailRepository.deleteByTag(tag);
                 tag.update(tagDto);  // isCover가 true이면 태그 정보 업데이트
                 tagRepository.save(tag);
                 System.out.println("isCover true / updating existing tag: " + tag);
