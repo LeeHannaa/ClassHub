@@ -18,6 +18,7 @@ public class LectureRoomResponse {
     private boolean onOff;
     private String studentInfoKey;
     private Role role;
+    private Long memberCount;
 
     public LectureRoomResponse(ClassHub_LRoom lectureRoom){
         this.lectureRoomId = lectureRoom.getLRoomId();
@@ -28,7 +29,7 @@ public class LectureRoomResponse {
         this.description = lectureRoom.getDescription();
         this.studentInfoKey = lectureRoom.getStudentInfoKey();
     }
-    public LectureRoomResponse(ClassHub_LRoom lectureRoom, Role role){
+    public LectureRoomResponse(ClassHub_LRoom lectureRoom, Role role, Long memberCount){
         this.lectureRoomId = lectureRoom.getLRoomId();
         this.roomName = lectureRoom.getRoomName();
         this.taInviteCode = lectureRoom.getTaInviteCode();
@@ -37,6 +38,7 @@ public class LectureRoomResponse {
         this.description = lectureRoom.getDescription();
         this.studentInfoKey = lectureRoom.getStudentInfoKey();
         this.role = role;
+        this.memberCount = memberCount;
     }
 
     public LectureRoomResponse(LectureRoomDto lectureRoomDto){
