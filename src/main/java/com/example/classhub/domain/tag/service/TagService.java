@@ -3,6 +3,8 @@ package com.example.classhub.domain.tag.service;
 
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
 import com.example.classhub.domain.classhub_lroom.repository.LectureRoomRepository;
+import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
+import com.example.classhub.domain.datadetail.repository.DataDetailRepository;
 import com.example.classhub.domain.tag.ClassHub_Tag;
 import com.example.classhub.domain.tag.controller.request.TagPerfectScoreUpdateRequest;
 import com.example.classhub.domain.tag.controller.response.TagListResponse;
@@ -24,8 +26,9 @@ import java.util.stream.Collectors;
 public class TagService {
     private final TagRepository tagRepository;
     private final LectureRoomRepository lectureRoomRepository;
+  private final DataDetailRepository dataDetailRepository;
 
-    @Transactional
+  @Transactional
     public TagDto createTag(TagDto tagDto, Long lRoomId){
         String tagName = tagDto.getName();
         String newName = tagName;
@@ -62,7 +65,19 @@ public class TagService {
                 .collect(Collectors.toList());
         return new TagListResponse(tagResponses);
     }
-    @Transactional
+
+  @Transactional
+  public TagListResponse getTagsByLectureRoomIdAndStudentNum(Long lRoomId, String studentNum) {
+    List<ClassHub_Tag> tags = tagRepository.findByLectureRoomIdAndStudentNum(lRoomId, studentNum);
+    List<TagResponse> tagResponses = tags.stream()
+      .map(TagResponse::new)
+      .collect(Collectors.toList());
+    return new TagListResponse(tagResponses);
+  }
+
+
+
+  @Transactional
     public TagDto findByTagId(Long tagId){
         ClassHub_Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
@@ -93,7 +108,14 @@ public class TagService {
         return tagDto.from(tag);
     }
     @Transactional
-    public void tagDelete(Long tagId){tagRepository.deleteById(tagId);}
+    public void tagDelete(Long tagId) {
+        if (tagRepository.existsById(tagId)) {
+            tagRepository.deleteById(tagId);
+        } else {
+            // 존재하지 않는 엔티티에 대한 로그를 남깁니다.
+            System.err.println("ID가 " + tagId + "인 엔티티가 존재하지 않습니다!");
+        }
+    }
 
 //    public TagDto findByName(String name) {
 //        ClassHub_Tag tag = tagRepository.findByName(name);
@@ -109,6 +131,7 @@ public class TagService {
             return createTag(tagDto, lRoomId);
         } else {
             if (isCover) {
+                dataDetailRepository.deleteByTag(tag);
                 tag.update(tagDto);  // isCover가 true이면 태그 정보 업데이트
                 tagRepository.save(tag);
                 System.out.println("isCover true / updating existing tag: " + tag);

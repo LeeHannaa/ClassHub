@@ -77,6 +77,21 @@
       <div class="sidebar-brand-text mx-3">ClassHub <sup style="font-size: 10px">hgu</sup></div>
     </a>
 
+    <div class="sidebar-heading" th:object="${lectureRoom}">
+      <span for="name" th:text="${lectureRoom.roomName}"></span>
+    </div>
+
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item">
+      <a class="nav-link " th:href="@{/student/{uniqueId}/{LRoomId}(uniqueId = ${uniqueId},LRoomId=${LRoomId})}" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-line-fill" viewBox="0 0 16 16">
+          <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1z"/>
+        </svg>
+        <span style="font-weight: bold">데이터 통계</span>
+      </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
@@ -89,20 +104,30 @@
         <span>공지사항</span>
       </a>
     </li>
-
-    <hr class="sidebar-divider my-0">
-
-    <li class="nav-item">
-      <a class="nav-link " th:href="@{/student/{uniqueId}/{LRoomId}(uniqueId = ${uniqueId},LRoomId=${LRoomId})}" >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-line-fill" viewBox="0 0 16 16">
-          <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1z"/>
-        </svg>
-        <span style="font-weight: bold">데이터 통계</span>
-      </a>
-    </li>
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
+    <li class="nav-item active">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder" viewBox="0 0 16 16">
+          <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z"/>
+        </svg>
+        <span>나의 강의실</span>
+      </a>
+      <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <div id="LRList">
+            <div id="LRContainer" th:each="myLectureRoom : ${myLectureRooms}">
+              <div class="collapse-item d-flex align-items-center justify-content-between">
+                <div class="LRNameDiv">
+                  <a class="item" th:id="'LRItem_' + ${myLectureRoom.lectureRoomId}" th:href="@{${myLectureRoom.role == 'STUDENT' ? '/student/'+uniqueId : '/lecture-room/detail/'} + ${myLectureRoom.lectureRoomId}}" th:text="${myLectureRoom.roomName}" style="text-decoration: none; color: inherit;"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
     <!-- Heading -->
     <div class="sidebar-heading">
       ClassHub
@@ -200,7 +225,7 @@
               <h2 class="accordion-header d-flex justify-content-between" th:id="'heading' + ${iterStat.index}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}" style="display: flex; align-items: center;">
                   <span th:text="${tag.name}" style="font-weight: bold;"></span>
-                  <span th:id="'scoreDifference-' + ${tag.tagId}" style="margin: 0 1rem;"></span>
+                  <span th:id="'myScore-' + ${tag.tagId}" style="margin: 0 1rem;"></span>
                   <span>
                     <small th:id="'modDate-' + ${tag.tagId}">최근 수정일: 로딩 중...</small>
                   </span>
@@ -220,6 +245,14 @@
                   <div th:unless="${statisticsByTagId.containsKey(tag.tagId)}">
                     <div class="stat-item"><span class="stat-value">N/A</span><br><span class="stat-label">해당 태그에 대한 데이터가 없습니다.</span></div>
                   </div>
+                  <hr/>
+                  <div th:each="detail : ${matchedStudentDetails}" th:if="${detail.tagId} == ${tag.tagId}">
+                    <div class="comment" style="padding: 10px;">
+                      <strong>코멘트:</strong>
+                      <span th:if="${detail.comment != null and detail.comment != ''}" th:text="${detail.comment}"></span>
+                      <span th:unless="${detail.comment != null and detail.comment != ''}">작성된 코멘트가 없습니다.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -230,6 +263,7 @@
             var myScores = matchedStudentDetails.map(function(detail) {
               return {score: detail.score,modDate: detail.modDate, tagId: detail.tagId};
             });
+
             var groupedByTagId = matchedStudentDetails.reduce(function(acc, detail) {
               var date = new Date(detail.modDate); // 문자열을 Date 객체로 변환
               var year = date.getFullYear(); // 년도
@@ -246,7 +280,7 @@
               Object.keys(groupedByTagId).forEach(function(tagId) {
                 var modDateElement = document.getElementById('modDate-' + tagId);
                 if (modDateElement) { // 해당하는 요소가 있을 경우에만 업데이트
-                  modDateElement.textContent = `( 수정일: ${groupedByTagId[tagId]} )`;
+                  modDateElement.textContent = `( 최근 업데이트일: ${groupedByTagId[tagId]} )`;
                 }
               });
 
@@ -266,6 +300,7 @@
             });
 
             var tags = [[${tags}]];
+            console.log(tags);
             var tagNames = tags.tags.map(function(tag) {
               return tag.name;
             });
@@ -323,7 +358,6 @@
           var extractedData = tags.tags.map(function(tag) {
             return {tagId: tag.tagId, idealScore: tag.perfectScore}; // 변수명 변경
           });
-          console.log(extractedData);
 
           Object.keys(scoresByTagId).forEach(function(tagId) {
             var tagData = extractedData.find(function(data) { // 변수명 변경
@@ -336,7 +370,6 @@
             }
 
             var idealScore = tagData.idealScore; // 변수명 변경
-            console.log(idealScore);
 
             var myScorePercentage = myScores.find(function(scoreP) {
               return scoreP.tagId == tagId;
@@ -421,8 +454,7 @@
 
             // 각 태그별 완벽 점수에 대한 나의 점수의 백분율 계산
             myScores.forEach(score => {
-              var perfectScore = tags.tags.find(tag => tag.tagId === score.tagId).perfectScore;
-              var percentage = (score.score / perfectScore) * 100;
+              var percentage = score.score;
               if (!tagScores[score.tagId]) {
                 tagScores[score.tagId] = [];
               }
@@ -432,21 +464,16 @@
             // 각 태그별 평균 점수 계산 및 표시
             tags.tags.forEach(tag => {
               var myAverageScore = tagScores[tag.tagId] ? tagScores[tag.tagId].reduce((acc, score) => acc + score, 0) / tagScores[tag.tagId].length : 0;
-              var overallAverage = averages.reduce((acc, score) => acc + score, 0) / averages.length;
-              var scoreDifference = myAverageScore - overallAverage;
 
-              var scoreDifferenceElement = document.getElementById('scoreDifference-' + tag.tagId);
+              var myScoreElement = document.getElementById('myScore-' + tag.tagId);
 
-              if (scoreDifferenceElement) {
-                if (scoreDifference < 0) {
-                  scoreDifferenceElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                      <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                    </svg><span style="color: blue;">${Math.abs(scoreDifference).toFixed(2)}%</span>`;
-                } else {
-                  scoreDifferenceElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                      <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                    </svg><span style="color: red;">${scoreDifference.toFixed(2)}%</span>`;
-                }
+              if (myScoreElement) {
+                myScoreElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                                              <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                              <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                                              <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                                            </svg>
+                                            <span style="color: blue;">${myAverageScore.toFixed(1)}점</span>`;
               }
             });
           };
@@ -454,7 +481,6 @@
           window.onload = function() {
             calculateStatistics();
           };
-
 
           /*]]>*/
         </script>

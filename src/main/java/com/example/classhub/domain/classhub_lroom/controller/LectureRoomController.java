@@ -80,6 +80,8 @@ public class LectureRoomController {
         PostListResponse postListResponse = postService.getPostListByLectureRoomId(lectureRoomId, page, size);
 
         MemberLRoomDto memberLRoomDto = memberLRoomService.findByMemberIdAndLroomId(memberDto.getMemberId(), lectureRoomId);
+        LectureRoomListResponse lectureRoomListResponse = lectureRoomService.getLectureRoomList(memberDto.getMemberId());
+        model.addAttribute("myLectureRooms", lectureRoomListResponse.getLectureRooms());
 
         model.addAttribute("posts", postListResponse.getPosts());
         model.addAttribute("totalPages", postListResponse.getTotalPages());
@@ -124,6 +126,8 @@ public class LectureRoomController {
                                         HttpSession session) {
         LectureRoomDto lectureRoomDto = lectureRoomService.findLRoomDtoByRoomId(lectureRoomId);
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
+        LectureRoomListResponse lectureRoomListResponse = lectureRoomService.getLectureRoomList(memberDto.getMemberId());
+        model.addAttribute("myLectureRooms", lectureRoomListResponse.getLectureRooms());
         memberLRoomService.createMemberByOne(lectureRoomDto, memberDto);
 
         PostListResponse postListResponse = postService.getPostListByLectureRoomId(lectureRoomId, page, size);

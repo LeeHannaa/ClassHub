@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface LectureRoomRepository extends JpaRepository<ClassHub_LRoom, Long> {
     ClassHub_LRoom findByTaInviteCodeAndStInviteCode(String taInviteCode, String stInviteCode);
-    List<ClassHub_LRoom> findByTaInviteCodeOrStInviteCodeOrRoomName(String taInviteCode, String stInviteCode, String roomName);
+    List<ClassHub_LRoom> findByTaInviteCodeOrStInviteCodeOrRoomNameOrDescriptionContainingOrCreator(String taInviteCode, String stInviteCode, String roomName, String description, String creator);
 }

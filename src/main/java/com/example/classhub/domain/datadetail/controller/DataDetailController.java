@@ -1,5 +1,6 @@
 package com.example.classhub.domain.datadetail.controller;
 
+import com.example.classhub.domain.classhub_lroom.controller.response.LectureRoomListResponse;
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
 import com.example.classhub.domain.datadetail.controller.request.DataDetailCreateRequest;
@@ -106,7 +107,7 @@ public class DataDetailController {
     public ResponseEntity<String> downloadCSV(@PathVariable("tagId") Long tagId){
         DataStatisticListResponse dataStatisticListResponse = dataDetailService.getDataStatisticsList(tagId);
         HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "text/csv; charset=UTF-8");
+        header.add("Content-Type", "application/vnd.ms-excel; charset=euc-kr");
         header.add("Content-Disposition", "attachment; filename=\""+"student_data.csv"+"\"");
         return new ResponseEntity<String>(dataDetailService.setContent(dataStatisticListResponse), header, HttpStatus.CREATED);
     }
@@ -127,6 +128,8 @@ public class DataDetailController {
     @GetMapping("student/{uniqueId}/{LRoomId}")
     public String findStudentList(@PathVariable Long LRoomId, @PathVariable String uniqueId, Model model, HttpSession session) {
       MemberDto mem = (MemberDto) session.getAttribute("member");
+      LectureRoomListResponse lectureRoomListResponse = lectureRoomService.getLectureRoomList(mem.getMemberId());
+      model.addAttribute("myLectureRooms", lectureRoomListResponse.getLectureRooms());
       model.addAttribute("uniqueId", mem.getUniqueId());
       model.addAttribute("name", mem.getMember_name());
       // uniqueId로 member_id 찾기
@@ -139,7 +142,7 @@ public class DataDetailController {
         MemberLRoomDto memberLroom = memberLRoomService.findByMemberIdAndLroomId(member.getMemberId(), LRoomId);
         if (memberLroom != null) {
           // Lroom에 연결된 태그 목록 찾기
-          TagListResponse tagListResponse = tagService.getTagListByLectureId(LRoomId);
+          TagListResponse tagListResponse = tagService.getTagsByLectureRoomIdAndStudentNum(LRoomId,uniqueId);
           model.addAttribute("tags", tagListResponse);
 
           // datadetail에서 해당 태그와 일치하는 데이터 목록을 가져오기

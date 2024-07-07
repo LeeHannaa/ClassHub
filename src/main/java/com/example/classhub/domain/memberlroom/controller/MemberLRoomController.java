@@ -2,6 +2,7 @@ package com.example.classhub.domain.memberlroom.controller;
 
 import com.example.classhub.domain.classhub_lroom.dto.LectureRoomDto;
 import com.example.classhub.domain.classhub_lroom.service.LectureRoomService;
+import com.example.classhub.domain.member.ClassHub_Member;
 import com.example.classhub.domain.member.dto.MemberDto;
 import com.example.classhub.domain.memberlroom.ClassHub_MemberLRoom;
 import com.example.classhub.domain.memberlroom.controller.request.MemberLRoomMemberCreateRequest;
@@ -135,8 +136,9 @@ public class MemberLRoomController {
   // Delete
   @PostMapping("/memberlroom/delete/{lectureRoomId}/{uniqueId}")
   public String deleteMemberLRoom(@PathVariable Long lectureRoomId, @PathVariable String uniqueId) {
+    System.out.println("멤버 삭제 확인" + lectureRoomId + uniqueId);
     Long id = memberLRoomService.findMemberIdForDelete(lectureRoomId, uniqueId);
     memberLRoomService.deleteMemberLRoom(id);
-    return "redirect:/lecture-room";
+    return "redirect:/lecture-room/member/info/" + lectureRoomId;
   }
 }

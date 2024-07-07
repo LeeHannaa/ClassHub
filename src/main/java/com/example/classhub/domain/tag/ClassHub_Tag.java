@@ -2,11 +2,14 @@ package com.example.classhub.domain.tag;
 
 import com.example.classhub.domain.BaseEntity;
 import com.example.classhub.domain.classhub_lroom.ClassHub_LRoom;
+import com.example.classhub.domain.datadetail.ClassHub_DataDetail;
 import com.example.classhub.domain.tag.dto.TagDto;
 import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,6 +34,9 @@ public class ClassHub_Tag extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "lRoomId")
     private ClassHub_LRoom lectureRoom;
+
+    @OneToMany(mappedBy = "tag")
+    private Set<ClassHub_DataDetail> dataDetails;
 
     public static ClassHub_Tag from(TagDto tagDto, ClassHub_LRoom lectureRoom, String newName) {
         return ClassHub_Tag.builder()
